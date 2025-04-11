@@ -10,21 +10,21 @@
   */
 void initDeltaThumb( void )
 {
-    static int velocitycounter = 0;
-    double dxH_new = 0;
-    int time_dif_int = 0;
-    
-    double theta_ma = calculatePositionMotor1();
-    
-    double theta_a = -theta_ma*R_MA/R_A;
-    double xH = -R_HA*theta_a;
-    
-    printf("Xh=%f\n", xH);
-    
-    double ForceH = 0.1;
+    // Read encoders    
+    double ThetaMotor1 = calculatePositionMotor1();
+    double ThetaMotor2 = calculatePositionMotor2();
 
+    printf("theta1=%f, theta2=%f\n", ThetaMotor1, ThetaMotor2);
     
-    double  TorqueMotor1 = -((R_MA/R_A) * R_HA) * ForceH;
+
+    // Output forces
+    double ForceMotor1 = 0.0;
+    double TorqueMotor1 = -((R_MA/R_A) * R_HA) * ForceMotor1;
     TorqueMotor1 = TorqueMotor1*0.001; //convert units
     outputTorqueMotor1(TorqueMotor1);    
+
+    double ForceMotor2 = 0.0;
+    double TorqueMotor2 = -((R_MA/R_A) * R_HA) * ForceMotor2;
+    TorqueMotor2 = TorqueMotor2*0.001; //convert units
+    outputTorqueMotor2(TorqueMotor2);    
 }
