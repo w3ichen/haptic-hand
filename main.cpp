@@ -20,7 +20,7 @@
 #include "haplink_time.h"
 #include "haplink_fsr.h"
 #include "haplink_adc_sensors.h"
-
+#include "delta_thumb.h"
 
 int main() 
 {
@@ -39,8 +39,10 @@ int main()
     calculatePositionHandleAndJacobian();
   while(1) 
   {
-    #ifdef DOF_1
-        calculatePosition1DOF(); 
+    initDeltaThumb();
+
+    #ifdef DOF_1        
+        // calculatePosition1DOF(); 
         /*Insert here the virtual environment from the file haplink_virtual_environments.c that you wish to render*/   
         //renderSpring1DOF( );
         //renderForceAlert( );

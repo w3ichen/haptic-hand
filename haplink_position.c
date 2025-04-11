@@ -13,6 +13,7 @@
 #include "haplink_encoders.h"
 #include "stdlib.h"
 #include <math.h>
+#include <debug_mort.h>
 
 /* Global Variables ----------------------------------------------------------*/
 
@@ -171,6 +172,8 @@ void calculatePosition1DOF( void )
     
     //dxH = ;//Some complicated function you will decide on
     /**************************************************************************/
+
+    printDebug1DOFAllParameters();
 }
 
 /*******************************************************************************
