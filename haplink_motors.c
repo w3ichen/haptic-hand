@@ -13,14 +13,14 @@
 /* Pin Connections:***********************************************************
   * PC6-TIM3_CH1-PWMB-PWM Motor1
   * PC7-TIM3_CH2-PWMA-PWM Motor2
-  * PC8-TIM3_CH3-     -PWM Motor3
+  * PC8-TIM3_CH3-PWMB-PWM Motor3
   * PC9-TIM3_CH4-     -PWM Motor4
   * PC10 - Bin2 - PWM12_PIN Motor1
   * PC11 - Bin1 - PWM11_PIN Motor1
   * PC12 - Ain1 - PWM21_PIN Motor2
   * PD2 - Ain2  - PWM22_PIN Motor2
-  * PG2 -       - pwm31 Motor3
-  * PG3 -       - pwm32 Motor3
+  * PG2 - Bin2  - pwm31 Motor3
+  * PG3 - Bin1  - pwm32 Motor3
   ******************************************************************************
   */
 
