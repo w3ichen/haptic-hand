@@ -342,7 +342,7 @@ void outputDutyCycleMotor3(double duty)
     {
         motor3Dir2();
     }
-    dutyPrint2 = duty;
+    dutyPrint3 = duty;
     updateDutyCycle3(duty); 
 }
 /**/
@@ -382,12 +382,12 @@ void outputTorqueMotor2(double torque)
     double duty;
     if (torque < 0)
     {
-        motor2Dir2();
+        motor2Dir1();
         torque = torque*(-1.0);
     }
     else
     {
-        motor2Dir1();
+        motor2Dir2();
     }
 
     duty = torque*65.13; //replace 65.13 with value for specific motor.

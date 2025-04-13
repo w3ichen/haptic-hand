@@ -3,6 +3,7 @@
   * @file    delta_thumb.cpp
   * @date    April-2025
   * @brief   Delta thumb mechanism based on code from https://github.com/alvaresc/DeltaZ/blob/main/Arduino/DeltaZ_communication/DeltaRobot.cpp
+  * NOTE: DeltaZ code operates in degrees!
   ******************************************************************************
   */
 
@@ -19,7 +20,12 @@ DeltaThumb deltaThumb;
 float deltaThumbX;
 float deltaThumbY;
 float deltaThumbZ;
-
+double ThetaMotor1Rad;
+double ThetaMotor2Rad;
+double ThetaMotor3Rad;
+double ThetaMotor1Deg;
+double ThetaMotor2Deg;
+double ThetaMotor3Deg;
 
 
 /*******************************************************************************
@@ -32,13 +38,13 @@ float deltaThumbZ;
 void deltaThumbHandler( void )
 {
     // Read encoders    
-    double ThetaMotor1Rad = calculatePositionMotor1();
-    double ThetaMotor2Rad = calculatePositionMotor2();
-    double ThetaMotor3Rad = calculatePositionMotor3();
+    ThetaMotor1Rad = calculatePositionMotor1();
+    ThetaMotor2Rad = calculatePositionMotor2();
+    ThetaMotor3Rad = calculatePositionMotor3();
     // Convert radians to degrees
-    double ThetaMotor1Deg = RAD_TO_DEG(ThetaMotor1Rad);
-    double ThetaMotor2Deg = RAD_TO_DEG(ThetaMotor2Rad);
-    double ThetaMotor3Deg = RAD_TO_DEG(ThetaMotor3Rad);
+    ThetaMotor1Deg = RAD_TO_DEG(ThetaMotor1Rad);
+    ThetaMotor2Deg = RAD_TO_DEG(ThetaMotor2Rad);
+    ThetaMotor3Deg = RAD_TO_DEG(ThetaMotor3Rad);
 
     // Output forces
     double ForceMotor1 = 0.0;
@@ -61,9 +67,105 @@ void deltaThumbHandler( void )
     delta_calcForward(ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
 
 
+    goHome();
+
+
     // Print values
     printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
 }
+
+
+
+/**
+ * @name   setAndMaintainMotorAngle
+ * @brief  Sets a motor to a specific angle and maintains it using PID control
+ * @param  motorNumber: Which motor to control (1, 2, or 3)
+ * @param  targetAngleDeg: The target angle in degrees
+ * @retval None.
+ */
+void setAndMaintainMotorAngle(int motorNumber, float targetAngleDeg) {
+    static float errorIntegral1 = 0.0;
+    static float errorIntegral2 = 0.0;
+    static float errorIntegral3 = 0.0;
+    static float prevError1 = 0.0;
+    static float prevError2 = 0.0;
+    static float prevError3 = 0.0;
+    
+    // PID coefficients - adjust these values based on system response
+    const float kp = 0.05;  // Proportional gain
+    const float ki = 0.001; // Integral gain
+    const float kd = 0.01;  // Derivative gain
+    
+    // Maximum integral value to prevent windup
+    const float maxIntegral = 50.0;
+    
+    float currentAngleDeg = 0.0;
+    float error = 0.0;
+    float errorDerivative = 0.0;
+    float *errorIntegralPtr = NULL;
+    float *prevErrorPtr = NULL;
+    float torque = 0.0;
+    
+    // Use the global angle variables based on motor number
+    switch(motorNumber) {
+        case 1:
+            currentAngleDeg = ThetaMotor1Deg;
+            errorIntegralPtr = &errorIntegral1;
+            prevErrorPtr = &prevError1;
+            break;
+        case 2:
+            currentAngleDeg = ThetaMotor2Deg;
+            errorIntegralPtr = &errorIntegral2;
+            prevErrorPtr = &prevError2;
+            break;
+        case 3:
+            currentAngleDeg = ThetaMotor3Deg;
+            errorIntegralPtr = &errorIntegral3;
+            prevErrorPtr = &prevError3;
+            break;
+        default:
+            printf("Invalid motor number!\n");
+            return; // Invalid motor number
+    }
+    
+    // Calculate error
+    error = targetAngleDeg - currentAngleDeg;
+    
+    // Calculate error integral with anti-windup
+    *errorIntegralPtr += error;
+    if (*errorIntegralPtr > maxIntegral) {
+        *errorIntegralPtr = maxIntegral; // Cap + value
+    } else if (*errorIntegralPtr < -maxIntegral) {
+        *errorIntegralPtr = -maxIntegral; // Cap - value
+    }
+    
+    // Calculate error derivative
+    errorDerivative = error - *prevErrorPtr;
+    *prevErrorPtr = error;
+    
+    // Calculate torque using PID formula
+    torque = kp * error + ki * (*errorIntegralPtr) + kd * errorDerivative;
+    
+    // Apply torque to motor
+    switch(motorNumber) {
+        case 1:
+            outputTorqueMotor1(torque);
+            break;
+        case 2:
+            outputTorqueMotor2(torque);
+            break;
+        case 3:
+            outputTorqueMotor3(torque);
+            break;
+    }
+}
+
+
+/*******************************************************************************************************************************************/
+// START DeltaZ code
+// Modified version of https://github.com/alvaresc/DeltaZ/blob/main/Arduino/DeltaZ_communication/DeltaRobot.cpp
+// NOTE: DeltaZ code operates in degrees!
+/*******************************************************************************************************************************************/
 
 
 void initDeltaThumb() {
@@ -95,25 +197,25 @@ void goHome() {
 }
 
 void goTo(float x, float y, float z) {
-    return; // TODO: neeed to implement
+  /* Inputs the target position, (x,y,z). First, this function tests if the target position is in the workspace. 
+   If so, it calculates the inverse kineamtics, moves the robot to that position. It not, the robot reports that it isnt in the workspace.
+   Finally, the robot reports its current joint angles.*/
+  int inWorkspace = testInWorkspace(x, y, z);
 
-//   /* Inputs the target position, (x,y,z). First, this function tests if the target position is in the workspace. 
-//    If so, it calculates the inverse kineamtics, moves the robot to that position. It not, the robot reports that it isnt in the workspace.
-//    Finally, the robot reports its current joint angles.*/
-//   int inWorkspace = testInWorkspace(x, y, z);
+  if (inWorkspace){
+    deltaThumb.x0 = x;
+    deltaThumb.y0 = y;
+    deltaThumb.z0 = z;
+    delta_calcInverse(deltaThumb.x0, deltaThumb.y0, deltaThumb.z0, &deltaThumb.t1, &deltaThumb.t2, &deltaThumb.t3);
 
-//   if (inWorkspace){
-//     x0 = x;
-//     y0 = y;
-//     z0 = z;
-//     delta_calcInverse(x0, y0, z0, t1, t2, t3);
-//     servo1.write(-t1 + 90);
-//     servo2.write(-t2 + 90);
-//     servo3.write(-t3 + 90);  
-//   } else {
-//     printf("NOT IN WORKSPACE");
-//   }
-//   reportAngles();
+    // Set the angles
+    setAndMaintainMotorAngle(MOTOR_1, -deltaThumb.t1 + 90);
+    setAndMaintainMotorAngle(MOTOR_2, -deltaThumb.t2 + 90);
+    setAndMaintainMotorAngle(MOTOR_3, -deltaThumb.t3 + 90);  
+  } else {
+    printf("NOT IN WORKSPACE");
+  }
+  reportAngles();
 }
 
 int testInWorkspace(float x, float y, float z) {
@@ -129,40 +231,40 @@ int testInWorkspace(float x, float y, float z) {
 
 void reportPosition(){
   /* Report the curent position of the robot*/
-   printf("ATPOS %.2f %.2f %.2f\n", deltaThumb.x0, deltaThumb.y0, deltaThumb.z0);
+//    printf("ATPOS %.2f %.2f %.2f\n", deltaThumb.x0, deltaThumb.y0, deltaThumb.z0);
 }
 
 void reportAngles(){
   /* Report the current position of the robot*/
-    printf("ATANG %f %f %f\n", deltaThumb.t1, deltaThumb.t2, deltaThumb.t3);
+    // printf("ATANG %f %f %f\n", deltaThumb.t1, deltaThumb.t2, deltaThumb.t3);
 }
 
 void goToAngle(int angle1, int angle2, int angle3) {
-    return; // TODO: need to implement
-//   /* inputs angles angle1-3. Claculates forward kineamtics and tests if position is in the workspace. If so, the robot goes to those angles. 
-//    *  If not, the root reports that it is not in the workspace. Then, report the position of the robot. */
-//   float x0Old = x0;
-//   float y0Old = y0;
-//   float z0Old = z0;
+  /* inputs angles angle1-3. Claculates forward kineamtics and tests if position is in the workspace. If so, the robot goes to those angles. 
+   *  If not, the root reports that it is not in the workspace. Then, report the position of the robot. */
+  float x0Old = deltaThumb.x0;
+  float y0Old = deltaThumb.y0;
+  float z0Old = deltaThumb.z0;
 
-//   delta_calcForward(angle1, angle2, angle3, x0, y0, z0);
-//   /* Visit https://hypertriangle.com/~alex/delta-robot-tutorial/ for more information*/
-//   int inWorkspace = testInWorkspace(x0, y0, z0);
-//   if (inWorkspace){
-//     t1 = angle1;
-//     t2 = angle2;
-//     t3 = angle3;
-//     servo1.write(-t1 + 90);
-//     servo2.write(-t2 + 90);
-//     servo3.write(-t3 + 90);
-//   } else {
-//     printf("NOT IN WORKSPACE");
-//     x0 = x0Old;
-//     y0 = y0Old;
-//     z0 = z0Old;
-//   }
-//   reportPosition();
-  
+  delta_calcForward(angle1, angle2, angle3, &deltaThumb.x0, &deltaThumb.y0, &deltaThumb.z0);
+  /* Visit https://hypertriangle.com/~alex/delta-robot-tutorial/ for more information*/
+  int inWorkspace = testInWorkspace(deltaThumb.x0, deltaThumb.y0, deltaThumb.z0);
+  if (inWorkspace){
+    deltaThumb.t1 = angle1;
+    deltaThumb.t2 = angle2;
+    deltaThumb.t3 = angle3;
+
+    // Set the angles
+    setAndMaintainMotorAngle(MOTOR_1, -deltaThumb.t1 + 90);
+    setAndMaintainMotorAngle(MOTOR_2, -deltaThumb.t2 + 90);
+    setAndMaintainMotorAngle(MOTOR_3, -deltaThumb.t3 + 90);  
+  } else {
+    printf("NOT IN WORKSPACE");
+    deltaThumb.x0 = x0Old;
+    deltaThumb.y0 = y0Old;
+    deltaThumb.z0 = z0Old;
+  }
+  reportPosition();
 }
 
 int delta_calcAngleYZ(float x0, float y0, float z0, float *theta) {
@@ -258,3 +360,7 @@ int delta_calcForward(float theta1, float theta2, float theta3, float *x0, float
   *y0 = (a2 * *z0 + b2) / dnm;
   return 0;
 }
+
+/*******************************************************************************************************************************************/
+// END DeltaZ Code
+/*******************************************************************************************************************************************/
