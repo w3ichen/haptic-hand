@@ -32,11 +32,13 @@ float deltaThumbZ;
 void deltaThumbHandler( void )
 {
     // Read encoders    
-    double ThetaMotor1 = calculatePositionMotor1();
-    double ThetaMotor2 = calculatePositionMotor2();
-    double ThetaMotor3 = calculatePositionMotor3();
-
-    
+    double ThetaMotor1Rad = calculatePositionMotor1();
+    double ThetaMotor2Rad = calculatePositionMotor2();
+    double ThetaMotor3Rad = calculatePositionMotor3();
+    // Convert radians to degrees
+    double ThetaMotor1Deg = RAD_TO_DEG(ThetaMotor1Rad);
+    double ThetaMotor2Deg = RAD_TO_DEG(ThetaMotor2Rad);
+    double ThetaMotor3Deg = RAD_TO_DEG(ThetaMotor3Rad);
 
     // Output forces
     double ForceMotor1 = 0.0;
@@ -56,11 +58,11 @@ void deltaThumbHandler( void )
     outputTorqueMotor3(TorqueMotor3);    
 
     // Update x,y,z positions of end-effector
-    delta_calcForward(ThetaMotor1, ThetaMotor2, ThetaMotor3, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
+    delta_calcForward(ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
 
 
     // Print values
-    printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1, ThetaMotor2, ThetaMotor3, deltaThumbX, deltaThumbY, deltaThumbZ);
+    printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
 }
 
 

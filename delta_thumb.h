@@ -17,6 +17,10 @@
 
 #include "main.h"
 
+#define PI 3.14159265358979323846
+#define DEG_TO_RAD(degrees) ((degrees) * (PI / 180.0))
+#define RAD_TO_DEG(radians) ((radians) * (180.0 / PI))
+
 /******* Calibration Values ****/
 typedef struct {
     float t1;

@@ -569,7 +569,7 @@ void EXTI15_10_IRQHandler(void)
   {
     M3_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M3_S1_PIN));
     M3_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M3_S2_PIN));
-    if (((M3p_s1 == M3p_s2)&&(M3_s1 == (!M3_s2)))||((M3_s1==M2_s2)&&(M3p_s1==(!M3p_s2))))
+    if (((M3p_s1 == M3p_s2)&&(M3_s1 == (!M3_s2)))||((M3_s1==M3_s2)&&(M3p_s1==(!M3p_s2))))
     {
         CountsSensor3Changed = 1;
         if ((M3_s2 == M3p_s1)&&(M3_s1==(!M3p_s2)))
