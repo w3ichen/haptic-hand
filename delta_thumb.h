@@ -22,7 +22,7 @@
 
 
 /******* Function prototypes ****/
-void initDeltaThumb( void );
+void deltaThumbHandler( void );
 
 
 

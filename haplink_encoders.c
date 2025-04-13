@@ -193,6 +193,115 @@ void initHaplinkEncoders2Motors( void )
 }
 
 
+void initHapticHandEncodersMotors( void )
+{
+    uint32_t * reg_pointer_32;
+   
+    
+    /* Enable GPIOE clock */
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
+    
+    /* Enable SYSCFG clock */
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+
+    gpioinitstructure.GPIO_Mode = GPIOModeIN;
+    gpioinitstructure.GPIO_OType = GPIOOTypePP;
+    gpioinitstructure.GPIO_Speed = GPIOHighSpeed;
+    gpioinitstructure.GPIO_PuPd = GPIOPuPdNOPULL;
+    gpioinitstructure.GPIO_Pin = GPIOPin12;
+    GPIOInit((GPIOTypeDef *)GPIOE_BASE_MORT, &gpioinitstructure);
+    gpioinitstructure.GPIO_Pin = GPIOPin13;
+    GPIOInit((GPIOTypeDef *)GPIOE_BASE_MORT, &gpioinitstructure);
+    gpioinitstructure.GPIO_Pin = GPIOPin14;
+    GPIOInit((GPIOTypeDef *)GPIOE_BASE_MORT, &gpioinitstructure);
+    gpioinitstructure.GPIO_Pin = GPIOPin15;
+    GPIOInit((GPIOTypeDef *)GPIOE_BASE_MORT, &gpioinitstructure);
+    gpioinitstructure.GPIO_Pin = GPIOPin11;
+    GPIOInit((GPIOTypeDef *)GPIOE_BASE_MORT, &gpioinitstructure);
+    gpioinitstructure.GPIO_Pin = GPIOPin10;
+    GPIOInit((GPIOTypeDef *)GPIOE_BASE_MORT, &gpioinitstructure);
+
+    M1p_s1 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M1_S1_PIN);
+    M1p_s2 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M1_S2_PIN);
+    M1_s1 = M1p_s1;
+    //check that it is configured as an input correctly
+    debugprintRegister(M1_s1);
+    M1_s2 = M1p_s2;
+    M2p_s1 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M2_S1_PIN);
+    M2p_s2 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M2_S2_PIN);
+    M2_s1 = M2p_s1;
+    M2_s2 = M2p_s2;
+
+    M3p_s1 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M3_S1_PIN);
+    M3p_s2 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M3_S2_PIN);
+    M3_s1 = M3p_s1;
+    M3_s2 = M3p_s2;
+
+    CountsSensor1 = 0;
+    CountsSensor2 = 0;
+    CountsSensor3 = 0;
+    CountsSensor1Changed = 0;
+    CountsSensor2Changed = 0;
+    CountsSensor3Changed = 0;
+
+    /* Connect EXTI Line15 to PE15 pin */
+    SYSCFGEXTILineConfig(EXTI_PORT_SOURCE_GPIOE , EXTI_PIN_SOURCE_15 );
+    /* Connect EXTI Line14 to PE14 pin */
+    SYSCFGEXTILineConfig(EXTI_PORT_SOURCE_GPIOE , EXTI_PIN_SOURCE_14 );
+    /* Connect EXTI Line13 to PE13 pin */
+    SYSCFGEXTILineConfig(EXTI_PORT_SOURCE_GPIOE , EXTI_PIN_SOURCE_13 );
+    /* Connect EXTI Line12 to PE12 pin */
+    SYSCFGEXTILineConfig(EXTI_PORT_SOURCE_GPIOE , EXTI_PIN_SOURCE_12 );
+    /* Connect EXTI Line11 to PE11 pin */
+    SYSCFGEXTILineConfig(EXTI_PORT_SOURCE_GPIOE , EXTI_PIN_SOURCE_11 );
+    /* Connect EXTI Line10 to PE10 pin */
+    SYSCFGEXTILineConfig(EXTI_PORT_SOURCE_GPIOE , EXTI_PIN_SOURCE_10 );
+    //check that the register is good:
+    reg_pointer_32 = (uint32_t *)SYSCFG_EXTERNAL_INTERRUPT_REGISTER_4;
+    debugprintRegister(*reg_pointer_32);
+
+    /* Configure EXTI Line15 */
+    extiinitstructure.EXTILine = EXTI_Line15_MORT;
+    extiinitstructure.EXTIMode = EXTIModeInterrupt;
+    extiinitstructure.EXTITrigger = EXTITriggerRisingFalling;
+    extiinitstructure.EXTILineCmd = ENABLE_MORT;
+    EXTIInit(&extiinitstructure);
+    /* Configure EXTI Line14 */
+    extiinitstructure.EXTILine = EXTI_Line14_MORT;
+    EXTIInit(&extiinitstructure);
+    /* Configure EXTI Line13 */
+    extiinitstructure.EXTILine = EXTI_Line13_MORT;
+    EXTIInit(&extiinitstructure);
+    /* Configure EXTI Line12 */
+    extiinitstructure.EXTILine = EXTI_Line12_MORT;
+    EXTIInit(&extiinitstructure);
+    /* Configure EXTI Line11 */
+    extiinitstructure.EXTILine = EXTI_Line11_MORT;
+    EXTIInit(&extiinitstructure);
+    /* Configure EXTI Line10 */
+    extiinitstructure.EXTILine = EXTI_Line10_MORT;
+    EXTIInit(&extiinitstructure);
+    //check that the register is good:
+    reg_pointer_32 = (uint32_t *)EXTERNAL_INTERRUPT_CONTROLLER_MASK_REGISTER;
+    debugprintRegister(*reg_pointer_32);
+    reg_pointer_32 = (uint32_t *)EXTERNAL_INTERRUPT_CONTROLLER_RTSR;
+    debugprintRegister(*reg_pointer_32);
+    reg_pointer_32 = (uint32_t *)EXTERNAL_INTERRUPT_CONTROLLER_FTSR;
+    debugprintRegister(*reg_pointer_32);
+
+    /* Enable and set EXTI15_10 Interrupt to the lowest priority */
+    nvicinitstructure.NVICIRQChannel = EXTI15_10_IRQn;
+    nvicinitstructure.NVICIRQChannelPreemptionPriority = 0x0F;
+    nvicinitstructure.NVICIRQChannelSubPriority = 0x0F;
+    nvicinitstructure.NVICIRQChannelCmd = ENABLE_MORT;
+
+    NVICInit(&nvicinitstructure);
+
+    reg_pointer_32 = (uint32_t *)NVIC_INTERRUPT_SET_ENABLE_REGISTER_32_63;
+    debugprintRegister(*reg_pointer_32);
+
+}
+
 void initHaplinkEncoders3Motors( void )
 {
     uint32_t * reg_pointer_32;

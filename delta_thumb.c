@@ -3,12 +3,12 @@
 #include "haplink_motors.h"
 
 /*******************************************************************************
-  * @name   initDeltaThumb
+  * @name   deltaThumbHandler
   * @brief  initialize the delta mechanism thumb
   * @param  None.
   * @retval None.
   */
-void initDeltaThumb( void )
+void deltaThumbHandler( void )
 {
     // Read encoders    
     double ThetaMotor1 = calculatePositionMotor1();
@@ -29,8 +29,9 @@ void initDeltaThumb( void )
     TorqueMotor2 = TorqueMotor2*0.001; //convert units
     outputTorqueMotor2(TorqueMotor2);    
 
-    double ForceMotor3 = 1.0;
+    double ForceMotor3 = 0.0;
     double TorqueMotor3 = -((R_MA/R_A) * R_HA) * ForceMotor3;
     TorqueMotor3 = TorqueMotor3*0.001; //convert units
+
     outputTorqueMotor3(TorqueMotor3);    
 }

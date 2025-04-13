@@ -31,7 +31,7 @@ int main()
 
     initCommunication();
     initLED1();
-    initHaplinkPosition();
+    initHapticHandPosition();
     initHaplinkMotors();
     initHaplinkAnalogSensors();
     initHaplinkTime();
@@ -39,7 +39,7 @@ int main()
     calculatePositionHandleAndJacobian();
   while(1) 
   {
-    initDeltaThumb();
+    deltaThumbHandler();
 
     #ifdef DOF_1        
         // calculatePosition1DOF(); 
