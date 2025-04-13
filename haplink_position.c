@@ -14,6 +14,7 @@
 #include "stdlib.h"
 #include <math.h>
 #include <debug_mort.h>
+#include "delta_thumb.h"
 
 /* Global Variables ----------------------------------------------------------*/
 
@@ -53,12 +54,12 @@ int debugcounter = 0;
 
 
 /*******************************************************************************
-  * @name   initHapticHandPosition
+  * @name   initHapticHand
   * @brief  initializes the Haptic hand position variables and position hardware
   * @param  None.
   * @retval int 1 to indicate initialization has been completed.
   */
-int initHapticHandPosition( void )
+int initHapticHand( void )
 {
     //initialize variables
     rx = 0;
@@ -84,6 +85,8 @@ int initHapticHandPosition( void )
     initHapticHandEncodersMotors();
     
     initPositionHandleAndJacobian( );   
+
+    initDeltaThumb();
     return 1;
 }
 

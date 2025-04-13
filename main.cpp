@@ -31,7 +31,7 @@ int main()
 
     initCommunication();
     initLED1();
-    initHapticHandPosition();
+    initHapticHand();
     initHaplinkMotors();
     initHaplinkAnalogSensors();
     initHaplinkTime();

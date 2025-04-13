@@ -36,7 +36,7 @@
 
 
 /******* Function prototypes ****/
-int initHapticHandPosition( void );
+int initHapticHand( void );
 
 int initHaplinkPosition( void );
 
