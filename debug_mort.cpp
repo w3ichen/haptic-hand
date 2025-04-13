@@ -111,9 +111,14 @@ to help you see that your device is working properly. Just remember that prints 
 ALWAYS cause delays and affect the behavior of your device. And if they happen too 
 frequently, your device may not work at all.-- */
 
+void printDebugDeltaThumb( void )
+{
+    pc.printf("xH=%lf, dXh=%lf, ForceH=%lf, Torque=%lf\r\n", getXH(), getDxH(), getForceH(), getTorqueMotor1());
+}
+
 void printDebug1DOFAllParameters( void )
 {
-    pc.printf("%lf, %u, %u, %lf, %lf, %lf,%lf\r\n",getTime_ms(), queryFSR1value(), queryFSR2value(), getXH(), getDxH(), getForceH(), getTorqueMotor1());
+    pc.printf("t=%lf, FSR1=%u, FSR2=%u, xH=%lf, dXh=%lf, ForceH=%lf, Torque=%lf\r\n",getTime_ms(), queryFSR1value(), queryFSR2value(), getXH(), getDxH(), getForceH(), getTorqueMotor1());
 }
 
 void printDebug2DOFAllParameters( void )

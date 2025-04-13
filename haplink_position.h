@@ -36,6 +36,8 @@
 
 
 /******* Function prototypes ****/
+int initHapticHand( void );
+
 int initHaplinkPosition( void );
 
 double calculatePositionMotor1( void );

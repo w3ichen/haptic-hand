@@ -21,6 +21,13 @@
 
 //PWM timer period
 #define PERIOD_PWM                  665
+#define MOTOR_1 1
+#define MOTOR_2 2
+#define MOTOR_3 3
+#define MOTOR_4 4
+#define MOTOR_5 5
+#define MOTOR_6 6
+#define MOTOR_7 7
 
 
 void initHaplinkMotors( void );

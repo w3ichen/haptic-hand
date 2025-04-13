@@ -13,6 +13,8 @@
 #include "haplink_encoders.h"
 #include "stdlib.h"
 #include <math.h>
+#include <debug_mort.h>
+#include "delta_thumb.h"
 
 /* Global Variables ----------------------------------------------------------*/
 
@@ -52,6 +54,43 @@ int debugcounter = 0;
 
 
 /*******************************************************************************
+  * @name   initHapticHand
+  * @brief  initializes the Haptic hand position variables and position hardware
+  * @param  None.
+  * @retval int 1 to indicate initialization has been completed.
+  */
+int initHapticHand( void )
+{
+    //initialize variables
+    rx = 0;
+    ry = 0;
+    rx_prev = 0;
+    ry_prev = 0;
+    dx = 0;
+    dy = 0;
+    dx_prev = 0;
+    dy_prev = 0;
+    theta_a = 0;
+    theta_b = 0;
+    xH = 0;
+    xH_prev = 0;
+    dxH = 0;
+    dxH_prev = 0;
+    
+    J00 = 0;
+    J01 = 0;
+    J10 = 0;
+    J11 = 0;
+    //initialize encoders
+    initHapticHandEncodersMotors();
+    
+    initPositionHandleAndJacobian( );   
+
+    initDeltaThumb();
+    return 1;
+}
+
+/*******************************************************************************
   * @name   initHaplinkPosition
   * @brief  initializes the Haplink position variables and position hardware
   * @param  None.
@@ -86,6 +125,7 @@ int initHaplinkPosition( void )
     initPositionHandleAndJacobian( );   
     return 1;
 }
+
 
 /*******************************************************************************
   * @name   calculatePositionMotor1
@@ -171,6 +211,8 @@ void calculatePosition1DOF( void )
     
     //dxH = ;//Some complicated function you will decide on
     /**************************************************************************/
+
+    printDebug1DOFAllParameters();
 }
 
 /*******************************************************************************
