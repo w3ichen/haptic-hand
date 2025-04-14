@@ -22,6 +22,10 @@
 double theta_m1;
 double theta_m2;
 double theta_m3;
+double theta_m4;
+double theta_m5;
+double theta_m6;
+double theta_m7;
 
 //Haplink Variables
 double theta_a;
@@ -145,7 +149,7 @@ double calculatePositionMotor1( void )
   * @name   calculatePositionMotor2
   * @brief  Calculates the rotation of Motor 2 in radians
   * @param  None.
-  * @retval theta_m1: the current rotation of Motor 2 in radians
+  * @retval theta_m2: the current rotation of Motor 2 in radians
   */
 double calculatePositionMotor2( void )
 {
@@ -159,7 +163,7 @@ double calculatePositionMotor2( void )
   * @name   calculatePositionMotor3
   * @brief  Calculates the rotation of Motor 3 in radians
   * @param  None.
-  * @retval theta_m1: the current rotation of Motor 3 in radians
+  * @retval theta_m3: the current rotation of Motor 3 in radians
   */
 double calculatePositionMotor3( void )
 {
@@ -168,6 +172,64 @@ double calculatePositionMotor3( void )
     theta_m3 = theta_m3/TOTAL_ENCODER_COUNTS_3;
     return theta_m3;
 }
+
+/*******************************************************************************
+  * @name   calculatePositionMotor4
+  * @brief  Calculates the rotation of Motor 4 in radians
+  * @param  None.
+  * @retval theta_m4: the current rotation of Motor 4 in radians
+  */
+double calculatePositionMotor4( void )
+{
+    theta_m4 = (double)getCountsSensor4();
+    theta_m4 = theta_m4*2.0*3.1416;
+    theta_m4 = theta_m4/TOTAL_ENCODER_COUNTS_4;
+    return theta_m4;
+}
+
+/*******************************************************************************
+  * @name   calculatePositionMotor5
+  * @brief  Calculates the rotation of Motor 5 in radians
+  * @param  None.
+  * @retval theta_m5: the current rotation of Motor 5 in radians
+  */
+double calculatePositionMotor5( void )
+{
+    theta_m5 = (double)getCountsSensor5();
+    theta_m5 = theta_m5*2.0*3.1416;
+    theta_m5 = theta_m5/TOTAL_ENCODER_COUNTS_5;
+    return theta_m5;
+}
+
+/*******************************************************************************
+  * @name   calculatePositionMotor6
+  * @brief  Calculates the rotation of Motor 6 in radians
+  * @param  None.
+  * @retval theta_m6: the current rotation of Motor 6 in radians
+  */
+double calculatePositionMotor6( void )
+{
+    theta_m6 = (double)getCountsSensor6();
+    theta_m6 = theta_m6*2.0*3.1416;
+    theta_m6 = theta_m6/TOTAL_ENCODER_COUNTS_6;
+    return theta_m6;
+}
+
+/*******************************************************************************
+  * @name   calculatePositionMotor7
+  * @brief  Calculates the rotation of Motor 7 in radians
+  * @param  None.
+  * @retval theta_m7: the current rotation of Motor 7 in radians
+  */
+double calculatePositionMotor7( void )
+{
+    theta_m7 = (double)getCountsSensor7();
+    theta_m7 = theta_m7*2.0*3.1416;
+    theta_m7 = theta_m7/TOTAL_ENCODER_COUNTS_7;
+    return theta_m7;
+}
+
+
 
 /*******************************************************************************
   * @name   calculatePosition1DOF
