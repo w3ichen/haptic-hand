@@ -28,6 +28,16 @@ double ThetaMotor2Deg;
 double ThetaMotor3Deg;
 
 
+float getThumbX( void ) {
+    return deltaThumbX;
+}
+float getThumbY( void ) {
+    return deltaThumbY;
+}
+float getThumbZ( void ) {
+    return deltaThumbZ;
+}
+
 /*******************************************************************************
   * @name   deltaThumbHandler
   * @brief  initialize the delta mechanism thumb
@@ -67,11 +77,11 @@ void deltaThumbHandler( void )
     delta_calcForward(ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
 
 
-    goHome();
+    // goHome();
 
 
     // Print values
-    printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
+    // printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
 }
 
 

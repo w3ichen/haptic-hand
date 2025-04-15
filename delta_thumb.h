@@ -49,6 +49,7 @@ typedef struct {
 /******* Function prototypes ****/
 void deltaThumbHandler( void );
 void setAndMaintainMotorAngle(int motorNumber, float targetAngleDeg);
+float getThumbX( void ), getThumbY( void ), getThumbZ( void );
 
 void initDeltaThumb();
 void goHome();

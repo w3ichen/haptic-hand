@@ -85,7 +85,8 @@ int main()
         if (print_counter > 10000)
         {
             //printDebug1DOFAllParameters();
-            debugprintHelloWorld();
+            // debugprintHelloWorld();
+            printProcessingHapticHand();
             //debugprintStarterCode();
             //debugprinttruesusb();
             print_counter = 0;
@@ -100,7 +101,8 @@ int main()
 //change the parameter you are sending depending on the virtual environment you are rendering.
 //or maybe you need to write your own function in debug_mort.cpp and call it from here.
     #ifdef COMM_PROCESSING
-        printProcessingComm1DOF(mass_position*1000.0);
+        printProcessingHapticHand();
+        // printProcessingComm1DOF(mass_position*1000.0);
         //printProcessingComm2DOF((double)contact);
     #endif
 
