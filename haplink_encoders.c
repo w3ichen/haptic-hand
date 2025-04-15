@@ -510,7 +510,6 @@ void EXTI15_10_IRQHandler(void)
   //debugprint(0);
   if(EXTI_GetITStatus_mort(EXTI_Line13_MORT) != RESET_MORT) // motor 1  s1
   {
-      //debugprint(1);
     M1_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M1_S1_PIN));
     M1_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M1_S2_PIN));
     if (((M1p_s1 == M1p_s2)&&(M1_s1 == (!M1_s2)))||((M1_s1==M1_s2)&&(M1p_s1==(!M1p_s2))))
