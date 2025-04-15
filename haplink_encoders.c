@@ -580,7 +580,6 @@ void EXTI15_10_IRQHandler(void)
   //debugprint(0);
   if(EXTI_GetITStatus_mort(EXTI_Line13_MORT) != RESET_MORT) // motor 1  s1
   {
-      debugprint(13);
     M1_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M1_S1_PIN));
     M1_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M1_S2_PIN));
     if (((M1p_s1 == M1p_s2)&&(M1_s1 == (!M1_s2)))||((M1_s1==M1_s2)&&(M1p_s1==(!M1p_s2))))
@@ -604,7 +603,6 @@ void EXTI15_10_IRQHandler(void)
   }
   else if(EXTI_GetITStatus_mort(EXTI_Line12_MORT) != RESET_MORT) // motor1 s2
   {
-      //debugprint(12);
     M1_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M1_S1_PIN));
     M1_s2 = (GPIOReadInputDataBit(( GPIOTypeDef *)GPIOE_BASE_MORT, M1_S2_PIN));
     if (((M1p_s1 == M1p_s2)&&(M1_s1 == (!M1_s2)))||((M1_s1==M1_s2)&&(M1p_s1==(!M1p_s2))))
@@ -626,7 +624,6 @@ void EXTI15_10_IRQHandler(void)
   }
   else if(EXTI_GetITStatus_mort(EXTI_Line15_MORT) != RESET) // motor 2 sensor 1
   {
-      //debugprint(15);
     M2_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M2_S1_PIN));
     M2_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M2_S2_PIN));
     if (((M2p_s1 == M2p_s2)&&(M2_s1 == (!M2_s2)))||((M2_s1==M2_s2)&&(M2p_s1==(!M2p_s2))))
@@ -649,7 +646,6 @@ void EXTI15_10_IRQHandler(void)
   }
   else if(EXTI_GetITStatus_mort(EXTI_Line14_MORT) != RESET) // motor2  sensor2
   {
-      //debugprint(14);
     M2_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M2_S1_PIN));
     M2_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M2_S2_PIN));
     if (((M2p_s1 == M2p_s2)&&(M2_s1 == (!M2_s2)))||((M2_s1==M2_s2)&&(M2p_s1==(!M2p_s2))))
@@ -672,7 +668,6 @@ void EXTI15_10_IRQHandler(void)
   }
   else if(EXTI_GetITStatus_mort(EXTI_Line11_MORT) != RESET) // motor 3 sensor 1
   {
-      //debugprint(11);
     M3_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M3_S1_PIN));
     M3_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M3_S2_PIN));
     if (((M3p_s1 == M3p_s2)&&(M3_s1 == (!M3_s2)))||((M3_s1==M3_s2)&&(M3p_s1==(!M3p_s2))))
@@ -695,10 +690,9 @@ void EXTI15_10_IRQHandler(void)
   }
   else if(EXTI_GetITStatus_mort(EXTI_Line10_MORT) != RESET) // motor3  sensor2
   {
-      //debugprint(10);
     M3_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M3_S1_PIN));
     M3_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M3_S2_PIN));
-    if (((M3p_s1 == M3p_s2)&&(M3_s1 == (!M3_s2)))||((M3_s1==M2_s2)&&(M3p_s1==(!M3p_s2))))
+    if (((M3p_s1 == M3p_s2)&&(M3_s1 == (!M3_s2)))||((M3_s1==M3_s2)&&(M3p_s1==(!M3p_s2))))
     {
         CountsSensor3Changed = 1;
         if ((M3_s2 == M3p_s1)&&(M3_s1==(!M3p_s2)))

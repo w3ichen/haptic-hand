@@ -11,16 +11,24 @@
   ******************************************************************************
   */
 /* Pin Connections:***********************************************************
-  * PC6-TIM3_CH1-PWMB-PWM Motor1
-  * PC7-TIM3_CH2-PWMA-PWM Motor2
-  * PC8-TIM3_CH3-     -PWM Motor3
-  * PC9-TIM3_CH4-     -PWM Motor4
-  * PC10 - Bin2 - PWM12_PIN Motor1
-  * PC11 - Bin1 - PWM11_PIN Motor1
-  * PC12 - Ain1 - PWM21_PIN Motor2
-  * PD2 - Ain2  - PWM22_PIN Motor2
-  * PG2 -       - pwm31 Motor3
-  * PG3 -       - pwm32 Motor3
+    | HARDWARE       | PIN # | RESOURCE   |
+    |----------------|-------|------------|
+    | Motor 1 PWM    | PC6   | TIM3_CH1   |
+    | Motor 1 Dir 1  | PC11  | Output     |
+    | Motor 1 Dir 2  | PC10  | Output     |
+    | Motor 1 Enc 1  | PE13  | EXTI_15    |
+    | Motor 1 Enc 2  | PE12  | EXTI_14    |
+    | Motor 2 PWM    | PC7   | TIM3_CH2   |
+    | Motor 2 Dir 1  | PC12  | Output     |
+    | Motor 2 Dir 2  | PD2   | Output     |
+    | Motor 2 Enc 1  | PE15  | EXTI_13    |
+    | Motor 2 Enc 2  | PE14  | EXTI_12    |
+    | Motor 3 PWM    | PC8   | TIM3_CH3   |
+    | Motor 3 Dir1   | PD0   | Output     |
+    | Motor 3 Dir 2  | PD1   | Output     |
+    | Motor 3 Enc1   | PE11  | EXTI_11.   |
+    | Motor 3 Enc 2  | PE10  | EXTI_10.   |
+
   ******************************************************************************
   */
 
@@ -631,12 +639,12 @@ void outputTorqueMotor2(double torque)
     double duty;
     if (torque < 0)
     {
-        motor2Dir2();
+        motor2Dir1();
         torque = torque*(-1.0);
     }
     else
     {
-        motor2Dir1();
+        motor2Dir2();
     }
 
     duty = torque*65.13; //replace 65.13 with value for specific motor.
