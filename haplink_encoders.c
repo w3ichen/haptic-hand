@@ -523,6 +523,50 @@ int32_t getCountsSensor3( void )
     return CountsSensor3;    
 }
 
+/*******************************************************************************
+  * @name   getCountsSensor4
+  * @brief  Returns the number of counts on Motor4 encoder
+  * @param  None.
+  * @retval int32_t CountsSensor4: the number of ticks counted on the encoder
+  */
+int32_t getCountsSensor4( void )
+{
+    return CountsSensor4;    
+}
+
+/*******************************************************************************
+  * @name   getCountsSensor5
+  * @brief  Returns the number of counts on Motor5 encoder
+  * @param  None.
+  * @retval int32_t CountsSensor5: the number of ticks counted on the encoder
+  */
+int32_t getCountsSensor5( void )
+{
+    return CountsSensor5;    
+}
+
+/*******************************************************************************
+  * @name   getCountsSensor6
+  * @brief  Returns the number of counts on Motor6 encoder
+  * @param  None.
+  * @retval int32_t CountsSensor6: the number of ticks counted on the encoder
+  */
+int32_t getCountsSensor6( void )
+{
+    return CountsSensor6;    
+}
+
+/*******************************************************************************
+  * @name   getCountsSensor7
+  * @brief  Returns the number of counts on Motor7 encoder
+  * @param  None.
+  * @retval int32_t CountsSensor7: the number of ticks counted on the encoder
+  */
+int32_t getCountsSensor7( void )
+{
+    return CountsSensor7;    
+}
+
 /* Interrupt Callbacks ------------------------------------------------------*/
 
 /*#define M2_S1_PIN                 GPIO_Pin_15
