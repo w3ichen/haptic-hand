@@ -21,13 +21,6 @@
 
 //PWM timer period
 #define PERIOD_PWM                  665
-#define MOTOR_1 1
-#define MOTOR_2 2
-#define MOTOR_3 3
-#define MOTOR_4 4
-#define MOTOR_5 5
-#define MOTOR_6 6
-#define MOTOR_7 7
 
 
 void initHaplinkMotors( void );
@@ -42,17 +35,36 @@ void motor2Dir1 (void);
 void motor2Dir2 (void);
 void motor3Dir1 (void);
 void motor3Dir2 (void);
+void motor4Dir1 (void);
+void motor4Dir2 (void);
+void motor5Dir1 (void);
+void motor5Dir2 (void);
+void motor6Dir1 (void);
+void motor6Dir2 (void);
+void motor7Dir1 (void);
+void motor7Dir2 (void);
 
 void updateDutyCycle1( double newDuty );
 void updateDutyCycle2( double newDuty );
 void updateDutyCycle3( double newDuty );
 void updateDutyCycle4( double newDuty );
+void updateDutyCycle5( double newDuty );
+void updateDutyCycle6( double newDuty );
+void updateDutyCycle7( double newDuty );
 void outputDutyCycleMotor1(double duty);
 void outputDutyCycleMotor2(double duty);
 void outputDutyCycleMotor3(double duty);
+void outputDutyCycleMotor4(double duty);
+void outputDutyCycleMotor5(double duty);
+void outputDutyCycleMotor6(double duty);
+void outputDutyCycleMotor7(double duty);
 void outputTorqueMotor1(double torque);
 void outputTorqueMotor2(double torque);
 void outputTorqueMotor3(double torque);
+void outputTorqueMotor4(double torque);
+void outputTorqueMotor5(double torque);
+void outputTorqueMotor6(double torque);
+void outputTorqueMotor7(double torque);
 
 
 
