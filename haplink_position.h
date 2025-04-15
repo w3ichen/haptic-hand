@@ -29,10 +29,13 @@
 #define R_HA                    80.0      // radius of Handle A for Hapkit in mm
 #define R_MA                    5.5       // radius of Motor a in mm
 #define R_MB                    5.5       // radius of Motor b in mm
-#define DELTATHETA_A            0.8727  //theta a offset in rad (50deg)
-#define DELTATHETA_B            -1.4    //theta b offset in rad (-80deg)
+#define DELTATHETA_A            0.8727  //theta a offset in rad (50deg). ~ change to match finger 1
+#define DELTATHETA_B            -1.4    //theta b offset in rad (-80deg) ~ change to match finger 2
 #define THETA_A_OFFSET_RAD      ((THETA_A_OFFSET*3.1416)/180)   //the theta A offset you want to start with in radians
 #define THETA_B_OFFSET_RAD      ((THETA_B_OFFSET*3.1416)/180)   //the theta B offset you want to start with in radians
+
+
+
 
 
 /******* Function prototypes ****/

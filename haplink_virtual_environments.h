@@ -87,6 +87,13 @@ double getProxyY( void );
 double getForceX( void );
 double getForceY( void );
 double getTorqueMotor2( void );
+
+//Haptic Hand
+double getTorqueMotor4( void );
+double getTorqueMotor5( void );
+double getTorqueMotor6( void );
+double getTorqueMotor7( void );
+
 #ifdef __cplusplus
 }
 #endif
