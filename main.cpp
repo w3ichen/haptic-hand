@@ -21,6 +21,7 @@
 #include "haplink_fsr.h"
 #include "haplink_adc_sensors.h"
 #include "delta_thumb.h"
+#include "hand_virtual_environment.h"
 
 int main() 
 {
@@ -40,6 +41,7 @@ int main()
   while(1) 
   {
     deltaThumbHandler();
+    renderOutsideSphere();
 
     #ifdef DOF_1        
         // calculatePosition1DOF(); 
