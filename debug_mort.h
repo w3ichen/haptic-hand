@@ -20,6 +20,7 @@
 
 /*Function definitions---------------------------------------------------------*/
 void printDebugDeltaThumb( void );
+void printProcessingHapticHand( void );
 
 void printProcessingComm1DOF( double parameter );
 void printProcessingComm2DOF( double parameter );

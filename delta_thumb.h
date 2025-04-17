@@ -69,6 +69,8 @@ extern float deltaThumbZ;
 /******* Function prototypes ****/
 void deltaThumbHandler( void );
 void setAndMaintainMotorAngle(int motorNumber, float targetAngleDeg);
+float getThumbX( void ), getThumbY( void ), getThumbZ( void );
+
 void DeltaThumbGetJacobian (double *J11, double *J12, double *J13, 
                             double *J21, double *J22, double *J23, 
                             double *J31, double *J32, double *J33);
