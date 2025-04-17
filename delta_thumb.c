@@ -29,6 +29,16 @@ double ThetaMotor2Deg;
 double ThetaMotor3Deg;
 
 
+float getThumbX( void ) {
+    return deltaThumbX;
+}
+float getThumbY( void ) {
+    return deltaThumbY;
+}
+float getThumbZ( void ) {
+    return deltaThumbZ;
+}
+
 /*******************************************************************************
   * @name   deltaThumbHandler
   * @brief  runs every time to keep the delta thumb variables up to date!
@@ -81,8 +91,10 @@ void deltaThumbHandler( void )
                             &J21, &J22, &J23, 
                             &J31, &J32, &J33);
 
+    // goHome();
+
     // Print values
-    printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
+    // printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
 }
 
 

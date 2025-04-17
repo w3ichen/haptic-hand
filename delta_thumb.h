@@ -70,7 +70,7 @@ extern double deltaThumbZ;
 void deltaThumbHandler( void );
 void setAndMaintainMotorAngle(int motorNumber, double targetAngleDeg);
 void initDeltaThumb();
-
+float getThumbX( void ), getThumbY( void ), getThumbZ( void );
 
 // Haptic Mouse functions ////////////////////
 void GetElbowPosition (double *x1, double *y1, double *z1,
@@ -81,6 +81,7 @@ void GetElbowPosition (double *x1, double *y1, double *z1,
 void GetThetaii (double *theta1_1, double *theta1_2, double *theta1_3, 
                  double *theta2_1, double *theta2_2, double *theta2_3,
                  double *theta3_1, double *theta3_2, double *theta3_3);
+
 void DeltaThumbGetJacobian (double *J11, double *J12, double *J13, 
                             double *J21, double *J22, double *J23, 
                             double *J31, double *J32, double *J33);
