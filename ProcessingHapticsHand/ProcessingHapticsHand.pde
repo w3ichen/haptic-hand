@@ -1,5 +1,5 @@
 /**
- * ProcessingHapticsHandSimple.pde
+ * ProcessingHapticsHand.pde
  * 
  * A simplified version of the haptic hand interface visualization
  * using Processing's built-in 3D functions instead of the shapes3d library.
