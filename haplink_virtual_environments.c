@@ -605,4 +605,27 @@ double getTorqueMotor2( void )
 {
     return TorqueMotor2;    
 }
+
+double getTorqueMotor4( void )
+{
+    return TorqueMotor4;    
+}
+
+double getTorqueMotor5( void )
+{
+    return TorqueMotor5;    
+}
+
+double getTorqueMotor6( void )
+{
+    return TorqueMotor6;    
+}
+
+double getTorqueMotor7( void )
+{
+    return TorqueMotor7;    
+}
+
+
+
 //EOF
