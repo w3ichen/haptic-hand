@@ -87,10 +87,18 @@ uint8_t M3_s2;
 int32_t CountsSensor1;
 int32_t CountsSensor2;
 int32_t CountsSensor3;
+int32_t CountsSensor4;
+int32_t CountsSensor5;
+int32_t CountsSensor6;
+int32_t CountsSensor7;
 
 uint8_t CountsSensor1Changed;
 uint8_t CountsSensor2Changed;
 uint8_t CountsSensor3Changed;
+uint8_t CountsSensor4Changed;
+uint8_t CountsSensor5Changed;
+uint8_t CountsSensor6Changed;
+uint8_t CountsSensor7Changed;
 
 GPIOInitTypeDef   gpioinitstructure;
 EXTIInitTypeDef   extiinitstructure;
@@ -443,6 +451,52 @@ int32_t getCountsSensor3( void )
     return CountsSensor3;    
 }
 
+/*******************************************************************************
+  * @name   getCountsSensor4
+  * @brief  Returns the number of counts on Motor4 encoder
+  * @param  None.
+  * @retval int32_t CountsSensor4: the number of ticks counted on the encoder
+  */
+int32_t getCountsSensor4( void )
+{
+    return CountsSensor4;    
+}
+
+/*******************************************************************************
+  * @name   getCountsSensor5
+  * @brief  Returns the number of counts on Motor5 encoder
+  * @param  None.
+  * @retval int32_t CountsSensor5: the number of ticks counted on the encoder
+  */
+int32_t getCountsSensor5( void )
+{
+    return CountsSensor5;    
+}
+
+/*******************************************************************************
+  * @name   getCountsSensor6
+  * @brief  Returns the number of counts on Motor6 encoder
+  * @param  None.
+  * @retval int32_t CountsSensor6: the number of ticks counted on the encoder
+  */
+int32_t getCountsSensor6( void )
+{
+    return CountsSensor6;    
+}
+
+/*******************************************************************************
+  * @name   getCountsSensor7
+  * @brief  Returns the number of counts on Motor7 encoder
+  * @param  None.
+  * @retval int32_t CountsSensor7: the number of ticks counted on the encoder
+  */
+int32_t getCountsSensor7( void )
+{
+    return CountsSensor7;    
+}
+
+
+
 /* Interrupt Callbacks ------------------------------------------------------*/
 
 /*#define M2_S1_PIN                 GPIO_Pin_15
@@ -456,7 +510,6 @@ void EXTI15_10_IRQHandler(void)
   //debugprint(0);
   if(EXTI_GetITStatus_mort(EXTI_Line13_MORT) != RESET_MORT) // motor 1  s1
   {
-      //debugprint(1);
     M1_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M1_S1_PIN));
     M1_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M1_S2_PIN));
     if (((M1p_s1 == M1p_s2)&&(M1_s1 == (!M1_s2)))||((M1_s1==M1_s2)&&(M1p_s1==(!M1p_s2))))

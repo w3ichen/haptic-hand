@@ -24,6 +24,12 @@ void printProcessingHapticHand( void );
 
 void printProcessingComm1DOF( double parameter );
 void printProcessingComm2DOF( double parameter );
+
+// added for fingers 1 and 2
+void printProcessingCommFinger1(void);
+void printProcessingCommFinger2(void);
+
+
 void printTeleoperationComm( void );
 void printDebug1DOFAllParameters( void );
 void printDebug2DOFAllParameters( void );

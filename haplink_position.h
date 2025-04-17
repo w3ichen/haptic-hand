@@ -24,9 +24,9 @@
 #define CY                      0.0       // center point y coordinate
 #define L_A                     87.0      //length of a linkage in mm
 #define L_B                     100.0     //length of b linkage in mm
-#define R_A                     72.0      // radius of Sector a in mm
-#define R_B                     72.0      // radius of Sector b in mm
-#define R_HA                    80.0      // radius of Handle A for Hapkit in mm
+#define R_A                     35.0      // radius of Sector a in mm
+#define R_B                     59.0      // radius of Sector b in mm
+#define R_HA                    59.0      // radius of Handle A for Hapkit in mm
 #define R_MA                    5.5       // radius of Motor a in mm
 #define R_MB                    5.5       // radius of Motor b in mm
 #define DELTATHETA_A            0.8727  //theta a offset in rad (50deg)
@@ -46,11 +46,33 @@ double calculatePositionMotor2( void );
 
 double calculatePositionMotor3( void );
 
+double calculatePositionMotor4( void );
+
+double calculatePositionMotor5( void );
+
+double calculatePositionMotor6( void );
+
+double calculatePositionMotor7( void );
+
 void calculatePosition1DOF( void );
 void initPositionHandleAndJacobian( void );
 void calculatePositionHandleAndJacobian( void );
+
+// finger funcs
+void initPositionAndJacobianFinger1( void );
+void calculatePositionAndJacobianFinger1( void );
+void initPositionAndJacobianFinger2( void );
+void calculatePositionAndJacobianFinger2( void );
+
+
 double getRx( void );
 double getRy( void) ;
+// added for fingers 1 and 2
+double getRx1( void );
+double getRy1( void) ;
+double getRx2( void );
+double getRy2( void) ;
+//
 double getThetaA( void );
 double getThetaB( void );
 double getThetaADeg( void );

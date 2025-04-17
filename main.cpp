@@ -59,7 +59,10 @@ int main()
         //renderBilateralTeleoperator1DOF();
     #endif 
     #ifdef DOF_2//then we are in 2DOF
-        calculatePositionHandleAndJacobian();
+        //calculatePositionHandleAndJacobian();
+        calculatePositionAndJacobianFinger1();
+        calculatePositionAndJacobianFinger2();
+
         /*Insert here the virtual environment from the file haplink_virtual_environments.cpp
         that you wish to render*/
          //renderInsideBox2DOF();
@@ -104,8 +107,10 @@ int main()
 //or maybe you need to write your own function in debug_mort.cpp and call it from here.
     #ifdef COMM_PROCESSING
         printProcessingHapticHand();
-        // printProcessingComm1DOF(mass_position*1000.0);
+        //printProcessingComm1DOF(mass_position*1000.0);
         //printProcessingComm2DOF((double)contact);
+        printProcessingCommFinger1(); // prints out x and y position for finger 1 (z is determined by physical spacing)
+        printProcessingCommFinger2(); // prints out x and y position for finger 2 (z is determined by physical spacing )
     #endif
 
 //we are using the USB communication for teleoperation: 

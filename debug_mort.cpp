@@ -78,6 +78,48 @@ void printProcessingComm2DOF( double parameter )
          ////pc.printf("%f\t%f\t l", (float)getRx(), (float)getRy());
     }
 }
+
+
+
+/*******************************************************************************
+  * @name   printProcessingCommFinger1
+  * @brief  this is just an example function to send to show the communication structure to processing.
+            this function assumes that what you want to send to processing is the position of the 2DOF Finger1 cursor 
+  * @param  a parameter to send to processing.
+  * @retval none.
+  */
+void printProcessingCommFinger1(void)
+{
+    if ((returnMessageAcknowledged() > 0) && (returnDataHasBeenRequested() > 0))
+    {
+        clearMessageAcknowledged();
+        clearDataHasBeenRequested();
+         pc.printf("%f\t%f\t", getRx1(), getRy1());
+         ////pc.printf("%f\t%f\t l", (float)getRx(), (float)getRy());
+    }
+}
+
+
+/*******************************************************************************
+  * @name   printProcessingCommFinger2
+  * @brief  this is just an example function to send to show the communication structure to processing.
+            this function assumes that what you want to send to processing is the position of the 2DOF Finger2 cursor.
+  * @param  a parameter to send to processing.
+  * @retval none.
+  */
+void printProcessingCommFinger2(void)
+{
+    if ((returnMessageAcknowledged() > 0) && (returnDataHasBeenRequested() > 0))
+    {
+        clearMessageAcknowledged();
+        clearDataHasBeenRequested();
+         pc.printf("%f\t%f\t", getRx2(), getRy2());
+         ////pc.printf("%f\t%f\t l", (float)getRx(), (float)getRy());
+    }
+}
+
+
+
 /*******************************************************************************
   * @name   printTeleoperationComm
   * @brief  this is just an example function to send to show the communication structure for teleoperation.
