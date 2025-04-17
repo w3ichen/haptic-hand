@@ -185,7 +185,7 @@ int initHaplinkPosition( void )
   */
 double calculatePositionMotor1( void )
 {
-    theta_m1 = (double)getCountsSensor1();
+     theta_m1 = (double)getCountsSensor1();
     theta_m1 = theta_m1*2.0*3.1416;
     theta_m1 = theta_m1/TOTAL_ENCODER_COUNTS_1;
     return theta_m1;
@@ -371,6 +371,7 @@ void initPositionHandleAndJacobian( void )
 }
 
 /*******************************************************************************
+
   * @name   initPositionAndJacobianFinger1
   * @brief  initializes the 2DOF position variables of Haplink - finger 1 (motors 4 and 5)
   * @param  None.
