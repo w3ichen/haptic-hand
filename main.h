@@ -21,6 +21,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_mort2.h"
 
+
+
 /* MACROS for everyone--------------------------------------------------------*/
 
 //comment out which device you are not using:
@@ -28,8 +30,8 @@
     //#define DOF_2         2
 
 //choose which communication you are using, comment out the other two!
-    #define COMM_DEBUGGING          1
-    //#define COMM_PROCESSING         2
+    // #define COMM_DEBUGGING          1
+    #define COMM_PROCESSING         2
     //#define COMM_TELEOPERATION      3
 
 // Haplink 2-DOF initial Offset in degrees:

@@ -28,10 +28,25 @@ double theta_m6;
 double theta_m7;
 
 //Haplink Variables
+
+// angles of original haplink
 double theta_a;
 double theta_b;
 double theta_ma;
 double theta_mb;
+
+// angles of finger 1 device
+double theta_a1;
+double theta_b1;
+double theta_ma1;
+double theta_mb1;
+
+//angles of finger 2 device
+double theta_a2;
+double theta_b2;
+double theta_ma2;
+double theta_mb2;
+
 
 double b1, b2;
 
@@ -50,6 +65,15 @@ double rx, dx, rx_prev, dx_prev;
 double ry, dy, ry_prev, dy_prev;
 double t0_pos, t1_pos,time_dif;
 double xH, dxH, xH_prev, dxH_prev; //position of the hapkit handle
+
+// position of finger 1 vars
+double rx1, dx1, rx1_prev, dx1_prev;
+double ry1, dy1, ry1_prev, dy1_prev;
+
+// position of finger 2 vars
+double rx2, dx2, rx2_prev, dx2_prev;
+double ry2, dy2, ry2_prev, dy2_prev;
+
 // Jacobian variables:
 double J00, J01, J10, J11;
 
@@ -80,6 +104,26 @@ int initHapticHand( void )
     xH_prev = 0;
     dxH = 0;
     dxH_prev = 0;
+
+    // finger 1 vars
+    rx1 = 0;
+    ry1 = 0;
+    rx1_prev = 0;
+    ry1_prev = 0;
+    dx1 = 0;
+    dy1 = 0;
+    dx1_prev = 0;
+    dy1_prev = 0;
+
+    // finger 2 vars
+    rx2 = 0;
+    ry2 = 0;
+    rx2_prev = 0;
+    ry2_prev = 0;
+    dx2 = 0;
+    dy2 = 0;
+    dx2_prev = 0;
+    dy2_prev = 0;
     
     J00 = 0;
     J01 = 0;
@@ -88,7 +132,9 @@ int initHapticHand( void )
     //initialize encoders
     initHapticHandEncodersMotors();
     
-    initPositionHandleAndJacobian( );   
+    initPositionHandleAndJacobian( ); 
+    initPositionAndJacobianFinger1( ); 
+    initPositionAndJacobianFinger2( );   
 
     initDeltaThumb();
     return 1;
@@ -325,6 +371,96 @@ void initPositionHandleAndJacobian( void )
 }
 
 /*******************************************************************************
+
+  * @name   initPositionAndJacobianFinger1
+  * @brief  initializes the 2DOF position variables of Haplink - finger 1 (motors 4 and 5)
+  * @param  None.
+  * @retval None.
+  */
+void initPositionAndJacobianFinger1( void )
+{
+    double tildetheta_a = 0;
+    double tildetheta_b = 0;
+    double px = 0;
+    double py = 0;
+    
+    // Compute the angle of the paddles in radians
+    theta_ma1 = -calculatePositionMotor4();
+    theta_mb1 = -calculatePositionMotor5();
+    
+     /*Add code here:***********************************************************/
+    /* Uncomment and fill the variables theta_a, tehta_b (the rotation of paddle's a and b in radians)
+    and rx and ry */
+    /*Add code here:***********************************************************/
+    
+    // Compute the angle of the paddles in radians
+    theta_a1 = -R_MA/R_A*theta_ma1 + THETA_A_OFFSET_RAD; //some ratio of radiuses and theta_ma + the initial offset.
+    theta_b1 =  -R_MA/R_A*theta_mb1 +(R_MB/R_B)*theta_a1 + THETA_B_OFFSET_RAD;
+  
+    // Compute px and py 
+    tildetheta_a = theta_a1 + DELTATHETA_A; 
+    px = -L_A*sin(tildetheta_a) + CX;
+    py = L_A*cos(tildetheta_a) + CY ;
+
+    //Compute rx and ry in frame n
+    tildetheta_b = theta_b1 + DELTATHETA_B; 
+    rx1 =  -L_B*sin(tildetheta_a+tildetheta_b) + px;
+    ry1 =  -L_B*cos(tildetheta_a + tildetheta_b) + py;
+    
+    /**************************************************************************/
+    
+    rx1_prev =  rx1;
+    ry1_prev =  ry1;
+    t0_pos = getTime_ms();
+    
+}
+
+
+/*******************************************************************************
+  * @name   initPositionAndJacobianFinger2
+  * @brief  initializes the 2DOF position variables of Haplink
+  * @param  None.
+  * @retval None.
+  */
+void initPositionAndJacobianFinger2( void )
+{
+    double tildetheta_a = 0;
+    double tildetheta_b = 0;
+    double px = 0;
+    double py = 0;
+    
+    // Compute the angle of the paddles in radians
+    theta_ma2 = -calculatePositionMotor6();
+    theta_mb2 = -calculatePositionMotor7();
+    
+     /*Add code here:***********************************************************/
+    /* Uncomment and fill the variables theta_a, tehta_b (the rotation of paddle's a and b in radians)
+    and rx and ry */
+    /*Add code here:***********************************************************/
+    
+    // Compute the angle of the paddles in radians
+    theta_a2 = -R_MA/R_A*theta_ma2 + THETA_A_OFFSET_RAD; //some ratio of radiuses and theta_ma + the initial offset.
+    theta_b2 =  -R_MA/R_A*theta_mb2 +(R_MB/R_B)*theta_a2 + THETA_B_OFFSET_RAD;
+  
+    // Compute px and py 
+    tildetheta_a = theta_a2 + DELTATHETA_A; 
+    px = -L_A*sin(tildetheta_a) + CX;
+    py = L_A*cos(tildetheta_a) + CY ;
+
+    //Compute rx and ry in frame n
+    tildetheta_b = theta_b2 + DELTATHETA_B; 
+    rx2 =  -L_B*sin(tildetheta_a+tildetheta_b) + px;
+    ry2 =  -L_B*cos(tildetheta_a + tildetheta_b) + py;
+    
+    /**************************************************************************/
+    
+    rx2_prev =  rx2;
+    ry2_prev =  ry2;
+    t0_pos = getTime_ms();
+    
+}
+
+/*******************************************************************************
   * @name   calculatePositionHandleAndJacobian
   * @brief  calculates the 2DOF position variables of Haplink in mm.
   * @param  None.
@@ -373,6 +509,103 @@ void calculatePositionHandleAndJacobian( void )
     t1_pos = getTime_ms();
 }
 
+/*******************************************************************************
+  * @name   calculatePositionAndJacobianFinger1
+  * @brief  calculates the 2DOF position variables of Haplink in mm.
+  * @param  None.
+  * @retval None.
+  */
+void calculatePositionAndJacobianFinger1( void )
+{
+    static int velocityCounter = 0;
+    double tildetheta_a = 0;
+    double tildetheta_b = 0;
+    double px = 0;
+    double py = 0;
+    
+    
+    // Compute the angle of the paddles in radians
+    //motor angles:
+    theta_ma1 = -calculatePositionMotor4();
+    theta_mb1 = -calculatePositionMotor5();
+    /* Uncomment and fill the variables theta_a, tehta_b (the rotation of paddle's a and b in radians)
+    and rx and ry, as well as the velocity variables dx and dy */
+    /*Add code here:***********************************************************/
+    
+    // Compute the angle of the paddles in radians
+    theta_a1 = -R_MA/R_A*theta_ma1 + THETA_A_OFFSET_RAD; //some ratio of radiuses and theta_ma + the initial offset.
+    theta_b1 =  -R_MA/R_A*theta_mb1 +(R_MB/R_B)*theta_a1 + THETA_B_OFFSET_RAD;
+    
+  
+    // Compute px and py 
+    tildetheta_a = theta_a1 + DELTATHETA_A; 
+    px = -L_A*sin(tildetheta_a) + CX;
+    py = L_A*cos(tildetheta_a) + CY ;
+
+    //Compute rx and ry in n
+    tildetheta_b = theta_b1 + DELTATHETA_B; 
+    rx1 =  -L_B*sin(tildetheta_a+tildetheta_b) + px;
+    ry1 =  L_B*cos(tildetheta_a + tildetheta_b) + py;
+    
+    //build the Jacobian
+    J00 = -L_B*cos(tildetheta_a + tildetheta_b)-L_A*cos(tildetheta_a);
+    J01 = -L_B*cos(tildetheta_a + tildetheta_b);
+    J10 = -L_B*sin(tildetheta_a + tildetheta_b) - L_A*sin(tildetheta_a);   
+    J11 = -L_B*sin(tildetheta_a + tildetheta_b);  
+    
+    //for dx and dy decide on your method and implement it, don't forget to reset
+    //the velocity counter if that is what you are using and update t0_pos.
+    t1_pos = getTime_ms();
+}
+
+/*******************************************************************************
+  * @name   calculatePositionAndJacobianFinger2
+  * @brief  calculates the 2DOF position variables of Haplink in mm.
+  * @param  None.
+  * @retval None.
+  */
+void calculatePositionAndJacobianFinger2( void )
+{
+    static int velocityCounter = 0;
+    double tildetheta_a = 0;
+    double tildetheta_b = 0;
+    double px = 0;
+    double py = 0;
+    
+    
+    // Compute the angle of the paddles in radians
+    //motor angles:
+    theta_ma2 = -calculatePositionMotor6();
+    theta_mb2 = -calculatePositionMotor7();
+    /* Uncomment and fill the variables theta_a, theta_b (the rotation of paddle's a and b in radians)
+    and rx and ry, as well as the velocity variables dx and dy */
+    /*Add code here:***********************************************************/
+    
+    // Compute the angle of the paddles in radians
+    theta_a2 = -R_MA/R_A*theta_ma2 + THETA_A_OFFSET_RAD; //some ratio of radiuses and theta_ma + the initial offset.
+    theta_b2 =  -R_MA/R_A*theta_mb2 +(R_MB/R_B)*theta_a2 + THETA_B_OFFSET_RAD;
+    
+  
+    // Compute px and py 
+    tildetheta_a = theta_a2 + DELTATHETA_A; 
+    px = -L_A*sin(tildetheta_a) + CX;
+    py = L_A*cos(tildetheta_a) + CY ;
+
+    //Compute rx and ry in n
+    tildetheta_b = theta_b2 + DELTATHETA_B; 
+    rx2 =  -L_B*sin(tildetheta_a+tildetheta_b) + px;
+    ry2 =  L_B*cos(tildetheta_a + tildetheta_b) + py;
+    
+    //build the Jacobian
+    J00 = -L_B*cos(tildetheta_a + tildetheta_b)-L_A*cos(tildetheta_a);
+    J01 = -L_B*cos(tildetheta_a + tildetheta_b);
+    J10 = -L_B*sin(tildetheta_a + tildetheta_b) - L_A*sin(tildetheta_a);   
+    J11 = -L_B*sin(tildetheta_a + tildetheta_b);  
+    
+    //for dx and dy decide on your method and implement it, don't forget to reset
+    //the velocity counter if that is what you are using and update t0_pos.
+    t1_pos = getTime_ms();
+}
 
 
 /*--Functions to Access the various position variables------------------------*/
@@ -386,6 +619,29 @@ double getRy( void )
 { 
     return ry;
 }
+
+// added for fingerrs 1 and 2
+
+double getRx1( void )
+{
+    return rx1;
+}
+
+double getRy1( void )
+{ 
+    return ry1;
+}
+double getRx2( void )
+{
+    return rx2;
+}
+
+double getRy2( void )
+{ 
+    return ry2;
+}
+
+//
 
 double getThetaA( void )
 {
@@ -403,6 +659,7 @@ double getThetaBDeg( void )
 {
     return theta_b*180/3.1416;
 }
+
 double getXH( void )
 {
     return xH;

@@ -13,6 +13,7 @@
   ******************************************************************************
   */
 
+#include "delta_thumb.h"
 #include "main.h"
 #include "mbed.h"
 #include "debug_mort.h"
@@ -77,6 +78,48 @@ void printProcessingComm2DOF( double parameter )
          ////pc.printf("%f\t%f\t l", (float)getRx(), (float)getRy());
     }
 }
+
+
+
+/*******************************************************************************
+  * @name   printProcessingCommFinger1
+  * @brief  this is just an example function to send to show the communication structure to processing.
+            this function assumes that what you want to send to processing is the position of the 2DOF Finger1 cursor 
+  * @param  a parameter to send to processing.
+  * @retval none.
+  */
+void printProcessingCommFinger1(void)
+{
+    if ((returnMessageAcknowledged() > 0) && (returnDataHasBeenRequested() > 0))
+    {
+        clearMessageAcknowledged();
+        clearDataHasBeenRequested();
+         pc.printf("%f\t%f\t", getRx1(), getRy1());
+         ////pc.printf("%f\t%f\t l", (float)getRx(), (float)getRy());
+    }
+}
+
+
+/*******************************************************************************
+  * @name   printProcessingCommFinger2
+  * @brief  this is just an example function to send to show the communication structure to processing.
+            this function assumes that what you want to send to processing is the position of the 2DOF Finger2 cursor.
+  * @param  a parameter to send to processing.
+  * @retval none.
+  */
+void printProcessingCommFinger2(void)
+{
+    if ((returnMessageAcknowledged() > 0) && (returnDataHasBeenRequested() > 0))
+    {
+        clearMessageAcknowledged();
+        clearDataHasBeenRequested();
+         pc.printf("%f\t%f\t", getRx2(), getRy2());
+         ////pc.printf("%f\t%f\t l", (float)getRx(), (float)getRy());
+    }
+}
+
+
+
 /*******************************************************************************
   * @name   printTeleoperationComm
   * @brief  this is just an example function to send to show the communication structure for teleoperation.
@@ -114,6 +157,19 @@ frequently, your device may not work at all.-- */
 void printDebugDeltaThumb( void )
 {
     pc.printf("xH=%lf, dXh=%lf, ForceH=%lf, Torque=%lf\r\n", getXH(), getDxH(), getForceH(), getTorqueMotor1());
+}
+
+void printProcessingHapticHand( void )
+{
+    // pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t l", (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, getThumbX(), getThumbY(), getThumbZ(), (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    if ((returnMessageAcknowledged() > 0) && (returnDataHasBeenRequested() > 0))
+    {
+        clearMessageAcknowledged();
+        clearDataHasBeenRequested();
+         pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t l", (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, getThumbX(), getThumbY(), getThumbZ(), (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+         ////pc.printf("%f\t%f\t l", (float)getRx(), (float)getRy());
+    }
+    
 }
 
 void printDebug1DOFAllParameters( void )
