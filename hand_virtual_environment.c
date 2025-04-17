@@ -26,7 +26,9 @@ void renderOutsideSphere( void ) {
     // THUMB
     // Check if thumb is inside sphere
     double dist = sphereDistance(deltaThumbX, deltaThumbY, deltaThumbZ);
+    printf("DIST=%f\n", dist);
     if (dist < SPHERE1_RADIUS) {
+        printf("IN SPHERE\n");
         // Calculate the forces to apply in order to resist the user
         double F_coeff = K_DELTA_THUMB * (SPHERE1_RADIUS - dist) / dist;
         double Fx = F_coeff * (deltaThumbX - SPHERE1_X);
