@@ -28,6 +28,26 @@
     | Motor 3 Dir 2  | PD1   | Output     |
     | Motor 3 Enc1   | PE11  | EXTI_11.   |
     | Motor 3 Enc 2  | PE10  | EXTI_10.   |
+    | Motor 4 PWM    | PC9   | TIM3_CH4   |
+    | Motor 4 Dir 1  | PD3   | Output     |
+    | Motor 4 Dir 2  | PD4   | Output     |
+    | Motor 4 Enc 1  | PE9   | EXTI_9     |
+    | Motor 4 Enc 2  | PE8   | EXTI_8     |
+    | Motor 5 PWM    | PD12  | TIM4_CH1   |
+    | Motor 5 Dir 1  | PG2   | Output     |
+    | Motor 5 Dir 2  | PG3   | Output     |
+    | Motor 5 Enc 1  | PE7   | EXTI_7     |
+    | Motor 5 Enc 2  | PE6   | EXTI_6     |
+    | Motor 6 PWM    | PD13  | TIM4_CH2   |
+    | Motor 6 Dir 1  | PG4   | Output     |
+    | Motor 6 Dir 2  | PG5   | Output     |
+    | Motor 6 Enc 1  | PE4   | EXTI_4     |
+    | Motor 6 Enc 2  | PE3   | EXTI_3     |
+    | Motor 7 PWM    | PD14  | TIM4_CH3   |
+    | Motor 7 Dir 1  | PG8   | Output     |
+    | Motor 7 Dir 2  | PG9   | Output     |
+    | Motor 7 Enc 1  | PE2   | EXTI_2     |
+
 
   ******************************************************************************
   */
