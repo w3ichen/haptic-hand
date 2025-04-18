@@ -31,7 +31,7 @@ int main()
 
     initCommunication();
     initLED1();
-    initHapticHand();
+    initHapticHand(); // calls motor encoder initializations within
     initHaplinkMotors();
     initHaplinkAnalogSensors();
     initHaplinkTime();

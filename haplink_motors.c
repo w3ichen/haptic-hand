@@ -57,13 +57,20 @@
 #include "stm32f446ze_gpio.h"
 #include "stm32f4xx_tim_mort.h"
 
-
 #define PWM11_PIN GPIOPin11
 #define PWM12_PIN GPIOPin10
 #define PWM21_PIN GPIOPin12
 #define PWM22_PIN GPIOPin2
 #define PWM31_PIN GPIOPin0
 #define PWM32_PIN GPIOPin1
+#define PWM41_PIN GPIOPin3
+#define PWM42_PIN GPIOPin4
+#define PWM51_PIN GPIOPin2
+#define PWM52_PIN GPIOPin3
+#define PWM61_PIN GPIOPin4
+#define PWM62_PIN GPIOPin5
+#define PWM71_PIN GPIOPin8
+#define PWM72_PIN GPIOPin9
 
 #define PWM11_PORT ((GPIOTypeDef *)GPIOC_BASE_MORT)
 #define PWM12_PORT ((GPIOTypeDef *)GPIOC_BASE_MORT)
@@ -71,6 +78,14 @@
 #define PWM22_PORT ((GPIOTypeDef *)GPIOD_BASE_MORT)
 #define PWM31_PORT ((GPIOTypeDef *)GPIOD_BASE_MORT)
 #define PWM32_PORT ((GPIOTypeDef *)GPIOD_BASE_MORT)
+#define PWM41_PORT ((GPIOTypeDef *)GPIOD_BASE_MORT)
+#define PWM42_PORT ((GPIOTypeDef *)GPIOD_BASE_MORT)
+#define PWM51_PORT ((GPIOTypeDef *)GPIOG_BASE_MORT)
+#define PWM52_PORT ((GPIOTypeDef *)GPIOG_BASE_MORT)
+#define PWM61_PORT ((GPIOTypeDef *)GPIOG_BASE_MORT)
+#define PWM62_PORT ((GPIOTypeDef *)GPIOG_BASE_MORT)
+#define PWM71_PORT ((GPIOTypeDef *)GPIOG_BASE_MORT)
+#define PWM72_PORT ((GPIOTypeDef *)GPIOG_BASE_MORT)
 
 GPIOInitTypeDef gpiomotorsinitstructure;
 TIM_TimeBaseInitTypeDef_mort  TIM_TimeBaseStructure;
@@ -100,20 +115,32 @@ void initMotorsGpio( void )
     gpiomotorsinitstructure.GPIO_OType = GPIOOTypePP;
     gpiomotorsinitstructure.GPIO_Speed = GPIOHighSpeed;
     gpiomotorsinitstructure.GPIO_PuPd = GPIOPuPdUP;
+
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin6;
     GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure); //PWM1
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin7;
     GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure); //PWM2
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin8;
     GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure); //PWM3
+    
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin9;
     GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure); //PWM4
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin12;
+    GPIOInit((GPIOTypeDef *)GPIOD_BASE_MORT, &gpiomotorsinitstructure); //PWM5
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin13;
+    GPIOInit((GPIOTypeDef *)GPIOD_BASE_MORT, &gpiomotorsinitstructure); //PWM6
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin14;
+    GPIOInit((GPIOTypeDef *)GPIOD_BASE_MORT, &gpiomotorsinitstructure); //PWM7
 
     /* Connect TIM3 pins to AF2 */  
+        // should all of these be on tim3? explain for Kiran
     GPIOPinAFConfig((GPIOTypeDef *)GPIOC_BASE_MORT, GPIOPinSource6, GPIO_AF_TIM3);
     GPIOPinAFConfig((GPIOTypeDef *)GPIOC_BASE_MORT, GPIOPinSource7, GPIO_AF_TIM3); 
     GPIOPinAFConfig((GPIOTypeDef *)GPIOC_BASE_MORT, GPIOPinSource8, GPIO_AF_TIM3);
     GPIOPinAFConfig((GPIOTypeDef *)GPIOC_BASE_MORT, GPIOPinSource9, GPIO_AF_TIM3); 
+    GPIOPinAFConfig((GPIOTypeDef *)GPIOD_BASE_MORT, GPIOPinSource12, GPIO_AF_TIM3); 
+    GPIOPinAFConfig((GPIOTypeDef *)GPIOD_BASE_MORT, GPIOPinSource13, GPIO_AF_TIM3); 
+    GPIOPinAFConfig((GPIOTypeDef *)GPIOD_BASE_MORT, GPIOPinSource14, GPIO_AF_TIM3); 
 
 
     /*Then the pins used for direction*/
@@ -121,6 +148,7 @@ void initMotorsGpio( void )
     gpiomotorsinitstructure.GPIO_OType = GPIOOTypePP;
     gpiomotorsinitstructure.GPIO_Speed = GPIOHighSpeed;
     gpiomotorsinitstructure.GPIO_PuPd = GPIOPuPdNOPULL;
+
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin10;
     GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure); // C10
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin11;
@@ -129,14 +157,27 @@ void initMotorsGpio( void )
     GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure); // C12
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin2;
     GPIOInit((GPIOTypeDef *)GPIOD_BASE_MORT, &gpiomotorsinitstructure); // D2
-    gpiomotorsinitstructure.GPIO_Pin = GPIOPin2;
-    GPIOInit((GPIOTypeDef *)GPIOG_BASE_MORT, &gpiomotorsinitstructure); // G2
-    gpiomotorsinitstructure.GPIO_Pin = GPIOPin3;
-    GPIOInit((GPIOTypeDef *)GPIOG_BASE_MORT, &gpiomotorsinitstructure); // G3
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin0;
     GPIOInit((GPIOTypeDef *)GPIOD_BASE_MORT, &gpiomotorsinitstructure); // D0
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin1;
     GPIOInit((GPIOTypeDef *)GPIOD_BASE_MORT, &gpiomotorsinitstructure); // D1
+
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin3;
+    GPIOInit((GPIOTypeDef *)GPIOD_BASE_MORT, &gpiomotorsinitstructure); // D3
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin4;
+    GPIOInit((GPIOTypeDef *)GPIOD_BASE_MORT, &gpiomotorsinitstructure); // D4
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin2;
+    GPIOInit((GPIOTypeDef *)GPIOG_BASE_MORT, &gpiomotorsinitstructure); // G2
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin3;
+    GPIOInit((GPIOTypeDef *)GPIOG_BASE_MORT, &gpiomotorsinitstructure); // G3
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin4;
+    GPIOInit((GPIOTypeDef *)GPIOG_BASE_MORT, &gpiomotorsinitstructure); // G4
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin5;
+    GPIOInit((GPIOTypeDef *)GPIOG_BASE_MORT, &gpiomotorsinitstructure); // G5
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin8;
+    GPIOInit((GPIOTypeDef *)GPIOG_BASE_MORT, &gpiomotorsinitstructure); // G8
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin9;
+    GPIOInit((GPIOTypeDef *)GPIOG_BASE_MORT, &gpiomotorsinitstructure); // G9
 }
 
 void initHaplinkMotors( void )
@@ -162,43 +203,43 @@ void initHaplinkMotors( void )
     TIM_TimeBaseInit_mort(TIM3_MORT, &TIM_TimeBaseStructure);
 
     /* PWM1 Mode configuration: Channel1 */
-  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1_MORT;
-  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable_MORT;
-  TIM_OCInitStructure.TIM_Pulse = CCR1_Val;
-  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High_MORT;
+    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1_MORT;
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable_MORT;
+    TIM_OCInitStructure.TIM_Pulse = CCR1_Val;
+    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High_MORT;
 
-  TIM_OC1Init_mort(TIM3_MORT, &TIM_OCInitStructure);
+    TIM_OC1Init_mort(TIM3_MORT, &TIM_OCInitStructure);
 
-  TIM_OC1PreloadConfig_mort(TIM3_MORT, TIM_OCPreload_Enable_MORT);
+    TIM_OC1PreloadConfig_mort(TIM3_MORT, TIM_OCPreload_Enable_MORT);
 
-  /* PWM1 Mode configuration: Channel2 */
-  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable_MORT;
-  TIM_OCInitStructure.TIM_Pulse = CCR2_Val;
+    /* PWM1 Mode configuration: Channel2 */
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable_MORT;
+    TIM_OCInitStructure.TIM_Pulse = CCR2_Val;
 
-  TIM_OC2Init_mort(TIM3_MORT, &TIM_OCInitStructure);
+    TIM_OC2Init_mort(TIM3_MORT, &TIM_OCInitStructure);
 
-  TIM_OC2PreloadConfig_mort(TIM3_MORT, TIM_OCPreload_Enable_MORT);
+    TIM_OC2PreloadConfig_mort(TIM3_MORT, TIM_OCPreload_Enable_MORT);
 
-  /* PWM1 Mode configuration: Channel3 */
-  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable_MORT;
-  TIM_OCInitStructure.TIM_Pulse = CCR3_Val;
+    /* PWM1 Mode configuration: Channel3 */
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable_MORT;
+    TIM_OCInitStructure.TIM_Pulse = CCR3_Val;
 
-  TIM_OC3Init_mort(TIM3_MORT, &TIM_OCInitStructure);
+    TIM_OC3Init_mort(TIM3_MORT, &TIM_OCInitStructure);
 
-  TIM_OC3PreloadConfig_mort(TIM3_MORT, TIM_OCPreload_Enable_MORT);
+    TIM_OC3PreloadConfig_mort(TIM3_MORT, TIM_OCPreload_Enable_MORT);
 
-  /* PWM1 Mode configuration: Channel4 */
-  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable_MORT;
-  TIM_OCInitStructure.TIM_Pulse = CCR4_Val;
+    /* PWM1 Mode configuration: Channel4 */
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable_MORT;
+    TIM_OCInitStructure.TIM_Pulse = CCR4_Val;
 
-  TIM_OC4Init_mort(TIM3_MORT, &TIM_OCInitStructure);
+    TIM_OC4Init_mort(TIM3_MORT, &TIM_OCInitStructure);
 
-  TIM_OC4PreloadConfig_mort(TIM3_MORT, TIM_OCPreload_Enable_MORT);
+    TIM_OC4PreloadConfig_mort(TIM3_MORT, TIM_OCPreload_Enable_MORT);
 
-  TIM_ARRPreloadConfig_mort(TIM3_MORT, ENABLE);
+    TIM_ARRPreloadConfig_mort(TIM3_MORT, ENABLE);
 
-  /* TIM3 enable counter */
-  TIM_Cmd_mort(TIM3_MORT, ENABLE);  
+    /* TIM3 enable counter */
+    TIM_Cmd_mort(TIM3_MORT, ENABLE);  
 }
 
 
@@ -210,6 +251,14 @@ void turnOffMotorsDirPins( void )
     GPIOClearBits(PWM22_PORT, (uint16_t)PWM22_PIN );
     GPIOClearBits(PWM31_PORT, (uint16_t)PWM31_PIN );
     GPIOClearBits(PWM32_PORT, (uint16_t)PWM32_PIN );
+    GPIOClearBits(PWM41_PORT, (uint16_t)PWM41_PIN );
+    GPIOClearBits(PWM42_PORT, (uint16_t)PWM42_PIN );
+    GPIOClearBits(PWM51_PORT, (uint16_t)PWM51_PIN );
+    GPIOClearBits(PWM52_PORT, (uint16_t)PWM52_PIN );
+    GPIOClearBits(PWM61_PORT, (uint16_t)PWM61_PIN );
+    GPIOClearBits(PWM62_PORT, (uint16_t)PWM62_PIN );
+    GPIOClearBits(PWM71_PORT, (uint16_t)PWM71_PIN );
+    GPIOClearBits(PWM72_PORT, (uint16_t)PWM72_PIN );
 }
 
 

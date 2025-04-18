@@ -132,7 +132,7 @@ int initHapticHand( void )
     //initialize encoders
     initHapticHandEncodersMotors();
     
-    initPositionHandleAndJacobian( ); 
+    //initPositionHandleAndJacobian( ); // default, two motors from class
     initPositionAndJacobianFinger1( ); 
     initPositionAndJacobianFinger2( );   
 
