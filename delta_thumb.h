@@ -23,15 +23,39 @@
 #define RAD_TO_DEG(radians) ((radians) * (180.0 / PI))
 
 // DELTA DEVICE CONSTANTS
-#define DELTA_BASE_RADIUS 27.0 // base radius - distance from origin to base joint
-#define DELTA_END_EFFECTOR_RADIUS 7.0 // distance from platform's origin to platform joint
+// #define DELTA_BASE_RADIUS 27.0 // base radius - distance from origin to base joint
+// #define DELTA_END_EFFECTOR_RADIUS 7.0 // distance from platform's origin to platform joint
+// // Thetas that motors are positioned at
+// #define DELTA_THETA_N1 0.0
+// #define DELTA_THETA_N2 120.0 * PI / 180.0
+// #define DELTA_THETA_N3 240.0 * PI / 180.0
+// #define DELTA_LOWER_LINK_LEN 30.0
+// #define DELTA_UPPER_LINK_LEN 37.0
+
+// #define DELTA_THETA_OFFSET (12.5) * PI / 180.0
+
+
+#define DELTA_BASE_RADIUS 31.2 // base radius - distance from origin to base joint
+#define DELTA_END_EFFECTOR_RADIUS 13.5 // distance from platform's origin to platform joint
 // Thetas that motors are positioned at
 #define DELTA_THETA_N1 0.0
 #define DELTA_THETA_N2 120.0 * PI / 180.0
 #define DELTA_THETA_N3 240.0 * PI / 180.0
 #define DELTA_LOWER_LINK_LEN 30.0
-#define DELTA_UPPER_LINK_LEN 37.0
+#define DELTA_UPPER_LINK_LEN 60.0
 
+#define DELTA_THETA_OFFSET 0 // (12.5) * PI / 180.0
+
+
+// double LinkLen = 20.0;
+// double LinkLen_2 = 32.0;
+// double theta_n1 = 0.0;
+// double theta_n2 = 120.0 * PI / 180.0;
+// double theta_n3 = 240.0 * PI / 180.0;
+// double theta_offset = (12.5) * PI / 180.0;
+// double theta_roffset = (3.0) * PI / 180.0;
+// double dA = 17.0;// distance from origin to base joint
+// double dc = 8.0;// distance from platform's origina to platform joint
 
 // HAPTIC CONSTANTS
 #define K_DELTA_THUMB 20.0

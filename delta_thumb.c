@@ -81,20 +81,13 @@ void deltaThumbHandler( void )
     // delta_calcForward(ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
 
     // #2: Update x,y,z positions of end-effector using haptic mouse code
-    // double x1, y1, z1, x2, y2, z2, x3, y3, z3;
-    // GetElbowPosition(&x1, &y1, &z1, &x2, &y2, &z2, &x3, &y3, &z3, &deltaThumbX, &deltaThumbY, &deltaThumbZ, &ThetaMotor1Rad, &ThetaMotor2Rad, &ThetaMotor3Rad);
-
-    double J11, J12, J13, 
-            J21, J22, J23, 
-            J31, J32, J33;
-    DeltaThumbGetJacobian (&J11, &J12, &J13, 
-                            &J21, &J22, &J23, 
-                            &J31, &J32, &J33);
+    double x1, y1, z1, x2, y2, z2, x3, y3, z3;
+    GetElbowPosition(&x1, &y1, &z1, &x2, &y2, &z2, &x3, &y3, &z3, &deltaThumbX, &deltaThumbY, &deltaThumbZ, &ThetaMotor1Rad, &ThetaMotor2Rad, &ThetaMotor3Rad);
 
     // goHome();
 
     // Print values
-    // printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
+    printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
 }
 
 
@@ -404,9 +397,9 @@ void GetElbowPosition (double *x1, double *y1, double *z1,
                        double *x, double *y, double *z,
                        double *theta_a1, double *theta_a2, double *theta_a3)
 {
-    *theta_a1 = ThetaMotor1Rad;
-    *theta_a2 = ThetaMotor2Rad;
-    *theta_a3 = ThetaMotor3Rad;
+    *theta_a1 = -(ThetaMotor1Rad - DELTA_THETA_OFFSET);
+    *theta_a2 = -(ThetaMotor2Rad - DELTA_THETA_OFFSET);
+    *theta_a3 = -(ThetaMotor3Rad - DELTA_THETA_OFFSET);
 
     double dAprime = DELTA_BASE_RADIUS - DELTA_END_EFFECTOR_RADIUS;
 
@@ -448,7 +441,6 @@ void GetElbowPosition (double *x1, double *y1, double *z1,
 
     double A = pow(a1, 2) + pow(a2, 2) + 1;
     double B = 2 * (a1 * b1 + a2 * (b2 - *y1) - *z1);
-
     double C = pow(b1, 2) + pow((b2 - *y1), 2) + pow(*z1, 2) - pow(r, 2);
 
     *z = (- B + sqrt(pow(B, 2) - 4.0 * A * C)) / (2.0 * A); // one being used
@@ -458,7 +450,6 @@ void GetElbowPosition (double *x1, double *y1, double *z1,
     }
     *x = a1 * (*z) + b1;
     *y = a2 * (*z) + b2;
-
 }
 
 void GetThetaii (double *theta1_1, double *theta1_2, double *theta1_3, 

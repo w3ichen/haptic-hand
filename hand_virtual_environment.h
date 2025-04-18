@@ -21,7 +21,7 @@
 // Obstacles
 #define SPHERE1_X 0.0
 #define SPHERE1_Y 0.0
-#define SPHERE1_Z 50.0
+#define SPHERE1_Z 40.0
 #define SPHERE1_RADIUS 10.0
 
 /* Virtual Environments Functions*/

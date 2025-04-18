@@ -28,7 +28,8 @@ extern double rx, ry, dx, dy; // 2-DOF position variables
 extern double xH, dxH; //1-DOF position variables
 double rx_proxy = 0.0;
 double ry_proxy = 0.0;
-double TorqueX, TorqueY, ForceX, ForceY, TorqueMotor1, TorqueMotor2, ForceH;
+double TorqueX, TorqueY, ForceX, ForceY, ForceH;
+double TorqueMotor1, TorqueMotor2, TorqueMotor3, TorqueMotor4, TorqueMotor5, TorqueMotor6, TorqueMotor7;
 
 
 /* Function Definitions ----------------------------------------------------------*/

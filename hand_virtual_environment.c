@@ -26,32 +26,34 @@ void renderOutsideSphere( void ) {
     // THUMB
     // Check if thumb is inside sphere
     double dist = sphereDistance(deltaThumbX, deltaThumbY, deltaThumbZ);
+    double torque1, torque2, torque3, F_coeff;
+    double Fx=0, Fy=0, Fz=0;
+
     printf("DIST=%f\n", dist);
     if (dist < SPHERE1_RADIUS) {
         printf("IN SPHERE\n");
         // Calculate the forces to apply in order to resist the user
-        double F_coeff = K_DELTA_THUMB * (SPHERE1_RADIUS - dist) / dist;
-        double Fx = F_coeff * (deltaThumbX - SPHERE1_X);
-        double Fy = F_coeff * (deltaThumbY - SPHERE1_Y);
-        double Fz = F_coeff * (deltaThumbZ - SPHERE1_Z);
-
-        // Use jacobians to transforms forces into motor torques
-        // Get the jacobians
-        double J11, J12, J13, 
-               J21, J22, J23, 
-               J31, J32, J33;
-        DeltaThumbGetJacobian (&J11, &J12, &J13, 
-                               &J21, &J22, &J23, 
-                               &J31, &J32, &J33);
-        /* Force to Torque*/
-        double torque1 = J11 * Fx + J12 * Fy + J13 * Fz;
-        double torque2 = J21 * Fx + J22 * Fy + J23 * Fz;
-        double torque3 = J31 * Fx + J32 * Fy + J33 * Fz;
-        outputTorqueMotor1(torque1);
-        outputTorqueMotor2(torque2);
-        outputTorqueMotor3(torque3); 
-        
+        F_coeff = K_DELTA_THUMB * (SPHERE1_RADIUS - dist) / dist;
+        Fx = F_coeff * (deltaThumbX - SPHERE1_X);
+        Fy = F_coeff * (deltaThumbY - SPHERE1_Y);
+        Fz = F_coeff * (deltaThumbZ - SPHERE1_Z);
     }
+
+    // Use jacobians to transforms forces into motor torques
+    // Get the jacobians
+    double J11, J12, J13, 
+            J21, J22, J23, 
+            J31, J32, J33;
+    DeltaThumbGetJacobian (&J11, &J12, &J13, 
+                            &J21, &J22, &J23, 
+                            &J31, &J32, &J33);
+    /* Force to Torque*/
+    torque1 = J11 * Fx + J12 * Fy + J13 * Fz;
+    torque2 = J21 * Fx + J22 * Fy + J23 * Fz;
+    torque3 = J31 * Fx + J32 * Fy + J33 * Fz;
+    outputTorqueMotor1(torque1);
+    outputTorqueMotor2(torque2);
+    outputTorqueMotor3(torque3); 
 }
 
 
