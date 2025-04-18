@@ -29,9 +29,7 @@ void renderOutsideSphere( void ) {
     double torque1, torque2, torque3, F_coeff;
     double Fx=0, Fy=0, Fz=0;
 
-    printf("DIST=%f\n", dist);
     if (dist < SPHERE1_RADIUS) {
-        printf("IN SPHERE\n");
         // Calculate the forces to apply in order to resist the user
         F_coeff = K_DELTA_THUMB * (SPHERE1_RADIUS - dist) / dist;
         Fx = F_coeff * (deltaThumbX - SPHERE1_X);

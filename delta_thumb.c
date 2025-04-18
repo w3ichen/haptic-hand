@@ -78,7 +78,7 @@ void deltaThumbHandler( void )
     // goHome();
     // goTo(x, y, z); 
 
-    // #1: Update x,y,z positions of end-effector using DeltaZ code
+    // // #1: Update x,y,z positions of end-effector using DeltaZ code
     // delta_calcForward(ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
 
     // #2: Update x,y,z positions of end-effector using haptic mouse code
@@ -87,10 +87,10 @@ void deltaThumbHandler( void )
 
     // goHome(); // From DeltaZ
 
-    ForceApp(); // From Haptic mouse
+    // ForceApp(); // From Haptic mouse
 
     // Print values
-    printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
+    // printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
 }
 
 
@@ -588,9 +588,9 @@ void ForceApp (void)
     float timeout_duration = 5.0; // seconds
 
 
-    if (curr_time > (timeout_duration * 1000)){
-        mode = 1;
-    }
+    // if (curr_time > (timeout_duration * 1000)){
+    //     mode = 1;
+    // }
 
     double Fx, Fy, Fz;
     if (mode == 0){
@@ -624,6 +624,7 @@ void ForceApp (void)
     double torque1 = J11 * Fx + J12 * Fy + J13 * Fz;
     double torque2 = J21 * Fx + J22 * Fy + J23 * Fz;
     double torque3 = J31 * Fx + J32 * Fy + J33 * Fz;
+
     outputTorqueMotor1(torque1);
     outputTorqueMotor2(torque2);
     outputTorqueMotor3(torque3);

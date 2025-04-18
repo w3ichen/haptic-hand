@@ -38,6 +38,8 @@ int main()
     initHaplinkTime();
     SystemCoreClockUpdate();
     calculatePositionHandleAndJacobian();
+
+    printf("Starting haptic hand...\n");
   while(1) 
   {
     deltaThumbHandler();

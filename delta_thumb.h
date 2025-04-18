@@ -34,19 +34,8 @@
 
 #define DELTA_THETA_OFFSET  (18.1) * PI / 180.0
 
-
-// double LinkLen = 20.0;
-// double LinkLen_2 = 32.0;
-// double theta_n1 = 0.0;
-// double theta_n2 = 120.0 * PI / 180.0;
-// double theta_n3 = 240.0 * PI / 180.0;
-// double theta_offset = (12.5) * PI / 180.0;
-// double theta_roffset = (3.0) * PI / 180.0;
-// double dA = 17.0;// distance from origin to base joint
-// double dc = 8.0;// distance from platform's origina to platform joint
-
 // HAPTIC CONSTANTS
-#define K_DELTA_THUMB 20.0
+#define K_DELTA_THUMB 100.0
 
 /******* Calibration Values ****/
 typedef struct {
