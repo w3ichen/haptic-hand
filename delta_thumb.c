@@ -13,6 +13,7 @@
 #include "haplink_encoders.h"
 #include <math.h> // For sqrt
 #include "delta_thumb.h"
+#include "haplink_time.h"
 
 // Global vars
 DeltaThumb deltaThumb;
@@ -84,7 +85,9 @@ void deltaThumbHandler( void )
     double x1, y1, z1, x2, y2, z2, x3, y3, z3;
     GetElbowPosition(&x1, &y1, &z1, &x2, &y2, &z2, &x3, &y3, &z3, &deltaThumbX, &deltaThumbY, &deltaThumbZ, &ThetaMotor1Rad, &ThetaMotor2Rad, &ThetaMotor3Rad);
 
-    // goHome();
+    // goHome(); // From DeltaZ
+
+    ForceApp(); // From Haptic mouse
 
     // Print values
     printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
@@ -542,6 +545,92 @@ void DeltaThumbGetJacobian (double *J11, double *J12, double *J13,
     *J31 = (Jqc*(J1y*J2z - J2y*J1z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
     *J32 = -(Jqc*(J1x*J2z - J2x*J1z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
     *J33 = (Jqc*(J1x*J2y - J2x*J1y))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
+}
+
+void ForceApp (void)
+{
+    double J11, J12, J13, 
+           J21, J22, J23, 
+           J31, J32, J33;
+    DeltaThumbGetJacobian (&J11, &J12, &J13, 
+                           &J21, &J22, &J23, 
+                           &J31, &J32, &J33);
+    /* Force Equation*/
+    double Zstart = 36.0;
+    double xstart = 0.0;
+    double ystart = 0.0;
+    double zstart_initial = Zstart + 15.0;
+    double zstart = Zstart + 13.0;
+    double xwall = 1.0;
+
+    double kx = 10.0;
+    double ky = 5.0;
+    double kz = 45.0;
+    double kz_start = 2.0;
+
+    double bx = 0.05;
+    double by = 0.05;
+    double bz = 0.5;
+
+    double k_step = 30.0;
+    double b_step = 0.1;
+
+    static double prev_time = 0.0;
+    static double prev_z = 0.0;
+
+
+    double curr_time = getTime_ms(); 
+    double kz_sin = (20.0 * sin(curr_time / 10000) + 25.0);
+    double delta_time = (curr_time - prev_time) / 1000.0; 
+    double delta_z = deltaThumbZ - prev_z;
+    static double timeout_start = 0.0;
+    static int mode = 1;  // mode = 0 for startup
+    float timeout_duration = 5.0; // seconds
+
+
+    if (curr_time > (timeout_duration * 1000)){
+        mode = 1;
+    }
+
+    double Fx, Fy, Fz;
+    if (mode == 0){
+        Fx = 0;
+        Fy = 0;
+        Fz = kz_start * (zstart_initial - deltaThumbZ);
+    }
+
+    else if(mode == 1){
+        // Force x
+        Fx = 0;
+        // Force y
+        Fy = ky * (0.5 * sin(curr_time / 200) - deltaThumbY);
+
+        // Force z
+        if (deltaThumbZ <= zstart){
+             
+            Fz = kz * (zstart - deltaThumbZ) - bz * delta_z / delta_time;
+        }
+        else{
+            Fz = 0;
+        }
+    }
+
+    /* Force to Torque*/
+    /* transpose */
+    //double torque1 = J11 * Fx + J21 * Fy + J31 * Fz;
+    //double torque2 = J12 * Fx + J22 * Fy + J32 * Fz;
+    //double torque3 = J13 * Fx + J23 * Fy + J33 * Fz;
+    /* non - transpose */
+    double torque1 = J11 * Fx + J12 * Fy + J13 * Fz;
+    double torque2 = J21 * Fx + J22 * Fy + J23 * Fz;
+    double torque3 = J31 * Fx + J32 * Fy + J33 * Fz;
+    outputTorqueMotor1(torque1);
+    outputTorqueMotor2(torque2);
+    outputTorqueMotor3(torque3);
+    
+    // Change the prev variables
+    prev_time = curr_time;  // I changed this to use the curr_time variable instead of another call of getTime_ms() but you don't have to keep it
+    prev_z = deltaThumbZ;
 }
 
 /*******************************************************************************************************************************************/

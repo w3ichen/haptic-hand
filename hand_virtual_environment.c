@@ -42,18 +42,23 @@ void renderOutsideSphere( void ) {
     // Use jacobians to transforms forces into motor torques
     // Get the jacobians
     double J11, J12, J13, 
-            J21, J22, J23, 
-            J31, J32, J33;
+           J21, J22, J23, 
+           J31, J32, J33;
     DeltaThumbGetJacobian (&J11, &J12, &J13, 
-                            &J21, &J22, &J23, 
-                            &J31, &J32, &J33);
+                           &J21, &J22, &J23, 
+                           &J31, &J32, &J33);
     /* Force to Torque*/
+    /* transpose */
+    // torque1 = J11 * Fx + J21 * Fy + J31 * Fz;
+    // torque2 = J12 * Fx + J22 * Fy + J32 * Fz;
+    // torque3 = J13 * Fx + J23 * Fy + J33 * Fz;
+    /* non - transpose */
     torque1 = J11 * Fx + J12 * Fy + J13 * Fz;
     torque2 = J21 * Fx + J22 * Fy + J23 * Fz;
     torque3 = J31 * Fx + J32 * Fy + J33 * Fz;
     outputTorqueMotor1(torque1);
     outputTorqueMotor2(torque2);
-    outputTorqueMotor3(torque3); 
+    outputTorqueMotor3(torque3);
 }
 
 
