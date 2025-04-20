@@ -88,9 +88,13 @@ int main()
         if (print_counter > 10000)
         {
             //printDebug1DOFAllParameters();
-            debugprintHelloWorld();
+            //debugprintHelloWorld();
             //debugprintStarterCode();
             //debugprinttruesusb();
+
+            debugprintFingerMotorCounts();
+            printDebugFinger1Parameters();
+
             print_counter = 0;
         }
         else

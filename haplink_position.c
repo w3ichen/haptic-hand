@@ -660,6 +660,27 @@ double getThetaBDeg( void )
     return theta_b*180/3.1416;
 }
 
+// Finger 1
+double getThetaA1_deg( void )
+{
+    return theta_a1*180/3.1416;
+}
+double getThetaB1_deg( void )
+{
+    return theta_b1*180/3.1416;
+}
+
+// Finger 2
+double getThetaA2_deg( void )
+{
+    return theta_a2*180/3.1416;
+}
+double getThetaB2_deg( void )
+{
+    return theta_b2*180/3.1416;
+}
+
+
 double getXH( void )
 {
     return xH;

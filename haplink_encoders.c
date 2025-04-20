@@ -170,6 +170,7 @@ void initHapticHandEncodersMotors( void )
     //check that it is configured as an input correctly
     debugprintRegister(M1_s1);
     M1_s2 = M1p_s2;
+    
     M2p_s1 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M2_S1_PIN);
     M2p_s2 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M2_S2_PIN);
     M2_s1 = M2p_s1;

@@ -71,6 +71,11 @@ double getThetaA( void );
 double getThetaB( void );
 double getThetaADeg( void );
 double getThetaBDeg( void );
+double getThetaA1_deg( void );
+double getThetaB1_deg( void );
+double getThetaA1_deg( void );
+double getThetaB2_deg( void );
+
 double getXH( void );
 double getDxH( void );
 double getXHPrev( void );
