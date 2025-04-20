@@ -65,7 +65,7 @@ int main()
         that you wish to render*/
          //renderInsideBox2DOF();
          //renderInsideCircle2DOF();
-         //renderOutsideCircle2DOF();
+         renderOutsideCircle2DOF();
         //contact = renderOutsideBox2DOF();
         //renderBilateralTeleoperator2DOF();
     #endif

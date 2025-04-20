@@ -400,23 +400,7 @@ void renderFloor2DOF( void )
   */
 void renderInsideBox2DOF( void )
 {
-    ForceX = 0;
-    ForceY = 0;
-            
-    // implement the virtual environment!
-    //Remember that ForceX and ForceY should be in Newtons!
-
-
-    TorqueX = J00*ForceX + J10*ForceY;
-    TorqueX = TorqueX*0.001;
-    TorqueY = J01*ForceX + J11*ForceY;
-    TorqueY = TorqueY*0.001;
-        
-    TorqueMotor1 = -((TorqueX*R_MA)/R_A);
-    TorqueMotor2 = -((TorqueY*R_MB)/R_B); 
-        
-    outputTorqueMotor1(TorqueMotor1);
-    outputTorqueMotor2(TorqueMotor2);  
+   
 }
 /*******************************************************************************
   * @name   renderInsideCircle2DOF
@@ -456,25 +440,55 @@ void renderInsideCircle2DOF( void )
   */
 void renderOutsideCircle2DOF( void )
 {
-  double DCircle = 0.0;
-  double FVector = 0.0;  
-  ForceX = 0.0;
-  ForceY = 0.0;
-  
-  // implement the virtual environment!
-  //Remember that ForceX and ForceY should be in Newtons!
-  
+    static double x_sphere = 40.0/1000.0;
+    static double y_sphere = 80.0/1000.0;
+    static double R = 30/1000.0;
 
-  TorqueX = J00*ForceX + J10*ForceY;
-  TorqueX = TorqueX*0.001;
-  TorqueY = J01*ForceX + J11*ForceY;
-  TorqueY = TorqueY*0.001;
-        
-  TorqueMotor1 = -((TorqueX*R_MA)/R_A);
-  TorqueMotor2 = -((TorqueY*R_MB)/R_B); 
-        
-  outputTorqueMotor1(TorqueMotor1);
-  outputTorqueMotor2(TorqueMotor2);    
+    double dr;
+    double r_x;
+    double r_y;
+    double r_hat_x;
+    double r_hat_y;
+
+    static double k = 100; // N/m
+
+    double x_user = rx/1000.0;
+    double y_user = ry/1000.0;
+    
+
+    // implement the virtual environment!
+    //Remember that ForceX and ForceY should be in Newtons!
+
+    r_x = x_user - x_sphere;
+    r_y = y_user - y_sphere;
+
+    dr = sqrt(pow((x_user - x_sphere), 2) + pow((y_user - y_sphere), 2));
+
+    // normalization of a vector
+    r_hat_x = (1.0/dr) * r_x;
+    r_hat_y = (1.0/dr) * r_y;
+
+    if (dr < R)
+    {
+        ForceX = k*(R - dr)*r_hat_x;
+        ForceY = k*(R - dr)*r_hat_y;
+    }
+    else
+    {
+        ForceX = 0.0;
+        ForceY = 0.0;
+    }
+
+    TorqueX = J00*ForceX + J10*ForceY;
+    TorqueX = TorqueX*0.001;
+    TorqueY = J01*ForceX + J11*ForceY;
+    TorqueY = TorqueY*0.001;
+            
+    TorqueMotor4 = -((TorqueX*R_MA)/R_A);
+    TorqueMotor5 = -((TorqueY*R_MB)/R_B); 
+            
+    outputTorqueMotor4(TorqueMotor4);
+    outputTorqueMotor5(TorqueMotor5);    
 }
 /*******************************************************************************
   * @name   renderOutsideBox2DOF
