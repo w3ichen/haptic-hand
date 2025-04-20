@@ -132,11 +132,12 @@ int initHapticHand( void )
     //initialize encoders
     initHapticHandEncodersMotors();
     
-    initPositionHandleAndJacobian( ); 
+    //initPositionHandleAndJacobian( ); // default, two motors from class
     initPositionAndJacobianFinger1( ); 
     initPositionAndJacobianFinger2( );   
 
     initDeltaThumb();
+    
     return 1;
 }
 
@@ -371,6 +372,7 @@ void initPositionHandleAndJacobian( void )
 }
 
 /*******************************************************************************
+
   * @name   initPositionAndJacobianFinger1
   * @brief  initializes the 2DOF position variables of Haplink - finger 1 (motors 4 and 5)
   * @param  None.
@@ -658,6 +660,27 @@ double getThetaBDeg( void )
 {
     return theta_b*180/3.1416;
 }
+
+// Finger 1
+double getThetaA1_deg( void )
+{
+    return theta_a1*180/3.1416;
+}
+double getThetaB1_deg( void )
+{
+    return theta_b1*180/3.1416;
+}
+
+// Finger 2
+double getThetaA2_deg( void )
+{
+    return theta_a2*180/3.1416;
+}
+double getThetaB2_deg( void )
+{
+    return theta_b2*180/3.1416;
+}
+
 
 double getXH( void )
 {

@@ -13,6 +13,7 @@
   ******************************************************************************
   */
 
+#include "haplink_encoders.h"
 #include "main.h"
 #include "mbed.h"
 #include "debug_mort.h"
@@ -153,6 +154,14 @@ to help you see that your device is working properly. Just remember that prints 
 ALWAYS cause delays and affect the behavior of your device. And if they happen too 
 frequently, your device may not work at all.-- */
 
+void debugprintFingerMotorCounts()
+{
+    pc.printf("Motor 4 Encoder Counts: %i\n", getCountsSensor4());
+    pc.printf("Motor 5 Encoder Counts: %i\n", getCountsSensor5());
+    pc.printf("Motor 6 Encoder Counts: %i\n", getCountsSensor6());
+    pc.printf("Motor 7 Encoder Counts: %i\n", getCountsSensor7());
+}
+
 void printDebugDeltaThumb( void )
 {
     pc.printf("xH=%lf, dXh=%lf, ForceH=%lf, Torque=%lf\r\n", getXH(), getDxH(), getForceH(), getTorqueMotor1());
@@ -165,7 +174,12 @@ void printDebug1DOFAllParameters( void )
 
 void printDebug2DOFAllParameters( void )
 {
-    pc.printf("%lf, %lf, %lf, %lf, %lf, %lf \n", getRx(), getRy(), getThetaADeg(), getThetaBDeg(),getProxyX(),getProxyY());
+    pc.printf("Rx: %lf, Ry: %lf, ThetaA: %lf, ThetaB: %lf, ProxyX: %lf, ProxyY: %lf \n", getRx(), getRy(), getThetaADeg(), getThetaBDeg(),getProxyX(),getProxyY());
+}
+
+void printDebugFinger1Parameters( void )
+{
+    pc.printf("rx = %lf, ry = %lf, Torque M4 = %lf Nm, theta_a_deg = %lf, theta_b_deg = %lf \n", getRx1(), getRy1(), getTorqueMotor4(), getThetaA1_deg(), getThetaB1_deg());
 }
 
 void printComBuffer( void )

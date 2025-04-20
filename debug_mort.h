@@ -19,7 +19,9 @@
 #include "main.h"
 
 /*Function definitions---------------------------------------------------------*/
+void debugprintFingerMotorCounts();
 void printDebugDeltaThumb( void );
+void printDebugFinger1Parameters();
 
 void printProcessingComm1DOF( double parameter );
 void printProcessingComm2DOF( double parameter );

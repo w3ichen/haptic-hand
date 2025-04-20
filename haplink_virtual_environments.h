@@ -79,21 +79,23 @@ double getTorqueMotor1( void );
 void renderFloor2DOF( void );
 void renderInsideBox2DOF( void );
 void renderInsideCircle2DOF( void );
-void renderOutsideCircle2DOF( void );
+
+void renderOutsideCircle2DOF_M1M2( void );
+void renderOutsideCircle2DOF_M4M5( void );
+
 int renderOutsideBox2DOF( void );
 void renderBilateralTeleoperator2DOF(void);
 double getProxyX( void );
 double getProxyY( void );
 double getForceX( void );
 double getForceY( void );
-double getTorqueMotor2( void );
 
-//Haptic Hand
+double getTorqueMotor2( void );
+double getTorqueMotor3( void );
 double getTorqueMotor4( void );
 double getTorqueMotor5( void );
 double getTorqueMotor6( void );
 double getTorqueMotor7( void );
-
 #ifdef __cplusplus
 }
 #endif

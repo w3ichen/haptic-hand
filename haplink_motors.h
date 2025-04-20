@@ -58,6 +58,7 @@ void updateDutyCycle4( double newDuty );
 void updateDutyCycle5( double newDuty );
 void updateDutyCycle6( double newDuty );
 void updateDutyCycle7( double newDuty );
+
 void outputDutyCycleMotor1(double duty);
 void outputDutyCycleMotor2(double duty);
 void outputDutyCycleMotor3(double duty);
@@ -65,6 +66,7 @@ void outputDutyCycleMotor4(double duty);
 void outputDutyCycleMotor5(double duty);
 void outputDutyCycleMotor6(double duty);
 void outputDutyCycleMotor7(double duty);
+
 void outputTorqueMotor1(double torque);
 void outputTorqueMotor2(double torque);
 void outputTorqueMotor3(double torque);
@@ -72,7 +74,6 @@ void outputTorqueMotor4(double torque);
 void outputTorqueMotor5(double torque);
 void outputTorqueMotor6(double torque);
 void outputTorqueMotor7(double torque);
-
 
 
 #ifdef __cplusplus

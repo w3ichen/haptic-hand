@@ -25,19 +25,15 @@
 #define L_A                     65.0      //length of a linkage in mm
 #define L_B                     55.0     //length of b linkage in mm
 #define R_A                     35.0      // radius of Sector a in mm
+
 #define R_B                     59.0      // radius of Sector b in mm
 #define R_HA                    59.0      // radius of Handle A for Hapkit in mm
 #define R_MA                    5.5       // radius of Motor a in mm
 #define R_MB                    5.5       // radius of Motor b in mm
-#define DELTATHETA_A            -1.5708  //theta a offset in rad (50deg). ~ change to match finger 1
-#define DELTATHETA_B            1.1093   //theta b offset in rad (-80deg) ~ change to match finger 2
+#define DELTATHETA_A            -1.5708  //theta a offset in rad (50deg)
+#define DELTATHETA_B            1.10935    //theta b offset in rad (-80deg)
 #define THETA_A_OFFSET_RAD      ((THETA_A_OFFSET*3.1416)/180)   //the theta A offset you want to start with in radians
 #define THETA_B_OFFSET_RAD      ((THETA_B_OFFSET*3.1416)/180)   //the theta B offset you want to start with in radians
-
-//+ = down
-// y + = out towards user
-
-
 
 /******* Function prototypes ****/
 int initHapticHand( void );
@@ -45,17 +41,11 @@ int initHapticHand( void );
 int initHaplinkPosition( void );
 
 double calculatePositionMotor1( void );
-
 double calculatePositionMotor2( void );
-
 double calculatePositionMotor3( void );
-
 double calculatePositionMotor4( void );
-
 double calculatePositionMotor5( void );
-
 double calculatePositionMotor6( void );
-
 double calculatePositionMotor7( void );
 
 void calculatePosition1DOF( void );
@@ -81,6 +71,11 @@ double getThetaA( void );
 double getThetaB( void );
 double getThetaADeg( void );
 double getThetaBDeg( void );
+double getThetaA1_deg( void );
+double getThetaB1_deg( void );
+double getThetaA1_deg( void );
+double getThetaB2_deg( void );
+
 double getXH( void );
 double getDxH( void );
 double getXHPrev( void );

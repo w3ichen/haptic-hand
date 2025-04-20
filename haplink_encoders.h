@@ -17,8 +17,8 @@
 #include "main.h"
 
 void initHapticHandEncodersMotors( void );
-void initHaplinkEncoders2Motors( void );
-void initHaplinkEncoders3Motors( void );
+void initHaplinkEncoders2Motors( void ); //unused
+void initHaplinkEncoders3Motors( void ); //unused
 int32_t getCountsSensor1( void );
 int32_t getCountsSensor2( void );
 int32_t getCountsSensor3( void );
