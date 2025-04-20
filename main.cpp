@@ -40,8 +40,8 @@ int main()
   while(1) 
   {
     //deltaThumbHandler(); // remember to uncomment for delta - fingers need different jacobian variables
-    debugprint(print_counter); // test if even connecting
-    //printf("%d\n", print_counter);
+    //debugprint(print_counter); // test if even connecting
+
     //calculatePositionHandleAndJacobian(); // Motors 1 and 2 for debugging - nvm lol not implemented
     calculatePositionAndJacobianFinger1(); // Motors 4 and 5
     //calculatePositionAndJacobianFinger2(); // Motors 6 and 7
@@ -65,7 +65,7 @@ int main()
 //But you may want to print different things so feel free to write your own in debug_mort.cpp and call it from here.
 //Debug prints shouldn't happen very often.
     #ifdef COMM_DEBUGGING
-        if (print_counter > 100)
+        if (print_counter > 10000)
         {
             //printDebug1DOFAllParameters();
             //debugprintHelloWorld();

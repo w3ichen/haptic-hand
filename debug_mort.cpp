@@ -179,7 +179,7 @@ void printDebug2DOFAllParameters( void )
 
 void printDebugFinger1Parameters( void )
 {
-    pc.printf("rx = %lf, ry = %lf, Torque M4 = %lf Nm, theta_a_deg = %lf, theta_b_deg = %lf \n", getRx1(), getRy1(), getTorqueMotor4(), getThetaA1_deg(), getThetaB1_deg());
+    pc.printf("rx = %lf, ry = %lf, Torque M4 = %lf Nm, Torque M5 = %lf Nm, theta_a_deg = %lf, theta_b_deg = %lf \n", getRx1(), getRy1(), getTorqueMotor4(), getTorqueMotor5(), getThetaA1_deg(), getThetaB1_deg());
 }
 
 void printComBuffer( void )

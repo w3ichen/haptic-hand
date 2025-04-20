@@ -194,10 +194,14 @@ void initHaplinkMotors( void )
     TIM3_CCR2_Val = 0;
     TIM3_CCR3_Val = 0;
     TIM3_CCR4_Val = 0;
+    TIM4_CCR1_Val = 0;
+    TIM4_CCR2_Val = 0;
+    TIM4_CCR3_Val = 0;
     // add tim4 = 0
 
     /* TIM3 clock enable */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
   
     //setup pwm pins as pwm pins 
     initMotorsGpio();
