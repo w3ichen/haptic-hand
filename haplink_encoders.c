@@ -95,19 +95,19 @@ uint8_t M3_s2;
 
 uint8_t M4p_s1;
 uint8_t M5p_s1;
-uint8_t M7p_s1;
+uint8_t M6p_s1;
 uint8_t M7p_s1;
 uint8_t M4_s1;
 uint8_t M5_s1;
-uint8_t M7_s1;
+uint8_t M6_s1;
 uint8_t M7_s1;
 uint8_t M4p_s2;
 uint8_t M5p_s2;
-uint8_t M7p_s2;
+uint8_t M6p_s2;
 uint8_t M7p_s2;
 uint8_t M4_s2;
 uint8_t M5_s2;
-uint8_t M7_s2;
+uint8_t M6_s2;
 uint8_t M7_s2;
 
 int32_t CountsSensor1;
@@ -277,10 +277,10 @@ void initHapticHandEncodersMotors( void )
     M5_s1 = M5p_s1;
     M5_s2 = M5p_s2;
 
-    M7p_s1 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M7_S1_PIN);
-    M7p_s2 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M7_S2_PIN);
-    M7_s1 = M7p_s1;
-    M7_s2 = M7p_s2;
+    M6p_s1 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M6_S1_PIN);
+    M6p_s2 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M6_S2_PIN);
+    M6_s1 = M6p_s1;
+    M6_s2 = M6p_s2;
 
     M7p_s1 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M7_S1_PIN);
     M7p_s2 = GPIOReadInputDataBit( (GPIOTypeDef *)GPIOE_BASE_MORT, M7_S2_PIN);
@@ -306,11 +306,11 @@ void initHapticHandEncodersMotors( void )
     SYSCFGEXTILineConfig(EXTI_PORT_SOURCE_GPIOE , EXTI_PIN_SOURCE_6 );
     /* Connect EXTI Line4 to PE4 pin */
     SYSCFGEXTILineConfig(EXTI_PORT_SOURCE_GPIOE , EXTI_PIN_SOURCE_4 );
-    /* Connect EXTI Line4 to PE3 pin */
+    /* Connect EXTI Line3 to PE3 pin */
     SYSCFGEXTILineConfig(EXTI_PORT_SOURCE_GPIOE , EXTI_PIN_SOURCE_3 );
-    /* Connect EXTI Line4 to PE2 pin */
+    /* Connect EXTI Line2 to PE2 pin */
     SYSCFGEXTILineConfig(EXTI_PORT_SOURCE_GPIOE , EXTI_PIN_SOURCE_2 );
-    /* Connect EXTI Line4 to PE1 pin */
+    /* Connect EXTI Line1 to PE1 pin */
     SYSCFGEXTILineConfig(EXTI_PORT_SOURCE_GPIOE , EXTI_PIN_SOURCE_1 );
     //check that the register is good:
     reg_pointer_32 = (uint32_t *)SYSCFG_EXTERNAL_INTERRUPT_REGISTER_4; // check different register now?
@@ -336,8 +336,10 @@ void initHapticHandEncodersMotors( void )
     EXTIInit(&extiinitstructure);
     /* Configure EXTI Line3 */
     extiinitstructure.EXTILine = EXTI_Line3_MORT;
+    EXTIInit(&extiinitstructure);
     /* Configure EXTI Line2 */
     extiinitstructure.EXTILine = EXTI_Line2_MORT;
+    EXTIInit(&extiinitstructure);
     /* Configure EXTI Line1 */
     extiinitstructure.EXTILine = EXTI_Line1_MORT;
     EXTIInit(&extiinitstructure);
@@ -351,33 +353,21 @@ void initHapticHandEncodersMotors( void )
 
     /* Enable and set EXTI9_5 and EXTI4, EXTI3, EXTI2, EXTI1 Interrupts to the lowest priority */
     nvicinitstructure.NVICIRQChannel = EXTI9_5_IRQn;
-    nvicinitstructure.NVICIRQChannelPreemptionPriority = 0x0F;
-    nvicinitstructure.NVICIRQChannelSubPriority = 0x0F;
-    nvicinitstructure.NVICIRQChannelCmd = ENABLE_MORT;
+    nvicinitstructure.NVICIRQChannelPreemptionPriority = 0x0F;  // same for rest
+    nvicinitstructure.NVICIRQChannelSubPriority = 0x0F;         // same for rest
+    nvicinitstructure.NVICIRQChannelCmd = ENABLE_MORT;          // same for rest
     NVICInit(&nvicinitstructure);
 
     nvicinitstructure.NVICIRQChannel = EXTI4_IRQn;
-    nvicinitstructure.NVICIRQChannelPreemptionPriority = 0x0F;
-    nvicinitstructure.NVICIRQChannelSubPriority = 0x0F;
-    nvicinitstructure.NVICIRQChannelCmd = ENABLE_MORT;
     NVICInit(&nvicinitstructure);
 
     nvicinitstructure.NVICIRQChannel = EXTI3_IRQn;
-    nvicinitstructure.NVICIRQChannelPreemptionPriority = 0x0F;
-    nvicinitstructure.NVICIRQChannelSubPriority = 0x0F;
-    nvicinitstructure.NVICIRQChannelCmd = ENABLE_MORT;
     NVICInit(&nvicinitstructure);
 
     nvicinitstructure.NVICIRQChannel = EXTI2_IRQn;
-    nvicinitstructure.NVICIRQChannelPreemptionPriority = 0x0F;
-    nvicinitstructure.NVICIRQChannelSubPriority = 0x0F;
-    nvicinitstructure.NVICIRQChannelCmd = ENABLE_MORT;
     NVICInit(&nvicinitstructure);
 
     nvicinitstructure.NVICIRQChannel = EXTI1_IRQn;
-    nvicinitstructure.NVICIRQChannelPreemptionPriority = 0x0F;
-    nvicinitstructure.NVICIRQChannelSubPriority = 0x0F;
-    nvicinitstructure.NVICIRQChannelCmd = ENABLE_MORT;
     NVICInit(&nvicinitstructure);
 
     reg_pointer_32 = (uint32_t *)NVIC_INTERRUPT_SET_ENABLE_REGISTER_32_63; //check different register?
@@ -680,7 +670,7 @@ void EXTI9_5_IRQHandler(void)
     {
         M4_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M4_S1_PIN));
         M4_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M4_S2_PIN));
-        if (((M4p_s1 == M4p_s2)&&(M4_s1 == (!M4_s2)))||((M4_s1==M1_s2)&&(M4p_s1==(!M4p_s2))))
+        if (((M4p_s1 == M4p_s2)&&(M4_s1 == (!M4_s2)))||((M4_s1==M4_s2)&&(M4p_s1==(!M4p_s2))))
         {
             CountsSensor4Changed = 1;
             if ((M4_s2 == M4p_s1)&&(M4_s1==(!M4p_s2)))

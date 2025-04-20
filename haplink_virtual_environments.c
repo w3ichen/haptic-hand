@@ -452,8 +452,8 @@ void renderOutsideCircle2DOF( void )
 
     static double k = 100; // N/m
 
-    double x_user = rx/1000.0;
-    double y_user = ry/1000.0;
+    double x_user = getRx1()/1000.0; // Rx1 and Ry1 is for first finger
+    double y_user = getRy1()/1000.0; 
     
 
     // implement the virtual environment!
