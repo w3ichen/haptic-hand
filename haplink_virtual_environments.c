@@ -378,17 +378,17 @@ void renderFloor2DOF( void )
 
 
      // implement the virtual environment!
+    
 
+    TorqueX = J00*ForceX + J10*ForceY;
+    TorqueX = TorqueX*0.001;
+    TorqueY = J01*ForceX + J11*ForceY;
+    TorqueY = TorqueY*0.001;
+    TorqueMotor1 = -((TorqueX*R_MA)/R_A);
+    TorqueMotor2 = -((TorqueY*R_MB)/R_B); 
 
-            TorqueX = J00*ForceX + J10*ForceY;
-            TorqueX = TorqueX*0.001;
-            TorqueY = J01*ForceX + J11*ForceY;
-            TorqueY = TorqueY*0.001;
-            TorqueMotor1 = -((TorqueX*R_MA)/R_A);
-            TorqueMotor2 = -((TorqueY*R_MB)/R_B); 
-        
-            outputTorqueMotor1(TorqueMotor1);
-            outputTorqueMotor2(TorqueMotor2);   
+    outputTorqueMotor1(TorqueMotor1);
+    outputTorqueMotor2(TorqueMotor2);   
 }
 
 /*******************************************************************************
