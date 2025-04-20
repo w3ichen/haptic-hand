@@ -39,12 +39,12 @@ int main()
 
   while(1) 
   {
-    deltaThumbHandler(); // remember to uncomment for delta
-    //debugprintHelloWorld(); // test if even connecting
-
+    //deltaThumbHandler(); // remember to uncomment for delta - fingers need different jacobian variables
+    debugprint(print_counter); // test if even connecting
+    //printf("%d\n", print_counter);
     //calculatePositionHandleAndJacobian(); // Motors 1 and 2 for debugging - nvm lol not implemented
     calculatePositionAndJacobianFinger1(); // Motors 4 and 5
-    calculatePositionAndJacobianFinger2(); // Motors 6 and 7
+    //calculatePositionAndJacobianFinger2(); // Motors 6 and 7
 
     //renderOutsideCircle2DOF_M1M2(); // Motors 1 and 2 for debugging
     renderOutsideCircle2DOF_M4M5(); // Motors 4 and 5
