@@ -41,17 +41,11 @@ int initHapticHand( void );
 int initHaplinkPosition( void );
 
 double calculatePositionMotor1( void );
-
 double calculatePositionMotor2( void );
-
 double calculatePositionMotor3( void );
-
 double calculatePositionMotor4( void );
-
 double calculatePositionMotor5( void );
-
 double calculatePositionMotor6( void );
-
 double calculatePositionMotor7( void );
 
 void calculatePosition1DOF( void );
