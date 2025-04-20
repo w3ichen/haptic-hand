@@ -57,7 +57,7 @@ void setup() {
   object_radius = 30;
   
   if (!simulationMode) {
-    String portName = Serial.list()[8];
+    String portName = Serial.list()[5];
     println(portName);
     myPort = new Serial(this, portName, 115200);
   }
@@ -173,20 +173,20 @@ void draw() {
   
   // Draw coordinate system for reference
   strokeWeight(2);
-  stroke(255, 0, 0); line(0, 0, 0, 10, 0, 0);  // X axis (red)
-  stroke(0, 255, 0); line(0, 0, 0, 0, 10, 0);  // Y axis (green)
-  stroke(0, 0, 255); line(0, 0, 0, 0, 0, 10);  // Z axis (blue)
+  stroke(255, 0, 0); line(0, 0, 0, 100, 0, 0);  // X axis (red)
+  stroke(0, 255, 0); line(0, 0, 0, 0, 100, 0);  // Y axis (green)
+  stroke(0, 0, 255); line(0, 0, 0, 0, 0, 100);  // Z axis (blue)
   strokeWeight(1);
   
   if (simulationMode) {
     generateSimulatedData();
   } else if (myPort != null) {
-    // Serial communication code remains the same
-    //if (sayHiForFirstTime == 0) {
-    //  myPort.write("1l");
-    //  delay(10);
-    //  sayHiForFirstTime = 1;
-    //}
+     //Serial communication code remains the same
+    if (sayHiForFirstTime == 0) {
+      myPort.write("1l");
+      delay(10);
+      sayHiForFirstTime = 1;
+    }
 
     myPort.write("3l");
     delay(10);
@@ -197,14 +197,16 @@ void draw() {
       if (messageSize > 0) {
         //println("here2");
         String messageString = new String(messageBuffer);
-        //println(messageString);
+        println(messageString);
         vals = float(splitTokens(messageString, "\t"));
         print("Received: ");
-        //println(vals);
+        println(vals);
         thumb_end = new PVector(vals[6], vals[7], vals[8]);
         println(thumb_end);
         index_end = new PVector(vals[3], vals[4], vals[5]);
+        println(index_end);
         middle_end = new PVector(vals[0], vals[1], vals[2]);
+        println(middle_end);
         object_position = new PVector(vals[9], vals[10], vals[11]);
         object_radius = vals[12];
         myPort.write("1l");
@@ -219,8 +221,8 @@ void draw() {
   SimpleFinger middle = new SimpleFinger(origin, middle_end);
   
   thumb.draw();
-  //index.draw();
-  //middle.draw();
+  index.draw();
+  middle.draw();
 
   //// Draw object as a sphere
   //pushMatrix();
