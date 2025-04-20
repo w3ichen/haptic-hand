@@ -6,17 +6,17 @@
 
 // import ewbik.processing.singlePrecision.*; // REMOVED IK import
 
-// Colors for drawing
+// Colors for drawing (Restored)
 color fingerColor = color(255, 180, 180); // Light pink
 color objectColor = color(200, 200, 255, 200); // Light blue, slightly transparent
-color boneColor = color(240); // Off-white for bones
+// color boneColor = color(240); // Off-white for bones - Not used directly now
 color jointColor = color(100, 100, 255); // Blue for joints
 
 /**
  * Draws the entire scene if data is available.
  */
 void drawScene() {
-  if (!dataReceived) { // Removed IK check
+  if (!dataReceived) {
     // Optional: Draw a loading message or placeholder
     fill(255);
     textAlign(CENTER, CENTER);
@@ -29,12 +29,13 @@ void drawScene() {
   pointLight(255, 255, 255, 0, -200, 200); // Light from above-front
   directionalLight(150, 150, 150, 0.5, 1, -1); // Angled light
   
-  // Draw elements
-  drawCoordinateSystem(100);
-  drawFingers(); // Use the standard drawing function
+  // Draw elements conditionally based on GUI toggles
+  if (showAxes) { drawCoordinateSystem(100); }
+  if (showPlaneLabels) { drawPlaneLabels(); }
+  if (showPlanes) { drawCoordinatePlanes(100); }
+  drawFingers(); // Draw the bezier curve fingers
   drawObject();
-  // Optional: Draw target points
-  drawTargets(); 
+  if (showTargets) { drawTargets(); } // Added conditional drawing for targets
 }
 
 /**
@@ -127,7 +128,7 @@ void drawImpliedFinger(PVector fingerBase, PVector targetEnd,
   float j3y = bezierPoint(joint0.y, control1.y, control2.y, targetEnd.y, t3);
   float j3z = bezierPoint(joint0.z, control1.z, control2.z, targetEnd.z, t3);
   PVector joint3 = new PVector(j3x, j3y, j3z);
-
+  
   // Draw segments as cylinders and joints as spheres
   // Joint 0 (Base)
   pushMatrix();
@@ -210,8 +211,89 @@ void drawTargets() {
   popStyle();
 }
 
-// Helper function to draw a cylinder between two points
-// Keep this function as it's used by drawImpliedFinger
+/**
+ * Draws text labels for the coordinate planes near the origin.
+ */
+void drawPlaneLabels() {
+  if (!showPlaneLabels) return; // Check the global toggle
+
+  pushStyle();
+  float offset = 60; // How far from the origin to place the label
+  float textSize = 16;
+  textSize(textSize);
+  textAlign(CENTER, CENTER);
+  fill(255, 255, 200); // Bright yellow-white
+
+  // XY Label (on Z axis)
+  pushMatrix();
+  translate(offset, -offset, 0); // Position near the XY plane corner
+  // No rotation needed, text faces camera by default in PeasyCam
+  text("XY", 0, 0);
+  popMatrix();
+
+  // XZ Label (on Y axis)
+  pushMatrix();
+  translate(offset, 0, offset); // Position near the XZ plane corner
+  rotateX(PI/2); // Orient text to roughly face out from XZ plane 
+  text("XZ", 0, 0);
+  popMatrix();
+
+  // YZ Label (on X axis)
+  pushMatrix();
+  translate(0, -offset, offset); // Position near the YZ plane corner
+  rotateY(-PI/2); // Orient text to roughly face out from YZ plane
+  text("YZ", 0, 0);
+  popMatrix();
+  
+  popStyle();
+}
+
+/**
+ * Draws translucent colored squares representing coordinate planes.
+ */
+void drawCoordinatePlanes(float planeSize) {
+  if (!showPlanes) return; // Check the global toggle
+  
+  pushStyle();
+  noStroke();
+  rectMode(CORNER); // Keep CORNER mode for XY and XZ
+  float labelOffset = 5; // How far off the plane to draw text - REMOVED FROM HERE
+  float textSize = 16;
+  // REMOVED textSize setting and textAlign - moved to drawPlaneLabels
+  
+  // XY Plane (Z=0, Red/Green -> Yellowish)
+  pushMatrix();
+  // No rotation needed, already aligned
+  fill(255, 255, 0, 50); // Semi-transparent yellow
+  rect(0, 0, planeSize, -planeSize); // Draw from origin along +X, -Y (Up)
+  // REMOVED Label drawing
+  popMatrix();
+
+  // XZ Plane (Y=0, Red/Blue -> Magentish)
+  pushMatrix();
+  rotateX(PI/2); // Rotate plane to align with XZ
+  fill(255, 0, 255, 50); // Semi-transparent magenta
+  rect(0, 0, planeSize, planeSize); // Draw from origin along +X, +Z (local)
+  // REMOVED Label drawing
+  popMatrix();
+
+  // YZ Plane (X=0, Green/Blue -> Cyannish)
+  pushMatrix();
+  // No rotation needed, draw directly with vertices
+  fill(0, 255, 255, 50); // Semi-transparent cyan
+  beginShape(QUADS);
+  vertex(0, 0, 0);           // Origin
+  vertex(0, -planeSize, 0);  // Up Y axis
+  vertex(0, -planeSize, planeSize); // Up Y, Forward Z
+  vertex(0, 0, planeSize);    // Forward Z
+  endShape(CLOSE);
+  // REMOVED Label drawing
+  popMatrix();
+  
+  popStyle();
+}
+
+// Helper function to draw a cylinder between two points (Restored)
 void drawCylinder(PVector p1, PVector p2, float r) {
   PVector center = PVector.lerp(p1, p2, 0.5);
   float len = PVector.dist(p1, p2);
@@ -234,8 +316,9 @@ void drawCylinder(PVector p1, PVector p2, float r) {
   } else if (diff.y < -0.99) { // Check Y component after normalization
     // If pointing directly down (-Y), rotate 180 degrees around X or Z
     rotate(PI, 1, 0, 0); 
+  } else if (diff.y > 0.99) {
+    // If pointing directly up (+Y), no rotation needed
   }
-  // If pointing directly up (+Y), no rotation needed
     
   // Draw the cylinder body using a quad strip for better lighting
   beginShape(QUAD_STRIP);

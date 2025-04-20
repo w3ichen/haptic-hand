@@ -17,7 +17,7 @@ final int BAUD_RATE = 115200;
 
 // Simulation Mode
 // Set to true to use simulated data instead of serial data
-final boolean SIMULATION_MODE = true; 
+boolean SIMULATION_MODE = true;
 
 // --- Visualization Settings (Units assumed to be mm) ---
 final float FINGER_RADIUS = 5; // Radius for drawing finger segments/joints
