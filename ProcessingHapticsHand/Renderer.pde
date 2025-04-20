@@ -1,17 +1,22 @@
 /**
  * Renderer.pde
  * 
- * Contains the SimpleFinger class and drawing functions for the scene.
+ * Contains drawing functions for the scene, using implied joints.
  */
 
-// Origin point for the coordinate system (can be defined here or main sketch)
-final PVector origin = new PVector(0, 0, 0);
+// import ewbik.processing.singlePrecision.*; // REMOVED IK import
+
+// Colors for drawing
+color fingerColor = color(255, 180, 180); // Light pink
+color objectColor = color(200, 200, 255, 200); // Light blue, slightly transparent
+color boneColor = color(240); // Off-white for bones
+color jointColor = color(100, 100, 255); // Blue for joints
 
 /**
  * Draws the entire scene if data is available.
  */
 void drawScene() {
-  if (!dataReceived) {
+  if (!dataReceived) { // Removed IK check
     // Optional: Draw a loading message or placeholder
     fill(255);
     textAlign(CENTER, CENTER);
@@ -26,8 +31,10 @@ void drawScene() {
   
   // Draw elements
   drawCoordinateSystem(100);
-  drawFingers();
+  drawFingers(); // Use the standard drawing function
   drawObject();
+  // Optional: Draw target points
+  drawTargets(); 
 }
 
 /**
@@ -38,27 +45,125 @@ void drawCoordinateSystem(float axisLength) {
   // X axis (red)
   stroke(255, 0, 0);
   line(0, 0, 0, axisLength, 0, 0);
-  // Y axis (green) - Processing's Y is typically down in 2D, but up in 3D default
+  // Y axis (green) - Up
   stroke(0, 255, 0);
   line(0, 0, 0, 0, -axisLength, 0); // Draw negative Y to point upwards
-  // Z axis (blue) - Towards the viewer
+  // Z axis (blue) - Out
   stroke(0, 0, 255);
   line(0, 0, 0, 0, 0, axisLength);
   strokeWeight(1);
-  noStroke(); // Turn off stroke for shapes unless needed
 }
 
 /**
- * Draws the fingers based on current end positions.
+ * Draws the fingers using implied joints directed towards the target.
  */
 void drawFingers() {
-  SimpleFinger thumb = new SimpleFinger(origin, thumb_end);
-  SimpleFinger index = new SimpleFinger(origin, index_end);
-  SimpleFinger middle = new SimpleFinger(origin, middle_end);
+  // Calculate absolute base positions for each finger
+  PVector indexBaseAbs = PVector.add(FINGER_BASE_OFFSET, INDEX_FINGER_RELATIVE_OFFSET);
+  PVector middleBaseAbs = PVector.add(FINGER_BASE_OFFSET, MIDDLE_FINGER_RELATIVE_OFFSET);
+  PVector thumbBaseAbs = PVector.add(FINGER_BASE_OFFSET, THUMB_FINGER_RELATIVE_OFFSET);
+
+  // Draw each finger using the helper function with its specific base position
+  drawImpliedFinger(thumbBaseAbs, thumb_end, 
+                    IMPLIED_THUMB_BONE_1_LEN, IMPLIED_THUMB_BONE_2_LEN, IMPLIED_THUMB_BONE_3_LEN, 
+                    FINGER_RADIUS * 0.9); // Slightly thicker thumb
+                    
+  drawImpliedFinger(indexBaseAbs, index_end, 
+                    IMPLIED_INDEX_BONE_1_LEN, IMPLIED_INDEX_BONE_2_LEN, IMPLIED_INDEX_BONE_3_LEN, 
+                    FINGER_RADIUS * 0.8);
+                    
+  drawImpliedFinger(middleBaseAbs, middle_end, 
+                    IMPLIED_MIDDLE_BONE_1_LEN, IMPLIED_MIDDLE_BONE_2_LEN, IMPLIED_MIDDLE_BONE_3_LEN, 
+                    FINGER_RADIUS * 0.8);
+}
+
+/**
+ * Helper function to draw a single finger with implied joints using a Bezier curve.
+ * Draws 3 segments starting from fingerBase, curving towards targetEnd.
+ */
+void drawImpliedFinger(PVector fingerBase, PVector targetEnd, 
+                       float len1, float len2, float len3, 
+                       float segmentRadius) {
+  pushStyle();
+  noStroke();
+  fill(fingerColor);
+
+  PVector joint0 = fingerBase.copy();
+  float totalLen = len1 + len2 + len3;
   
-  thumb.draw();
-  index.draw();
-  middle.draw();
+  // Define the bend direction (towards palm/floor = -Y world axis)
+  PVector bendDir = new PVector(0, -1, 0); 
+  
+  // Calculate the distance and vector from base to target
+  PVector totalVec = PVector.sub(targetEnd, fingerBase);
+  float dist = totalVec.mag();
+  
+  // Define Bezier control points
+  // Control point 1: Offset from base towards bend direction
+  // Control point 2: Offset from target towards bend direction
+  // The amount of offset determines the curve intensity - adjust 'bendAmount' as needed
+  float bendAmount = dist * 0.3; // Example: 30% of distance, creates a noticeable curve
+  PVector control1 = PVector.add(PVector.lerp(fingerBase, targetEnd, 0.25), PVector.mult(bendDir, bendAmount));
+  PVector control2 = PVector.add(PVector.lerp(fingerBase, targetEnd, 0.75), PVector.mult(bendDir, bendAmount));
+
+  // Calculate joint positions along the Bezier curve based on bone lengths
+  // Parameter t is the fraction of the total *bone length* along the curve
+  float t1 = len1 / totalLen;
+  float t2 = (len1 + len2) / totalLen;
+  float t3 = 1.0; // End of the curve
+
+  float j1x = bezierPoint(joint0.x, control1.x, control2.x, targetEnd.x, t1);
+  float j1y = bezierPoint(joint0.y, control1.y, control2.y, targetEnd.y, t1);
+  float j1z = bezierPoint(joint0.z, control1.z, control2.z, targetEnd.z, t1);
+  PVector joint1 = new PVector(j1x, j1y, j1z);
+
+  float j2x = bezierPoint(joint0.x, control1.x, control2.x, targetEnd.x, t2);
+  float j2y = bezierPoint(joint0.y, control1.y, control2.y, targetEnd.y, t2);
+  float j2z = bezierPoint(joint0.z, control1.z, control2.z, targetEnd.z, t2);
+  PVector joint2 = new PVector(j2x, j2y, j2z);
+  
+  // Joint 3 is the end point of the curve, approximating the target
+  float j3x = bezierPoint(joint0.x, control1.x, control2.x, targetEnd.x, t3);
+  float j3y = bezierPoint(joint0.y, control1.y, control2.y, targetEnd.y, t3);
+  float j3z = bezierPoint(joint0.z, control1.z, control2.z, targetEnd.z, t3);
+  PVector joint3 = new PVector(j3x, j3y, j3z);
+
+  // Draw segments as cylinders and joints as spheres
+  // Joint 0 (Base)
+  pushMatrix();
+  translate(joint0.x, joint0.y, joint0.z);
+  fill(jointColor); 
+  sphere(segmentRadius * 1.2);
+  popMatrix();
+
+  // Bone 1
+  fill(fingerColor);
+  drawCylinder(joint0, joint1, segmentRadius);
+  pushMatrix();
+  translate(joint1.x, joint1.y, joint1.z);
+  fill(jointColor); 
+  sphere(segmentRadius * 1.2);
+  popMatrix();
+
+  // Bone 2
+  fill(fingerColor);
+  drawCylinder(joint1, joint2, segmentRadius);
+  pushMatrix();
+  translate(joint2.x, joint2.y, joint2.z);
+  fill(jointColor); 
+  sphere(segmentRadius * 1.2);
+  popMatrix();
+  
+  // Bone 3
+  fill(fingerColor);
+  drawCylinder(joint2, joint3, segmentRadius);
+  pushMatrix();
+  translate(joint3.x, joint3.y, joint3.z);
+  fill(jointColor); // Also color the final joint/tip
+  sphere(segmentRadius * 1.2);
+  popMatrix();
+
+  popStyle();
 }
 
 /**
@@ -68,86 +173,84 @@ void drawObject() {
   pushMatrix();
   translate(object_position.x, object_position.y, object_position.z);
   noStroke();
-  fill(200, 200, 255, 200); // Light blue, slightly transparent
+  fill(objectColor);
   sphere(object_radius);
   popMatrix();
 }
 
 /**
- * Simplified Finger class that uses basic Processing shapes.
+ * Optional: Draws the target points for visualization/debugging.
  */
-class SimpleFinger {
-  PVector start, end;
-  float radius;
-  int sides = 12; // Increased sides for smoother cylinder
+void drawTargets() {
+  pushStyle();
+  noFill();
+  strokeWeight(2);
   
-  SimpleFinger(PVector start, PVector end) {
-    this.start = start;
-    this.end = end;
-    this.radius = FINGER_RADIUS; // Use configured radius
-  }
+  // Index Target (Cyan)
+  stroke(0, 255, 255);
+  pushMatrix();
+  translate(index_end.x, index_end.y, index_end.z);
+  box(10); // Draw a small box at the target
+  popMatrix();
   
-  void draw() {
-    // Draw the finger as a cylinder with spheres at ends
-    noStroke(); // Generally no stroke for fingers
-    fill(255, 180, 180); // Light pink color for fingers
-    
-    // Draw spheres at start and end
-    pushMatrix();
-    translate(start.x, start.y, start.z);
-    sphere(radius);
-    popMatrix();
-    
-    pushMatrix();
-    translate(end.x, end.y, end.z);
-    sphere(radius);
-    popMatrix();
-    
-    // Draw cylinder connecting the spheres
-    drawCylinder(start, end, radius * 0.8); // Make cylinder slightly thinner
-  }
+  // Middle Target (Magenta)
+  stroke(255, 0, 255);
+  pushMatrix();
+  translate(middle_end.x, middle_end.y, middle_end.z);
+  box(10);
+  popMatrix();
   
-  // Helper function to draw a cylinder between two points
-  void drawCylinder(PVector p1, PVector p2, float r) {
-    PVector center = PVector.lerp(p1, p2, 0.5);
-    float len = PVector.dist(p1, p2);
+  // Thumb Target (Yellow)
+  stroke(255, 255, 0);
+  pushMatrix();
+  translate(thumb_end.x, thumb_end.y, thumb_end.z);
+  box(10);
+  popMatrix();
+  
+  popStyle();
+}
+
+// Helper function to draw a cylinder between two points
+// Keep this function as it's used by drawImpliedFinger
+void drawCylinder(PVector p1, PVector p2, float r) {
+  PVector center = PVector.lerp(p1, p2, 0.5);
+  float len = PVector.dist(p1, p2);
+  int sides = 12;
     
-    if (len < 0.1) return; // Avoid drawing zero-length cylinder
+  if (len < 0.1) return; // Avoid drawing zero-length cylinder
     
-    // Calculate rotation axis and angle
-    PVector diff = PVector.sub(p2, p1);
-    diff.normalize(); // Normalize for angle calculation
+  // Calculate rotation axis and angle
+  PVector diff = PVector.sub(p2, p1);
+  diff.normalize(); // Normalize for angle calculation
     
-    PVector rotAxis = new PVector(0, 1, 0).cross(diff);
-    float rotAngle = PVector.angleBetween(new PVector(0, 1, 0), diff);
+  PVector rotAxis = new PVector(0, 1, 0).cross(diff);
+  float rotAngle = PVector.angleBetween(new PVector(0, 1, 0), diff);
     
-    pushMatrix();
-    translate(center.x, center.y, center.z);
-    // Check if axis is near zero vector (collinear cases)
-    if (rotAxis.magSq() > 0.001) {
-        rotate(rotAngle, rotAxis.x, rotAxis.y, rotAxis.z);
-    } else if (diff.y < 0) { 
-        // If pointing directly down (-Y), rotate 180 degrees around X or Z
-        rotate(PI, 1, 0, 0); 
-    }
-    // If pointing directly up (+Y), no rotation needed
-    
-    // Draw the cylinder body using a quad strip for better lighting
-    beginShape(QUAD_STRIP);
-    for (int i = 0; i <= sides; i++) {
-      float angle = TWO_PI * i / sides;
-      float x = cos(angle) * r;
-      float z = sin(angle) * r;
-      // Define normals for lighting: points outwards from the cylinder axis
-      normal(cos(angle), 0, sin(angle)); 
-      vertex(x, len/2, z);  // Top vertex
-      vertex(x, -len/2, z); // Bottom vertex
-    }
-    endShape();
-    
-    // Optional: Draw caps (if needed, requires different shape mode)
-    // beginShape(TRIANGLE_FAN); ... endShape(); for top and bottom
-    
-    popMatrix();
+  pushMatrix();
+  translate(center.x, center.y, center.z);
+  // Check if axis is near zero vector (collinear cases)
+  if (rotAxis.magSq() > 0.001) {
+    rotate(rotAngle, rotAxis.x, rotAxis.y, rotAxis.z);
+  } else if (diff.y < -0.99) { // Check Y component after normalization
+    // If pointing directly down (-Y), rotate 180 degrees around X or Z
+    rotate(PI, 1, 0, 0); 
   }
-} 
+  // If pointing directly up (+Y), no rotation needed
+    
+  // Draw the cylinder body using a quad strip for better lighting
+  beginShape(QUAD_STRIP);
+  for (int i = 0; i <= sides; i++) {
+    float angle = TWO_PI * i / sides;
+    float x = cos(angle) * r;
+    float z = sin(angle) * r;
+    // Define normals for lighting: points outwards from the cylinder axis
+    normal(cos(angle), 0, sin(angle)); 
+    vertex(x, len/2, z);  // Top vertex
+    vertex(x, -len/2, z); // Bottom vertex
+  }
+  endShape();
+    
+  popMatrix();
+}
+
+// [REMOVED SimpleFinger CLASS] 
