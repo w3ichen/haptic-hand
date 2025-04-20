@@ -42,9 +42,13 @@ void renderOutsideSphere( void ) {
     double J11, J12, J13, 
            J21, J22, J23, 
            J31, J32, J33;
-    DeltaThumbGetJacobian (&J11, &J12, &J13, 
-                           &J21, &J22, &J23, 
-                           &J31, &J32, &J33);
+    // DeltaThumbGetJacobian (&J11, &J12, &J13, 
+    //                        &J21, &J22, &J23, 
+    //                        &J31, &J32, &J33);
+     DeltaThumbGetJacobian_OhioVersion (&J11, &J12, &J13, 
+                                        &J21, &J22, &J23, 
+                                        &J31, &J32, &J33);
+                                    
     /* Force to Torque*/
     /* transpose */
     // torque1 = J11 * Fx + J21 * Fy + J31 * Fz;

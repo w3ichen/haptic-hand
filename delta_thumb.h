@@ -24,7 +24,7 @@
 
 // DELTA DEVICE CONSTANTS
 #define DELTA_BASE_RADIUS 31.2 // base radius - distance from origin to base joint
-#define DELTA_END_EFFECTOR_RADIUS 13.5 // distance from platform's origin to platform joint
+#define DELTA_END_EFFECTOR_RADIUS 25 // distance from platform's origin to platform joint
 // Thetas that motors are positioned at
 #define DELTA_THETA_N1 0.0
 #define DELTA_THETA_N2 120.0 * PI / 180.0
@@ -33,6 +33,15 @@
 #define DELTA_UPPER_LINK_LEN 60.0
 
 #define DELTA_THETA_OFFSET  (18.1) * PI / 180.0
+
+// P = platform, B = base
+#define DELTA_WP 7.22 // end effector origin to edge perpendicular
+#define DELTA_UP 14.43 // end effector origin to corner
+#define DELTA_WB 35.0  // base origin to edge perpendicular
+#define DELTA_UB 70.0  // base origin to corner
+#define DELTA_SP 25.0  // edge length of end effector
+#define DELTA_SB 121.24 // edge length of base
+
 
 // HAPTIC CONSTANTS
 #define K_DELTA_THUMB 100.0
@@ -86,6 +95,11 @@ void GetThetaii (double *theta1_1, double *theta1_2, double *theta1_3,
 void DeltaThumbGetJacobian (double *J11, double *J12, double *J13, 
                             double *J21, double *J22, double *J23, 
                             double *J31, double *J32, double *J33);
+void DeltaThumbGetJacobian_OhioVersion (double *J11, double *J12, double *J13, 
+                                        double *J21, double *J22, double *J23, 
+                                        double *J31, double *J32, double *J33);
+
+                                        
 void ForceApp (void);
 // End Haptic Mouse functions ////////////////////
 

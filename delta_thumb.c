@@ -3,6 +3,11 @@
   * @file    delta_thumb.cpp
   * @date    April-2025
   * @brief   Delta thumb mechanism based on code from https://github.com/alvaresc/DeltaZ/blob/main/Arduino/DeltaZ_communication/DeltaRobot.cpp
+  * Links:
+  *     - DeltaZ Github: https://github.com/alvaresc/DeltaZ
+  *     - Delta Kinematics: https://hypertriangle.com/~alex/delta-robot-tutorial/
+  *     - Delta Robot paper: http://robby.caltech.edu/~jwb/courses/ME115/handouts/DeltaKinematics.pdf
+  *     - Delta Parallel Robot paper: https://people.ohio.edu/williams/html/PDF/DeltaKin.pdf
   * NOTE: DeltaZ code operates in degrees!
   ******************************************************************************
   */
@@ -79,18 +84,18 @@ void deltaThumbHandler( void )
     // goTo(x, y, z); 
 
     // // #1: Update x,y,z positions of end-effector using DeltaZ code
-    // delta_calcForward(ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
+    delta_calcForward(ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
 
     // #2: Update x,y,z positions of end-effector using haptic mouse code
-    double x1, y1, z1, x2, y2, z2, x3, y3, z3;
-    GetElbowPosition(&x1, &y1, &z1, &x2, &y2, &z2, &x3, &y3, &z3, &deltaThumbX, &deltaThumbY, &deltaThumbZ, &ThetaMotor1Rad, &ThetaMotor2Rad, &ThetaMotor3Rad);
+    // double x1, y1, z1, x2, y2, z2, x3, y3, z3;
+    // GetElbowPosition(&x1, &y1, &z1, &x2, &y2, &z2, &x3, &y3, &z3, &deltaThumbX, &deltaThumbY, &deltaThumbZ, &ThetaMotor1Rad, &ThetaMotor2Rad, &ThetaMotor3Rad);
 
     // goHome(); // From DeltaZ
 
     // ForceApp(); // From Haptic mouse
 
     // Print values
-    // printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
+    printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
 }
 
 
@@ -536,15 +541,17 @@ void DeltaThumbGetJacobian (double *J11, double *J12, double *J13,
     double Jqb = (DELTA_LOWER_LINK_LEN * sin(theta2_2) * sin(theta3_2));
     double Jqc = (DELTA_LOWER_LINK_LEN * sin(theta2_3) * sin(theta3_3));
 
-    *J11 = (Jqa*(J2y*J3z - J3y*J2z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J12 = -(Jqa*(J2x*J3z - J3x*J2z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J13 = (Jqa*(J2x*J3y - J3x*J2y))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J21 = -(Jqb*(J1y*J3z - J3y*J1z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J22 = (Jqb*(J1x*J3z - J3x*J1z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J23 = -(Jqb*(J1x*J3y - J3x*J1y))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J31 = (Jqc*(J1y*J2z - J2y*J1z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J32 = -(Jqc*(J1x*J2z - J2x*J1z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J33 = (Jqc*(J1x*J2y - J2x*J1y))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
+    double det = (J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
+
+    *J11 = (Jqa*(J2y*J3z - J3y*J2z))/det;
+    *J12 = -(Jqa*(J2x*J3z - J3x*J2z))/det;
+    *J13 = (Jqa*(J2x*J3y - J3x*J2y))/det;
+    *J21 = -(Jqb*(J1y*J3z - J3y*J1z))/det;
+    *J22 = (Jqb*(J1x*J3z - J3x*J1z))/det;
+    *J23 = -(Jqb*(J1x*J3y - J3x*J1y))/det;
+    *J31 = (Jqc*(J1y*J2z - J2y*J1z))/det;
+    *J32 = -(Jqc*(J1x*J2z - J2x*J1z))/det;
+    *J33 = (Jqc*(J1x*J2y - J2x*J1y))/det;
 }
 
 void ForceApp (void)
@@ -637,3 +644,51 @@ void ForceApp (void)
 /*******************************************************************************************************************************************/
 // END Haptic mouse Code
 /*******************************************************************************************************************************************/
+
+// From DeltaKin.pdf paper (page 15): https://people.ohio.edu/williams/html/PDF/DeltaKin.pdf
+void DeltaThumbGetJacobian_OhioVersion (double *J11, double *J12, double *J13, 
+                                        double *J21, double *J22, double *J23, 
+                                        double *J31, double *J32, double *J33)
+{
+    // delta variables
+    static double a = DELTA_WB - DELTA_UP;
+    double b = DELTA_SP / 2 - (sqrt(3)/2) * DELTA_WB;
+    static double c = DELTA_WP - DELTA_WB/2;
+    static double L = DELTA_UPPER_LINK_LEN;
+
+    double x = deltaThumbX;
+    double y = deltaThumbY;
+    double z = deltaThumbZ;
+    double theta1 = ThetaMotor1Rad;
+    double theta2 = ThetaMotor2Rad;
+    double theta3 = ThetaMotor3Rad;
+
+    // jacobian variables
+    double J1x = x;
+    double J1y = y + a + L * cos(theta1);
+    double J1z = z + L * sin(theta1);
+
+    double J2x = 2 * (x + b) - sqrt(3) * L * cos(theta2);
+    double J2y = 2 * (y + c) - L * cos(theta2);
+    double J2z = 2 * (z + L * sin(theta2));
+
+    double J3x = 2 * (x - b) + sqrt(3) * L *cos(theta3);
+    double J3y = 2 * (y + c) - L * cos(theta3);
+    double J3z = 2 * (z + L * sin(theta3));
+
+    double Jqa = L * ((y + a) * sin(theta1) - z * cos(theta1));
+    double Jqb = -L * ((sqrt(3) * (x + b) + y + c) * sin(theta2) + 2 * z * cos(theta2));
+    double Jqc = L * ((sqrt(3) * (x - b) - y - c) * sin(theta3) - 2 * z *cos(theta3));
+
+    double det = (J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
+
+    *J11 = (Jqa*(J2y*J3z - J3y*J2z))/det;
+    *J12 = -(Jqa*(J2x*J3z - J3x*J2z))/det;
+    *J13 = (Jqa*(J2x*J3y - J3x*J2y))/det;
+    *J21 = -(Jqb*(J1y*J3z - J3y*J1z))/det;
+    *J22 = (Jqb*(J1x*J3z - J3x*J1z))/det;
+    *J23 = -(Jqb*(J1x*J3y - J3x*J1y))/det;
+    *J31 = (Jqc*(J1y*J2z - J2y*J1z))/det;
+    *J32 = -(Jqc*(J1x*J2z - J2x*J1z))/det;
+    *J33 = (Jqc*(J1x*J2y - J2x*J1y))/det;
+}
