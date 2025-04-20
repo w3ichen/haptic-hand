@@ -39,7 +39,7 @@ int main()
     calculatePositionHandleAndJacobian();
   while(1) 
   {
-    deltaThumbHandler();
+    //deltaThumbHandler();
 
     #ifdef DOF_1        
         // calculatePosition1DOF(); 
@@ -59,7 +59,7 @@ int main()
     #ifdef DOF_2//then we are in 2DOF
         //calculatePositionHandleAndJacobian();
         calculatePositionAndJacobianFinger1();
-        calculatePositionAndJacobianFinger2();
+        //calculatePositionAndJacobianFinger2();
 
         /*Insert here the virtual environment from the file haplink_virtual_environments.cpp
         that you wish to render*/

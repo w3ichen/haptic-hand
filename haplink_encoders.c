@@ -760,12 +760,12 @@ void EXTI4_IRQHandler(void)
 {
     if(EXTI_GetITStatus_mort(EXTI_Line4_MORT) != RESET_MORT) // motor 6 sensor 1
     {
-        M7_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M7_S1_PIN));
-        M7_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M7_S2_PIN));
-        if (((M7p_s1 == M7p_s2)&&(M7_s1 == (!M7_s2)))||((M7_s1==M1_s2)&&(M7p_s1==(!M7p_s2))))
+        M6_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M6_S1_PIN));
+        M6_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M6_S2_PIN));
+        if (((M6p_s1 == M6p_s2)&&(M6_s1 == (!M6_s2)))||((M6_s1==M6_s2)&&(M6p_s1==(!M6p_s2))))
         {
             CountsSensor6Changed = 1;
-            if ((M7_s2 == M7p_s1)&&(M7_s1==(!M7p_s2)))
+            if ((M6_s2 == M6p_s1)&&(M6_s1==(!M6p_s2)))
             {
                 CountsSensor6 = CountsSensor6 + 1; //CL rotation
                 
@@ -775,8 +775,8 @@ void EXTI4_IRQHandler(void)
                 CountsSensor6 = CountsSensor6 - 1; //CCL rotation 
             }
         }
-        M7p_s1 = M7_s1;
-        M7p_s2 = M7_s2;
+        M6p_s1 = M6_s1;
+        M6p_s2 = M6_s2;
         
         /* Clear the EXTI line 4 pending bit */
         EXTI_ClearITPendingBit_mort(EXTI_Line4_MORT);
@@ -787,12 +787,12 @@ void EXTI3_IRQHandler(void)
 {
     if(EXTI_GetITStatus_mort(EXTI_Line3_MORT) != RESET_MORT) // motor 6 sensor 1
     {
-        M7_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M7_S1_PIN));
-        M7_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M7_S2_PIN));
-        if (((M7p_s1 == M7p_s2)&&(M7_s1 == (!M7_s2)))||((M7_s1==M1_s2)&&(M7p_s1==(!M7p_s2))))
+        M6_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M6_S1_PIN));
+        M6_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M6_S2_PIN));
+        if (((M6p_s1 == M6p_s2)&&(M6_s1 == (!M6_s2)))||((M6_s1==M6_s2)&&(M6p_s1==(!M6p_s2))))
         {
             CountsSensor6Changed = 1;
-            if ((M7_s2 == M7p_s1)&&(M7_s1==(!M7p_s2)))
+            if ((M6_s2 == M6p_s1)&&(M6_s1==(!M6p_s2)))
             {
                 CountsSensor6 = CountsSensor6 + 1; //CL rotation
                 
@@ -802,11 +802,11 @@ void EXTI3_IRQHandler(void)
                 CountsSensor6 = CountsSensor6 - 1; //CCL rotation 
             }
         }
-        M7p_s1 = M7_s1;
-        M7p_s2 = M7_s2;
+        M6p_s1 = M6_s1;
+        M6p_s2 = M6_s2;
         
-        /* Clear the EXTI line 3 pending bit */
-        EXTI_ClearITPendingBit_mort(EXTI_Line3_MORT);
+        /* Clear the EXTI line 4 pending bit */
+        EXTI_ClearITPendingBit_mort(EXTI_Line4_MORT);
     }
 }
 
@@ -816,7 +816,7 @@ void EXTI2_IRQHandler(void)
     {
         M7_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M7_S1_PIN));
         M7_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M7_S2_PIN));
-        if (((M7p_s1 == M7p_s2)&&(M7_s1 == (!M7_s2)))||((M7_s1==M1_s2)&&(M7p_s1==(!M7p_s2))))
+        if (((M7p_s1 == M7p_s2)&&(M7_s1 == (!M7_s2)))||((M7_s1==M7_s2)&&(M7p_s1==(!M7p_s2))))
         {
             CountsSensor7Changed = 1;
             if ((M7_s2 == M7p_s1)&&(M7_s1==(!M7p_s2)))
@@ -843,7 +843,7 @@ void EXTI1_IRQHandler(void)
     {
         M7_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M7_S1_PIN));
         M7_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M7_S2_PIN));
-        if (((M7p_s1 == M7p_s2)&&(M7_s1 == (!M7_s2)))||((M7_s1==M1_s2)&&(M7p_s1==(!M7p_s2))))
+        if (((M7p_s1 == M7p_s2)&&(M7_s1 == (!M7_s2)))||((M7_s1==M7_s2)&&(M7p_s1==(!M7p_s2))))
         {
             CountsSensor7Changed = 1;
             if ((M7_s2 == M7p_s1)&&(M7_s1==(!M7p_s2)))
