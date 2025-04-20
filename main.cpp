@@ -29,47 +29,27 @@ int main()
     double wall_position;
     int contact;
 
-    initCommunication();
-    initLED1();
+    initCommunication(); // unchanged
+    initLED1(); // unchanged
     initHapticHand(); // calls motor encoder initializations within
     initHaplinkMotors();
-    initHaplinkAnalogSensors();
-    initHaplinkTime();
-    SystemCoreClockUpdate();
-    calculatePositionHandleAndJacobian();
+    initHaplinkAnalogSensors(); // unchanged
+    initHaplinkTime(); // unchanged
+    SystemCoreClockUpdate(); // unchanged
+
   while(1) 
   {
-    //deltaThumbHandler();
+    deltaThumbHandler(); // remember to uncomment for delta
+    //debugprintHelloWorld(); // test if even connecting
 
-    #ifdef DOF_1        
-        // calculatePosition1DOF(); 
-        /*Insert here the virtual environment from the file haplink_virtual_environments.c that you wish to render*/   
-        //renderSpring1DOF( );
-        //renderForceAlert( );
-        //renderVirtualWall1DOF();
-        //renderLinearDamping1DOF();
-        //renderNonLinearFriction1DOF();
-        //renderHardSurface1DOF();
-        //renderBumpAndValley1DOF( );
-        //renderTexture21DOF();
-        //wall_position =  renderWallForGraphics1DOF();
-        //mass_position = renderDynamicMSDSimulation1DOF();
-        //renderBilateralTeleoperator1DOF();
-    #endif 
-    #ifdef DOF_2//then we are in 2DOF
-        //calculatePositionHandleAndJacobian();
-        calculatePositionAndJacobianFinger1();
-        //calculatePositionAndJacobianFinger2();
+    //calculatePositionHandleAndJacobian(); // Motors 1 and 2 for debugging - nvm lol not implemented
+    calculatePositionAndJacobianFinger1(); // Motors 4 and 5
+    calculatePositionAndJacobianFinger2(); // Motors 6 and 7
 
-        /*Insert here the virtual environment from the file haplink_virtual_environments.cpp
-        that you wish to render*/
-         //renderInsideBox2DOF();
-         //renderInsideCircle2DOF();
-         renderOutsideCircle2DOF();
-        //contact = renderOutsideBox2DOF();
-        //renderBilateralTeleoperator2DOF();
-    #endif
-    toggleLED1();
+    //renderOutsideCircle2DOF_M1M2(); // Motors 1 and 2 for debugging
+    renderOutsideCircle2DOF_M4M5(); // Motors 4 and 5
+
+    //toggleLED1();
 
     /* Message decoding code, do not change*/
     if (checkReceiveMessage() > 0)
@@ -85,7 +65,7 @@ int main()
 //But you may want to print different things so feel free to write your own in debug_mort.cpp and call it from here.
 //Debug prints shouldn't happen very often.
     #ifdef COMM_DEBUGGING
-        if (print_counter > 10000)
+        if (print_counter > 100)
         {
             //printDebug1DOFAllParameters();
             //debugprintHelloWorld();

@@ -79,7 +79,10 @@ double getTorqueMotor1( void );
 void renderFloor2DOF( void );
 void renderInsideBox2DOF( void );
 void renderInsideCircle2DOF( void );
-void renderOutsideCircle2DOF( void );
+
+void renderOutsideCircle2DOF_M1M2( void );
+void renderOutsideCircle2DOF_M4M5( void );
+
 int renderOutsideBox2DOF( void );
 void renderBilateralTeleoperator2DOF(void);
 double getProxyX( void );

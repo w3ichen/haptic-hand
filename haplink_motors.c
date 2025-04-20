@@ -194,6 +194,7 @@ void initHaplinkMotors( void )
     TIM3_CCR2_Val = 0;
     TIM3_CCR3_Val = 0;
     TIM3_CCR4_Val = 0;
+    // add tim4 = 0
 
     /* TIM3 clock enable */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
@@ -606,7 +607,7 @@ void outputTorqueMotor1(double torque)
     double duty;
     if (torque < 0)
     {
-        motor1Dir1();
+        motor1Dir1(); // same original
         torque = torque*(-1.0);
     }
     else
@@ -630,7 +631,7 @@ void outputTorqueMotor2(double torque)
     double duty;
     if (torque < 0)
     {
-        motor2Dir1();
+        motor2Dir1(); // Weichen changed from Dir2
         torque = torque*(-1.0);
     }
     else
@@ -679,7 +680,7 @@ void outputTorqueMotor4(double torque)
     double duty;
     if (torque < 0)
     {
-        motor4Dir1();
+        motor4Dir1(); // original per motor 1
         torque = torque*(-1.0);
     }
     else
@@ -704,12 +705,12 @@ void outputTorqueMotor5(double torque)
     double duty;
     if (torque < 0)
     {
-        motor5Dir1();
+        motor5Dir2(); // original per motor 2
         torque = torque*(-1.0);
     }
     else
     {
-        motor5Dir2();
+        motor5Dir1();
     }
 
     duty = torque*65.13; //replace the 65.13 with value for specific motor

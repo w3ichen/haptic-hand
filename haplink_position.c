@@ -137,6 +137,7 @@ int initHapticHand( void )
     initPositionAndJacobianFinger2( );   
 
     initDeltaThumb();
+    
     return 1;
 }
 
