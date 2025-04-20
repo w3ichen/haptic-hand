@@ -53,7 +53,10 @@ void outputDutyCycleMotor3(double duty);
 void outputTorqueMotor1(double torque);
 void outputTorqueMotor2(double torque);
 void outputTorqueMotor3(double torque);
-
+void outputTorqueMotor4(double torque);
+void outputTorqueMotor5(double torque);
+void outputTorqueMotor6(double torque);
+void outputTorqueMotor7(double torque);
 
 
 #ifdef __cplusplus
