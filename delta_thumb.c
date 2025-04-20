@@ -95,7 +95,7 @@ void deltaThumbHandler( void )
     // ForceApp(); // From Haptic mouse
 
     // Print values
-    printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
+    printf("theta1=%.2f, theta2=%.2f, theta3=%.2f, thumbX=%.2f, thumbY=%.2f, thumbZ=%.2f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
 }
 
 
