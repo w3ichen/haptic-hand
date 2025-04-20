@@ -84,7 +84,7 @@ void setup() {
   object_position = new PVector(0, 0, 0);
   object_radius = OBJECT_BASE_RADIUS; 
   // Set fixed object position
-  object_position.set(80, -60, 100); 
+  object_position.set(80, -20, 100); 
   
   // Initialize simulation state from config 
   useSimulationData = SIMULATION_MODE;
