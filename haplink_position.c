@@ -586,7 +586,6 @@ void calculatePositionAndJacobianFinger2( void )
     double px = 0;
     double py = 0;
     
-    
     // Compute the angle of the paddles in radians
     //motor angles:
     theta_ma2 = -calculatePositionMotor6();
@@ -654,7 +653,6 @@ double getRy2( void )
 { 
     return ry2;
 }
-
 //
 
 double getThetaA( void )
@@ -693,7 +691,6 @@ double getThetaB2_deg( void )
 {
     return theta_b2*180/3.1416;
 }
-
 
 double getXH( void )
 {
