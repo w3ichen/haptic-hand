@@ -3,6 +3,11 @@
   * @file    delta_thumb.cpp
   * @date    April-2025
   * @brief   Delta thumb mechanism based on code from https://github.com/alvaresc/DeltaZ/blob/main/Arduino/DeltaZ_communication/DeltaRobot.cpp
+  * Links:
+  *     - DeltaZ Github: https://github.com/alvaresc/DeltaZ
+  *     - Delta Kinematics: https://hypertriangle.com/~alex/delta-robot-tutorial/
+  *     - Delta Robot paper: http://robby.caltech.edu/~jwb/courses/ME115/handouts/DeltaKinematics.pdf
+  *     - Delta Parallel Robot paper: https://people.ohio.edu/williams/html/PDF/DeltaKin.pdf
   * NOTE: DeltaZ code operates in degrees!
   ******************************************************************************
   */
@@ -13,14 +18,15 @@
 #include "haplink_encoders.h"
 #include <math.h> // For sqrt
 #include "delta_thumb.h"
+#include "haplink_time.h"
 
 // Global vars
 DeltaThumb deltaThumb;
 
 
-float deltaThumbX;
-float deltaThumbY;
-float deltaThumbZ;
+double deltaThumbX;
+double deltaThumbY;
+double deltaThumbZ;
 double ThetaMotor1Rad;
 double ThetaMotor2Rad;
 double ThetaMotor3Rad;
@@ -77,13 +83,19 @@ void deltaThumbHandler( void )
     // goHome();
     // goTo(x, y, z); 
 
-    // Update x,y,z positions of end-effector
+    // // #1: Update x,y,z positions of end-effector using DeltaZ code
     delta_calcForward(ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
 
-    // goHome();
+    // #2: Update x,y,z positions of end-effector using haptic mouse code
+    // double x1, y1, z1, x2, y2, z2, x3, y3, z3;
+    // GetElbowPosition(&x1, &y1, &z1, &x2, &y2, &z2, &x3, &y3, &z3, &deltaThumbX, &deltaThumbY, &deltaThumbZ, &ThetaMotor1Rad, &ThetaMotor2Rad, &ThetaMotor3Rad);
+
+    // goHome(); // From DeltaZ
+
+    // ForceApp(); // From Haptic mouse
 
     // Print values
-    // printf("theta1=%f, theta2=%f, theta3=%f, thumbX=%f, thumbY=%f, thumbZ=%f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
+    printf("theta1=%.2f, theta2=%.2f, theta3=%.2f, thumbX=%.2f, thumbY=%.2f, thumbZ=%.2f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
 }
 
 
@@ -95,28 +107,28 @@ void deltaThumbHandler( void )
  * @param  targetAngleDeg: The target angle in degrees
  * @retval None.
  */
-void setAndMaintainMotorAngle(int motorNumber, float targetAngleDeg) {
-    static float errorIntegral1 = 0.0;
-    static float errorIntegral2 = 0.0;
-    static float errorIntegral3 = 0.0;
-    static float prevError1 = 0.0;
-    static float prevError2 = 0.0;
-    static float prevError3 = 0.0;
+void setAndMaintainMotorAngle(int motorNumber, double targetAngleDeg) {
+    static double errorIntegral1 = 0.0;
+    static double errorIntegral2 = 0.0;
+    static double errorIntegral3 = 0.0;
+    static double prevError1 = 0.0;
+    static double prevError2 = 0.0;
+    static double prevError3 = 0.0;
     
     // PID coefficients - adjust these values based on system response
-    const float kp = 0.05;  // Proportional gain
-    const float ki = 0.001; // Integral gain
-    const float kd = 0.01;  // Derivative gain
+    const double kp = 0.05;  // Proportional gain
+    const double ki = 0.001; // Integral gain
+    const double kd = 0.01;  // Derivative gain
     
     // Maximum integral value to prevent windup
-    const float maxIntegral = 50.0;
+    const double maxIntegral = 50.0;
     
-    float currentAngleDeg = 0.0;
-    float error = 0.0;
-    float errorDerivative = 0.0;
-    float *errorIntegralPtr = NULL;
-    float *prevErrorPtr = NULL;
-    float torque = 0.0;
+    double currentAngleDeg = 0.0;
+    double error = 0.0;
+    double errorDerivative = 0.0;
+    double *errorIntegralPtr = NULL;
+    double *prevErrorPtr = NULL;
+    double torque = 0.0;
     
     // Use the global angle variables based on motor number
     switch(motorNumber) {
@@ -179,13 +191,16 @@ void setAndMaintainMotorAngle(int motorNumber, float targetAngleDeg) {
 // NOTE: DeltaZ code operates in degrees!
 /*******************************************************************************************************************************************/
 
-
+ 
 void initDeltaThumb() {
   // Inits delta vars
-  deltaThumb.e = 25;     // end effector
-  deltaThumb.f = 50;     // base
-  deltaThumb.re = 60.0;
-  deltaThumb.rf = 30.0;
+
+  // Delta device constants
+  deltaThumb.e = DELTA_END_EFFECTOR_RADIUS;    
+  deltaThumb.f = DELTA_BASE_RADIUS;    
+  deltaThumb.re = DELTA_UPPER_LINK_LEN;    
+  deltaThumb.rf = DELTA_LOWER_LINK_LEN;           
+
   deltaThumb.sqrt3 = sqrt(3.0);
   deltaThumb.pi = 3.141592653;    // PI
   deltaThumb.sin120 = deltaThumb.sqrt3 / 2.0;
@@ -194,8 +209,8 @@ void initDeltaThumb() {
   deltaThumb.sin30 = 0.5;
   deltaThumb.tan30 = 1.0 / deltaThumb.sqrt3;
   deltaThumb.rMax = 30;
-  deltaThumb.zMin = -75;
-  deltaThumb.zMax = -35;
+  deltaThumb.zMin = 35;
+  deltaThumb.zMax = 75;
 
   deltaThumbX = 0;
   deltaThumbY = 0;
@@ -208,7 +223,7 @@ void goHome() {
   reportAngles();
 }
 
-void goTo(float x, float y, float z) {
+void goTo(double x, double y, double z) {
   /* Inputs the target position, (x,y,z). First, this function tests if the target position is in the workspace. 
    If so, it calculates the inverse kineamtics, moves the robot to that position. It not, the robot reports that it isnt in the workspace.
    Finally, the robot reports its current joint angles.*/
@@ -230,10 +245,10 @@ void goTo(float x, float y, float z) {
   reportAngles();
 }
 
-int testInWorkspace(float x, float y, float z) {
+int testInWorkspace(double x, double y, double z) {
   /* inputs target x,y, and z position. Tests if the position if the position is in the current worksapce of the robot (set by rMax, zMin, and zMax.
   If the point is in the workspace, return 1, else return 0*/
-  float r = sqrt(x * x + y * y);
+  double r = sqrt(x * x + y * y);
   if ((r <= deltaThumb.rMax) && (z <= deltaThumb.zMax) && (z >= deltaThumb.zMin)) {
     return 1;
   } else {
@@ -254,9 +269,9 @@ void reportAngles(){
 void goToAngle(int angle1, int angle2, int angle3) {
   /* inputs angles angle1-3. Claculates forward kineamtics and tests if position is in the workspace. If so, the robot goes to those angles. 
    *  If not, the root reports that it is not in the workspace. Then, report the position of the robot. */
-  float x0Old = deltaThumb.x0;
-  float y0Old = deltaThumb.y0;
-  float z0Old = deltaThumb.z0;
+  double x0Old = deltaThumb.x0;
+  double y0Old = deltaThumb.y0;
+  double z0Old = deltaThumb.z0;
 
   delta_calcForward(angle1, angle2, angle3, &deltaThumb.x0, &deltaThumb.y0, &deltaThumb.z0);
   /* Visit https://hypertriangle.com/~alex/delta-robot-tutorial/ for more information*/
@@ -279,19 +294,19 @@ void goToAngle(int angle1, int angle2, int angle3) {
   reportPosition();
 }
 
-int delta_calcAngleYZ(float x0, float y0, float z0, float *theta) {
+int delta_calcAngleYZ(double x0, double y0, double z0, double *theta) {
   /* Visit https://hypertriangle.com/~alex/delta-robot-tutorial/ for more information*/
-  float y1 = -0.5 * 0.57735 * deltaThumb.f; // f/2 * tg 30
-  //float y1 = yy1;
+  double y1 = -0.5 * 0.57735 * deltaThumb.f; // f/2 * tg 30
+  //double y1 = yy1;
   y0 -= 0.5 * 0.57735 * deltaThumb.e;    // shift center to edge
   // z = a + b*y
-  float a = (x0 * x0 + y0 * y0 + z0 * z0 + deltaThumb.rf * deltaThumb.rf - deltaThumb.re * deltaThumb.re - y1 * y1) / (2 * z0);
-  float b = (y1 - y0) / z0;
+  double a = (x0 * x0 + y0 * y0 + z0 * z0 + deltaThumb.rf * deltaThumb.rf - deltaThumb.re * deltaThumb.re - y1 * y1) / (2 * z0);
+  double b = (y1 - y0) / z0;
   // discriminant
-  float d = -(a + b * y1) * (a + b * y1) + deltaThumb.rf * (b * b * deltaThumb.rf + deltaThumb.rf);
+  double d = -(a + b * y1) * (a + b * y1) + deltaThumb.rf * (b * b * deltaThumb.rf + deltaThumb.rf);
   if (d < 0) return -1; // non-existing point
-  float yj = (y1 - a * b - sqrt(d)) / (b * b + 1); // choosing outer point
-  float zj = a + b * yj;
+  double yj = (y1 - a * b - sqrt(d)) / (b * b + 1); // choosing outer point
+  double zj = a + b * yj;
   *theta = 180.0 * atan(-zj / (y1 - yj)) / deltaThumb.pi + ((yj > y1) ? 180.0 : 0.0);
   if ((*theta < -180) || (*theta > 180))
     return -1;
@@ -306,7 +321,7 @@ int delta_calcAngleYZ(float x0, float y0, float z0, float *theta) {
  * @param z0
  * @return theta1, theta2, theta3
  */
-int delta_calcInverse(float x0, float y0, float z0, float *theta1, float *theta2, float *theta3) {
+int delta_calcInverse(double x0, double y0, double z0, double *theta1, double *theta2, double *theta3) {
   /* Visit https://hypertriangle.com/~alex/delta-robot-tutorial/ for more information*/
   *theta1 = 0;
   *theta2 = 0;
@@ -324,50 +339,50 @@ int delta_calcInverse(float x0, float y0, float z0, float *theta1, float *theta2
  * @param theta3
  * @return x0, y0, z0
  */
-int delta_calcForward(float theta1, float theta2, float theta3, float *x0, float *y0, float *z0) {
+int delta_calcForward(double theta1, double theta2, double theta3, double *x0, double *y0, double *z0) {
   /* Visit https://hypertriangle.com/~alex/delta-robot-tutorial/ for more information*/
-  float t = (deltaThumb.f - deltaThumb.e) * deltaThumb.tan30 / 2;
-  float dtr = deltaThumb.pi / (float)180.0;
+  double t = (deltaThumb.f - deltaThumb.e) * deltaThumb.tan30 / 2;
+  double dtr = deltaThumb.pi / (double)180.0;
 
   theta1 *= dtr;
   theta2 *= dtr;
   theta3 *= dtr;
 
-  float y1 = -(t + deltaThumb.rf * cos(theta1));
-  float z1 = -deltaThumb.rf * sin(theta1);
+  double y1 = -(t + deltaThumb.rf * cos(theta1));
+  double z1 = deltaThumb.rf * sin(theta1);
 
-  float y2 = (t + deltaThumb.rf * cos(theta2)) * deltaThumb.sin30;
-  float x2 = y2 * deltaThumb.tan60;
-  float z2 = -deltaThumb.rf * sin(theta2);
+  double y2 = (t + deltaThumb.rf * cos(theta2)) * deltaThumb.sin30;
+  double x2 = y2 * deltaThumb.tan60;
+  double z2 = deltaThumb.rf * sin(theta2);
 
-  float y3 = (t + deltaThumb.rf * cos(theta3)) * deltaThumb.sin30;
-  float x3 = -y3 * deltaThumb.tan60;
-  float z3 = -deltaThumb.rf * sin(theta3);
+  double y3 = (t + deltaThumb.rf * cos(theta3)) * deltaThumb.sin30;
+  double x3 = -y3 * deltaThumb.tan60;
+  double z3 = deltaThumb.rf * sin(theta3);
 
-  float dnm = (y2 - y1) * x3 - (y3 - y1) * x2;
+  double dnm = (y2 - y1) * x3 - (y3 - y1) * x2;
 
-  float w1 = y1 * y1 + z1 * z1;
-  float w2 = x2 * x2 + y2 * y2 + z2 * z2;
-  float w3 = x3 * x3 + y3 * y3 + z3 * z3;
+  double w1 = y1 * y1 + z1 * z1;
+  double w2 = x2 * x2 + y2 * y2 + z2 * z2;
+  double w3 = x3 * x3 + y3 * y3 + z3 * z3;
 
   // x = (a1*z + b1)/dnm
-  float a1 = (z2 - z1) * (y3 - y1) - (z3 - z1) * (y2 - y1);
-  float b1 = -((w2 - w1) * (y3 - y1) - (w3 - w1) * (y2 - y1)) / 2.0;
+  double a1 = (z2 - z1) * (y3 - y1) - (z3 - z1) * (y2 - y1);
+  double b1 = -((w2 - w1) * (y3 - y1) - (w3 - w1) * (y2 - y1)) / 2.0;
 
   // y = (a2*z + b2)/dnm;
-  float a2 = -(z2 - z1) * x3 + (z3 - z1) * x2;
-  float b2 = ((w2 - w1) * x3 - (w3 - w1) * x2) / 2.0;
+  double a2 = -(z2 - z1) * x3 + (z3 - z1) * x2;
+  double b2 = ((w2 - w1) * x3 - (w3 - w1) * x2) / 2.0;
 
   // a*z^2 + b*z + c = 0
-  float a = a1 * a1 + a2 * a2 + dnm * dnm;
-  float b = 2 * (a1 * b1 + a2 * (b2 - y1 * dnm) - z1 * dnm * dnm);
-  float c = (b2 - y1 * dnm) * (b2 - y1 * dnm) + b1 * b1 + dnm * dnm * (z1 * z1 - deltaThumb.re * deltaThumb.re);
+  double a = a1 * a1 + a2 * a2 + dnm * dnm;
+  double b = 2 * (a1 * b1 + a2 * (b2 - y1 * dnm) - z1 * dnm * dnm);
+  double c = (b2 - y1 * dnm) * (b2 - y1 * dnm) + b1 * b1 + dnm * dnm * (z1 * z1 - deltaThumb.re * deltaThumb.re);
 
   // discriminant
-  float d = b * b - (float)4.0 * a * c;
+  double d = b * b - (double)4.0 * a * c;
   if (d < 0) return -1; // non-existing point
   
-  *z0 = -(float)0.5 * (b + sqrt(d)) / a;
+  *z0 = (double)0.5 * (b + sqrt(d)) / a;
   *x0 = (a1 * *z0 + b1) / dnm;
   *y0 = (a2 * *z0 + b2) / dnm;
   return 0;
@@ -381,17 +396,8 @@ int delta_calcForward(float theta1, float theta2, float theta3, float *x0, float
 /*******************************************************************************************************************************************/
 // START Haptic mouse code
 // Code from Michael Han <woongseh@andrew.cmu.edu>
+// NOTE: angles in radians
 /*******************************************************************************************************************************************/
-
-void MotorAngle (double *theta_a1, double *theta_a2, double *theta_a3)
-{
-    int32_t count1 = (double)getCountsSensor1();
-    *theta_a1 = -(count1  * (2.0 * PI / 2048.0) - DELTA_THUMB_THETA_OFFSET);
-    int32_t count2 = (double)getCountsSensor2();
-    *theta_a2 = -(count2  * (2.0 * PI / 2048.0) - DELTA_THUMB_THETA_OFFSET);
-    int32_t count3 = (double)getCountsSensor3();
-    *theta_a3 = -(count3  * (2.0 * PI / 2048.0) - DELTA_THUMB_THETA_OFFSET);
-}
 
 void GetElbowPosition (double *x1, double *y1, double *z1,
                        double *x2, double *y2, double *z2, 
@@ -399,23 +405,26 @@ void GetElbowPosition (double *x1, double *y1, double *z1,
                        double *x, double *y, double *z,
                        double *theta_a1, double *theta_a2, double *theta_a3)
 {
-    MotorAngle(theta_a1, theta_a2, theta_a3);
-    double dAprime = DELTA_dA - DELTA_dc;
+    *theta_a1 = -(ThetaMotor1Rad - DELTA_THETA_OFFSET);
+    *theta_a2 = -(ThetaMotor2Rad - DELTA_THETA_OFFSET);
+    *theta_a3 = -(ThetaMotor3Rad - DELTA_THETA_OFFSET);
+
+    double dAprime = DELTA_BASE_RADIUS - DELTA_END_EFFECTOR_RADIUS;
 
     // elbow position for 1
-    *x1 = sin(DELTA_THETA_N1) * (dAprime + DELTA_LINK_LEN * cos(*theta_a1));
-    *y1 = cos(DELTA_THETA_N1) * (-dAprime - DELTA_LINK_LEN * cos(*theta_a1));
-    *z1 = DELTA_LINK_LEN * sin(*theta_a1);
+    *x1 = sin(DELTA_THETA_N1) * (dAprime + DELTA_LOWER_LINK_LEN * cos(*theta_a1));
+    *y1 = cos(DELTA_THETA_N1) * (-dAprime - DELTA_LOWER_LINK_LEN * cos(*theta_a1));
+    *z1 = DELTA_LOWER_LINK_LEN * sin(*theta_a1);
 
     // elbow position for 2
-    *x2 = sin(DELTA_THETA_N2) * (dAprime + DELTA_LINK_LEN * cos(*theta_a2));
-    *y2 = cos(DELTA_THETA_N2) * (-dAprime - DELTA_LINK_LEN * cos(*theta_a2));
-    *z2 = DELTA_LINK_LEN * sin(*theta_a2);
+    *x2 = sin(DELTA_THETA_N2) * (dAprime + DELTA_LOWER_LINK_LEN * cos(*theta_a2));
+    *y2 = cos(DELTA_THETA_N2) * (-dAprime - DELTA_LOWER_LINK_LEN * cos(*theta_a2));
+    *z2 = DELTA_LOWER_LINK_LEN * sin(*theta_a2);
 
     // elbow position for 3
-    *x3 = sin(DELTA_THETA_N3) * (dAprime + DELTA_LINK_LEN * cos(*theta_a3));
-    *y3 = cos(DELTA_THETA_N3) * (-dAprime - DELTA_LINK_LEN * cos(*theta_a3));
-    *z3 = DELTA_LINK_LEN * sin(*theta_a3);
+    *x3 = sin(DELTA_THETA_N3) * (dAprime + DELTA_LOWER_LINK_LEN * cos(*theta_a3));
+    *y3 = cos(DELTA_THETA_N3) * (-dAprime - DELTA_LOWER_LINK_LEN * cos(*theta_a3));
+    *z3 = DELTA_LOWER_LINK_LEN * sin(*theta_a3);
 
     double w1 = pow(*y1, 2) + pow(*z1, 2);
     double w2 = pow(*x2, 2) + pow(*y2, 2) + pow(*z2, 2);
@@ -430,17 +439,16 @@ void GetElbowPosition (double *x1, double *y1, double *z1,
 
     //if (r == 0) //on initial run
     //{
-    //    r = DELTA_LINK_LEN_2;
+    //    r = DELTA_UPPER_LINK_LEN;
     //}
     //else {
     //    r = sqrt(pow((x - x1), 2) + pow((y - y1), 2) + pow((z - z1), 2));
     //}
 
-    double r = DELTA_LINK_LEN_2;
+    double r = DELTA_UPPER_LINK_LEN;
 
     double A = pow(a1, 2) + pow(a2, 2) + 1;
     double B = 2 * (a1 * b1 + a2 * (b2 - *y1) - *z1);
-
     double C = pow(b1, 2) + pow((b2 - *y1), 2) + pow(*z1, 2) - pow(r, 2);
 
     *z = (- B + sqrt(pow(B, 2) - 4.0 * A * C)) / (2.0 * A); // one being used
@@ -461,14 +469,14 @@ void GetThetaii (double *theta1_1, double *theta1_2, double *theta1_3,
     GetElbowPosition(&x1, &y1, &z1, &x2, &y2, &z2, &x3, &y3, &z3, &x, &y, &z, &theta_a1, &theta_a2, &theta_a3);
 
     // variable declaration
-    double Ax1 = DELTA_dA * cos(270.0 * PI / 180.0);
-    double Ay1 = DELTA_dA * sin(270.0 * PI / 180.0);
+    double Ax1 = DELTA_BASE_RADIUS * cos(270.0 * PI / 180.0);
+    double Ay1 = DELTA_BASE_RADIUS * sin(270.0 * PI / 180.0);
     double Az1 = 0;
-    double Ax2 = DELTA_dA * cos(30.0 * PI / 180.0) * cos(DELTA_THETA_N2) + DELTA_dA * sin(30.0 * PI / 180.0) * sin(DELTA_THETA_N2);
-    double Ay2 = - DELTA_dA * cos(30.0 * PI / 180.0) * sin(DELTA_THETA_N2) + DELTA_dA * sin(30.0 * PI / 180.0) * cos(DELTA_THETA_N2);
+    double Ax2 = DELTA_BASE_RADIUS * cos(30.0 * PI / 180.0) * cos(DELTA_THETA_N2) + DELTA_BASE_RADIUS * sin(30.0 * PI / 180.0) * sin(DELTA_THETA_N2);
+    double Ay2 = - DELTA_BASE_RADIUS * cos(30.0 * PI / 180.0) * sin(DELTA_THETA_N2) + DELTA_BASE_RADIUS * sin(30.0 * PI / 180.0) * cos(DELTA_THETA_N2);
     double Az2 = 0;
-    double Ax3 = DELTA_dA * cos(150.0 * PI / 180.0) * cos(DELTA_THETA_N3) + DELTA_dA * sin(150.0 * PI / 180.0) * sin(DELTA_THETA_N3);
-    double Ay3 = - DELTA_dA * cos(150.0 * PI / 180.0) * sin(DELTA_THETA_N3) + DELTA_dA * sin(150.0 * PI / 180.0) * cos(DELTA_THETA_N3);
+    double Ax3 = DELTA_BASE_RADIUS * cos(150.0 * PI / 180.0) * cos(DELTA_THETA_N3) + DELTA_BASE_RADIUS * sin(150.0 * PI / 180.0) * sin(DELTA_THETA_N3);
+    double Ay3 = - DELTA_BASE_RADIUS * cos(150.0 * PI / 180.0) * sin(DELTA_THETA_N3) + DELTA_BASE_RADIUS * sin(150.0 * PI / 180.0) * cos(DELTA_THETA_N3);
     double Az3 = 0;
     // Base joint position
     double Bx1 = x1;
@@ -501,9 +509,9 @@ void GetThetaii (double *theta1_1, double *theta1_2, double *theta1_3,
     *theta3_1 = fmod(PI + atan((Cz1 - Bz1) / (Cx1 - Bx1)), PI);
     *theta3_2 = fmod(PI + atan((Cz2 - Bz2) / (Cx2 - Bx2)), PI);
     *theta3_3 = fmod(PI + atan((Cz3 - Bz3) / (Cx3 - Bx3)), PI);
-    *theta2_1 = PI - acos(-(pow(Distance1,2) - pow(DELTA_LINK_LEN, 2) - pow((DELTA_LINK_LEN_2 * sin(*theta3_1)),2)) / (2 * DELTA_LINK_LEN * DELTA_LINK_LEN_2 * sin(*theta3_1)));
-    *theta2_2 = PI - acos(-(pow(Distance2,2) - pow(DELTA_LINK_LEN, 2) - pow((DELTA_LINK_LEN_2 * sin(*theta3_2)),2)) / (2 * DELTA_LINK_LEN * DELTA_LINK_LEN_2 * sin(*theta3_2)));
-    *theta2_3 = PI - acos(-(pow(Distance3,2) - pow(DELTA_LINK_LEN, 2) - pow((DELTA_LINK_LEN_2 * sin(*theta3_3)),2)) / (2 * DELTA_LINK_LEN * DELTA_LINK_LEN_2 * sin(*theta3_3)));
+    *theta2_1 = PI - acos(-(pow(Distance1,2) - pow(DELTA_LOWER_LINK_LEN, 2) - pow((DELTA_UPPER_LINK_LEN * sin(*theta3_1)),2)) / (2 * DELTA_LOWER_LINK_LEN * DELTA_UPPER_LINK_LEN * sin(*theta3_1)));
+    *theta2_2 = PI - acos(-(pow(Distance2,2) - pow(DELTA_LOWER_LINK_LEN, 2) - pow((DELTA_UPPER_LINK_LEN * sin(*theta3_2)),2)) / (2 * DELTA_LOWER_LINK_LEN * DELTA_UPPER_LINK_LEN * sin(*theta3_2)));
+    *theta2_3 = PI - acos(-(pow(Distance3,2) - pow(DELTA_LOWER_LINK_LEN, 2) - pow((DELTA_UPPER_LINK_LEN * sin(*theta3_3)),2)) / (2 * DELTA_LOWER_LINK_LEN * DELTA_UPPER_LINK_LEN * sin(*theta3_3)));
 }
 
 void DeltaThumbGetJacobian (double *J11, double *J12, double *J13, 
@@ -529,21 +537,158 @@ void DeltaThumbGetJacobian (double *J11, double *J12, double *J13,
     double J3y = - sin(theta3_3) * cos(theta2_3 + theta1_3) * cos(DELTA_THETA_N2) - cos(theta3_3) * sin(DELTA_THETA_N2);
     double J3z = sin(theta3_3) * sin(theta2_3 + theta1_3);
 
-    double Jqa = (DELTA_LINK_LEN * sin(theta2_1) * sin(theta3_1));
-    double Jqb = (DELTA_LINK_LEN * sin(theta2_2) * sin(theta3_2));
-    double Jqc = (DELTA_LINK_LEN * sin(theta2_3) * sin(theta3_3));
+    double Jqa = (DELTA_LOWER_LINK_LEN * sin(theta2_1) * sin(theta3_1));
+    double Jqb = (DELTA_LOWER_LINK_LEN * sin(theta2_2) * sin(theta3_2));
+    double Jqc = (DELTA_LOWER_LINK_LEN * sin(theta2_3) * sin(theta3_3));
 
-    *J11 = (Jqa*(J2y*J3z - J3y*J2z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J12 = -(Jqa*(J2x*J3z - J3x*J2z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J13 = (Jqa*(J2x*J3y - J3x*J2y))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J21 = -(Jqb*(J1y*J3z - J3y*J1z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J22 = (Jqb*(J1x*J3z - J3x*J1z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J23 = -(Jqb*(J1x*J3y - J3x*J1y))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J31 = (Jqc*(J1y*J2z - J2y*J1z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J32 = -(Jqc*(J1x*J2z - J2x*J1z))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
-    *J33 = (Jqc*(J1x*J2y - J2x*J1y))/(J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
+    double det = (J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
+
+    *J11 = (Jqa*(J2y*J3z - J3y*J2z))/det;
+    *J12 = -(Jqa*(J2x*J3z - J3x*J2z))/det;
+    *J13 = (Jqa*(J2x*J3y - J3x*J2y))/det;
+    *J21 = -(Jqb*(J1y*J3z - J3y*J1z))/det;
+    *J22 = (Jqb*(J1x*J3z - J3x*J1z))/det;
+    *J23 = -(Jqb*(J1x*J3y - J3x*J1y))/det;
+    *J31 = (Jqc*(J1y*J2z - J2y*J1z))/det;
+    *J32 = -(Jqc*(J1x*J2z - J2x*J1z))/det;
+    *J33 = (Jqc*(J1x*J2y - J2x*J1y))/det;
+}
+
+void ForceApp (void)
+{
+    double J11, J12, J13, 
+           J21, J22, J23, 
+           J31, J32, J33;
+    DeltaThumbGetJacobian (&J11, &J12, &J13, 
+                           &J21, &J22, &J23, 
+                           &J31, &J32, &J33);
+    /* Force Equation*/
+    double Zstart = 36.0;
+    double xstart = 0.0;
+    double ystart = 0.0;
+    double zstart_initial = Zstart + 15.0;
+    double zstart = Zstart + 13.0;
+    double xwall = 1.0;
+
+    double kx = 10.0;
+    double ky = 5.0;
+    double kz = 45.0;
+    double kz_start = 2.0;
+
+    double bx = 0.05;
+    double by = 0.05;
+    double bz = 0.5;
+
+    double k_step = 30.0;
+    double b_step = 0.1;
+
+    static double prev_time = 0.0;
+    static double prev_z = 0.0;
+
+
+    double curr_time = getTime_ms(); 
+    double kz_sin = (20.0 * sin(curr_time / 10000) + 25.0);
+    double delta_time = (curr_time - prev_time) / 1000.0; 
+    double delta_z = deltaThumbZ - prev_z;
+    static double timeout_start = 0.0;
+    static int mode = 1;  // mode = 0 for startup
+    float timeout_duration = 5.0; // seconds
+
+
+    // if (curr_time > (timeout_duration * 1000)){
+    //     mode = 1;
+    // }
+
+    double Fx, Fy, Fz;
+    if (mode == 0){
+        Fx = 0;
+        Fy = 0;
+        Fz = kz_start * (zstart_initial - deltaThumbZ);
+    }
+
+    else if(mode == 1){
+        // Force x
+        Fx = 0;
+        // Force y
+        Fy = ky * (0.5 * sin(curr_time / 200) - deltaThumbY);
+
+        // Force z
+        if (deltaThumbZ <= zstart){
+             
+            Fz = kz * (zstart - deltaThumbZ) - bz * delta_z / delta_time;
+        }
+        else{
+            Fz = 0;
+        }
+    }
+
+    /* Force to Torque*/
+    /* transpose */
+    //double torque1 = J11 * Fx + J21 * Fy + J31 * Fz;
+    //double torque2 = J12 * Fx + J22 * Fy + J32 * Fz;
+    //double torque3 = J13 * Fx + J23 * Fy + J33 * Fz;
+    /* non - transpose */
+    double torque1 = J11 * Fx + J12 * Fy + J13 * Fz;
+    double torque2 = J21 * Fx + J22 * Fy + J23 * Fz;
+    double torque3 = J31 * Fx + J32 * Fy + J33 * Fz;
+
+    outputTorqueMotor1(torque1);
+    outputTorqueMotor2(torque2);
+    outputTorqueMotor3(torque3);
+    
+    // Change the prev variables
+    prev_time = curr_time;  // I changed this to use the curr_time variable instead of another call of getTime_ms() but you don't have to keep it
+    prev_z = deltaThumbZ;
 }
 
 /*******************************************************************************************************************************************/
 // END Haptic mouse Code
 /*******************************************************************************************************************************************/
+
+// From DeltaKin.pdf paper (page 15): https://people.ohio.edu/williams/html/PDF/DeltaKin.pdf
+void DeltaThumbGetJacobian_OhioVersion (double *J11, double *J12, double *J13, 
+                                        double *J21, double *J22, double *J23, 
+                                        double *J31, double *J32, double *J33)
+{
+    // delta variables
+    static double a = DELTA_WB - DELTA_UP;
+    double b = DELTA_SP / 2 - (sqrt(3)/2) * DELTA_WB;
+    static double c = DELTA_WP - DELTA_WB/2;
+    static double L = DELTA_UPPER_LINK_LEN;
+
+    double x = deltaThumbX;
+    double y = deltaThumbY;
+    double z = deltaThumbZ;
+    double theta1 = ThetaMotor1Rad;
+    double theta2 = ThetaMotor2Rad;
+    double theta3 = ThetaMotor3Rad;
+
+    // jacobian variables
+    double J1x = x;
+    double J1y = y + a + L * cos(theta1);
+    double J1z = z + L * sin(theta1);
+
+    double J2x = 2 * (x + b) - sqrt(3) * L * cos(theta2);
+    double J2y = 2 * (y + c) - L * cos(theta2);
+    double J2z = 2 * (z + L * sin(theta2));
+
+    double J3x = 2 * (x - b) + sqrt(3) * L *cos(theta3);
+    double J3y = 2 * (y + c) - L * cos(theta3);
+    double J3z = 2 * (z + L * sin(theta3));
+
+    double Jqa = L * ((y + a) * sin(theta1) - z * cos(theta1));
+    double Jqb = -L * ((sqrt(3) * (x + b) + y + c) * sin(theta2) + 2 * z * cos(theta2));
+    double Jqc = L * ((sqrt(3) * (x - b) - y - c) * sin(theta3) - 2 * z *cos(theta3));
+
+    double det = (J1x*J2y*J3z - J1x*J3y*J2z - J2x*J1y*J3z + J2x*J3y*J1z + J3x*J1y*J2z - J3x*J2y*J1z);
+
+    *J11 = (Jqa*(J2y*J3z - J3y*J2z))/det;
+    *J12 = -(Jqa*(J2x*J3z - J3x*J2z))/det;
+    *J13 = (Jqa*(J2x*J3y - J3x*J2y))/det;
+    *J21 = -(Jqb*(J1y*J3z - J3y*J1z))/det;
+    *J22 = (Jqb*(J1x*J3z - J3x*J1z))/det;
+    *J23 = -(Jqb*(J1x*J3y - J3x*J1y))/det;
+    *J31 = (Jqc*(J1y*J2z - J2y*J1z))/det;
+    *J32 = -(Jqc*(J1x*J2z - J2x*J1z))/det;
+    *J33 = (Jqc*(J1x*J2y - J2x*J1y))/det;
+}

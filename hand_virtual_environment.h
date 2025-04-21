@@ -21,8 +21,8 @@
 // Obstacles
 #define SPHERE1_X 0.0
 #define SPHERE1_Y 0.0
-#define SPHERE1_Z -50.0
-#define SPHERE1_RADIUS 5.0
+#define SPHERE1_Z 60.0
+#define SPHERE1_RADIUS 10.0
 
 /* Virtual Environments Functions*/
 void renderOutsideSphere( void );

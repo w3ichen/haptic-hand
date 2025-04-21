@@ -56,6 +56,7 @@
 #include "stm32f4xx_rcc_mort.h"
 #include "stm32f446ze_gpio.h"
 #include "stm32f4xx_tim_mort.h"
+#include <math.h>
 
 
 #define PWM11_PIN GPIOPin11
