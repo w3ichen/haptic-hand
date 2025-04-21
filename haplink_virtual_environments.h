@@ -69,6 +69,7 @@ double getTorqueMotor1( void );
 
 void renderOutsideCircle2DOF_M1M2( void );
 void renderOutsideCircle2DOF_M4M5( void );
+void renderOutsideCircle2DOF_M6M7( void );
 
 int renderOutsideBox2DOF( void );
 

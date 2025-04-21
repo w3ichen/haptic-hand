@@ -76,6 +76,8 @@ double ry2, dy2, ry2_prev, dy2_prev;
 
 // Jacobian variables:
 double J00, J01, J10, J11;
+double J00_f1, J01_f1, J10_f1, J11_f1;
+double J00_f2, J01_f2, J10_f2, J11_f2;
 
 //debug variables:
 int debugcounter = 0;
@@ -129,6 +131,17 @@ int initHapticHand( void )
     J01 = 0;
     J10 = 0;
     J11 = 0;
+
+    J00_f1 = 0;
+    J01_f1 = 0;
+    J10_f1 = 0;
+    J11_f1 = 0;
+
+    J00_f2 = 0;
+    J01_f2 = 0;
+    J10_f2 = 0;
+    J11_f2 = 0;
+
     //initialize encoders
     initHapticHandEncodersMotors();
     
@@ -549,10 +562,10 @@ void calculatePositionAndJacobianFinger1( void )
     ry1 =  L_B*cos(tildetheta_a + tildetheta_b) + py;
     
     //build the Jacobian
-    J00 = -L_B*cos(tildetheta_a + tildetheta_b)-L_A*cos(tildetheta_a);
-    J01 = -L_B*cos(tildetheta_a + tildetheta_b);
-    J10 = -L_B*sin(tildetheta_a + tildetheta_b) - L_A*sin(tildetheta_a);   
-    J11 = -L_B*sin(tildetheta_a + tildetheta_b);  
+    J00_f1 = -L_B*cos(tildetheta_a + tildetheta_b)-L_A*cos(tildetheta_a);
+    J01_f1 = -L_B*cos(tildetheta_a + tildetheta_b);
+    J10_f1 = -L_B*sin(tildetheta_a + tildetheta_b) - L_A*sin(tildetheta_a);   
+    J11_f1 = -L_B*sin(tildetheta_a + tildetheta_b);  
     
     //for dx and dy decide on your method and implement it, don't forget to reset
     //the velocity counter if that is what you are using and update t0_pos.
@@ -598,10 +611,10 @@ void calculatePositionAndJacobianFinger2( void )
     ry2 =  L_B*cos(tildetheta_a + tildetheta_b) + py;
     
     //build the Jacobian
-    J00 = -L_B*cos(tildetheta_a + tildetheta_b)-L_A*cos(tildetheta_a);
-    J01 = -L_B*cos(tildetheta_a + tildetheta_b);
-    J10 = -L_B*sin(tildetheta_a + tildetheta_b) - L_A*sin(tildetheta_a);   
-    J11 = -L_B*sin(tildetheta_a + tildetheta_b);  
+    J00_f2 = -L_B*cos(tildetheta_a + tildetheta_b)-L_A*cos(tildetheta_a);
+    J01_f2 = -L_B*cos(tildetheta_a + tildetheta_b);
+    J10_f2 = -L_B*sin(tildetheta_a + tildetheta_b) - L_A*sin(tildetheta_a);   
+    J11_f2 = -L_B*sin(tildetheta_a + tildetheta_b);  
     
     //for dx and dy decide on your method and implement it, don't forget to reset
     //the velocity counter if that is what you are using and update t0_pos.
