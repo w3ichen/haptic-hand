@@ -187,10 +187,12 @@ void draw() {
     
     // Draw toggle hint text
     pushStyle();
-    // fill(200); // Light gray text
     textSize(12);
     textAlign(LEFT, BOTTOM);
-    text("Press 'h' to toggle panel", 18, height - 15); // Bottom-left corner
+    // Combine hints into one line or two
+    String hintText = "Press 'h' to toggle panel\nNum 1-6: Views\nArrows: Rotate View";
+    fill(200); 
+    text(hintText, 18, height - 15); // Position first line
     popStyle();
     
     cam.endHUD();
@@ -348,10 +350,11 @@ void mouseReleased() {
   cam.setActive(true);
 }
 
-// --- Key Press Handler for Text Input ---
+// --- Key Press Handler for Text Input & View Control ---
 void keyPressed() {
+  // --- Text Input Handling ---
   if (activeTextInputSliderIndex != -1) {
-    // Input is active for a slider
+    // Input is active for a slider - handle text input keys
     if (key >= '0' && key <= '9' || key == '.' || key == '-') {
       textInputBuffer += key;
     } else if (key == BACKSPACE) {
@@ -379,12 +382,9 @@ void keyPressed() {
         
       } catch (NumberFormatException e) {
         println("Invalid number format: " + textInputBuffer);
-        // Optionally reset buffer or keep editing
-        // textInputBuffer = ""; // Clear buffer on error
       } catch (Exception e) {
         println("Error applying text input: " + e.getMessage());
-        // Deactivate to be safe
-        if (activeTextInputSliderIndex < bar_left.sliders.size()) {
+        if (activeTextInputSliderIndex != -1 && activeTextInputSliderIndex < bar_left.sliders.size()) {
            bar_left.sliders.get(activeTextInputSliderIndex).isEditingText = false;
         }
         activeTextInputSliderIndex = -1;
@@ -392,15 +392,84 @@ void keyPressed() {
       }
     } else if (key == ESC) {
       // Cancel text input
-      bar_left.sliders.get(activeTextInputSliderIndex).isEditingText = false;
+      if (activeTextInputSliderIndex != -1 && activeTextInputSliderIndex < bar_left.sliders.size()) {
+         bar_left.sliders.get(activeTextInputSliderIndex).isEditingText = false;
+      }
       activeTextInputSliderIndex = -1;
       textInputBuffer = "";
     }
-  } else {
-    // No text input active, handle other keys if needed
-    // e.g., pass to PeasyCam or other functions
-    // PeasyCam handles its own default keys like WASD/Arrows if active.
+    return; // Don't process other keys if text input is active
   }
+  
+  // --- Camera View Control Handling (Numbers 1-6) ---
+  float targetDistance = 400; // Standard distance for view snaps
+  PVector targetCenter = new PVector(0, 0, 0); // Look at origin
+  boolean viewChanged = false;
+  
+  switch (key) {
+    case '1': // Front View (Default)
+      println("Setting Front View");
+      cam.setRotations(0, 0, 0);
+      viewChanged = true;
+      break;
+    case '2': // Back View
+      println("Setting Back View");
+      cam.setRotations(0, PI, 0); // Rotate 180 deg around Y
+      viewChanged = true;
+      break;
+    case '3': // Left View
+      println("Setting Left View");
+      cam.setRotations(0, -PI/2, 0); // Rotate -90 deg around Y
+      viewChanged = true;
+      break;
+    case '4': // Right View
+      println("Setting Right View");
+      cam.setRotations(0, PI/2, 0); // Rotate 90 deg around Y
+      viewChanged = true;
+      break;
+    case '5': // Top View
+      println("Setting Top View");
+      cam.setRotations(-PI/2, 0, 0); // Rotate -90 deg around X
+      viewChanged = true;
+      break;
+    case '6': // Bottom View
+      println("Setting Bottom View");
+      cam.setRotations(PI/2, 0, 0); // Rotate 90 deg around X
+      viewChanged = true;
+      break;
+  }
+  
+  if (viewChanged) {
+    cam.setDistance(targetDistance);
+    cam.lookAt(targetCenter.x, targetCenter.y, targetCenter.z); // Use lookAt instead of setCenter
+    return; // Don't process arrow keys if a view snap occurred
+  }
+  
+  // --- Camera Rotation Control Handling (Arrow Keys) ---
+  if (key == CODED) {
+    float rotateAmount = PI/2; // 90 degrees
+    switch (keyCode) {
+      case LEFT:
+        println("Rotating Left");
+        cam.rotateY(-rotateAmount);
+        break;
+      case RIGHT:
+        println("Rotating Right");
+        cam.rotateY(rotateAmount);
+        break;
+      case UP:
+        println("Rotating Up");
+        cam.rotateX(-rotateAmount);
+        break;
+      case DOWN:
+        println("Rotating Down");
+        cam.rotateX(rotateAmount);
+        break;
+    }
+  }
+  
+  // --- Other Key Handling ---
+  // (PeasyCam handles its defaults like mouse drag, WASD etc. automatically if active)
 }
 
 // --- Key Released Handler for GUI Toggle ---
