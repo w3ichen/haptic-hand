@@ -22,6 +22,7 @@
 void debugprintFingerMotorCounts();
 void printDebugDeltaThumb( void );
 void printDebugFinger1Parameters();
+void printDebugFinger2Parameters( void );
 
 void printProcessingComm1DOF( double parameter );
 void printProcessingComm2DOF( double parameter );

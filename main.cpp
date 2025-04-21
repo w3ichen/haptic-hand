@@ -43,12 +43,12 @@ int main()
     //debugprint(print_counter); // test if even connecting
 
     //calculatePositionHandleAndJacobian(); // Motors 1 and 2 for debugging - nvm lol not implemented
-    calculatePositionAndJacobianFinger1(); // Motors 4 and 5
-    //calculatePositionAndJacobianFinger2(); // Motors 6 and 7
+    // calculatePositionAndJacobianFinger1(); // Motors 4 and 5
+    calculatePositionAndJacobianFinger2(); // Motors 6 and 7
 
     //renderOutsideCircle2DOF_M1M2(); // Motors 1 and 2 for debugging
-    renderOutsideCircle2DOF_M4M5(); // Motors 4 and 5
-
+    // renderOutsideCircle2DOF_M4M5(); // Motors 4 and 5
+    renderOutsideCircle2DOF_M6M7();
     //toggleLED1();
 
     /* Message decoding code, do not change*/
@@ -73,7 +73,7 @@ int main()
             //debugprinttruesusb();
 
             // debugprintFingerMotorCounts();
-            printDebugFinger1Parameters();
+            printDebugFinger2Parameters();
 
             print_counter = 0;
         }

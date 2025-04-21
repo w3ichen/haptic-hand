@@ -181,6 +181,10 @@ void printDebugFinger1Parameters( void )
 {
     pc.printf("rx = %lf, ry = %lf, Torque M4 = %lf Nm, Torque M5 = %lf Nm, theta_a_deg = %lf, theta_b_deg = %lf \n", getRx1(), getRy1(), getTorqueMotor4(), getTorqueMotor5(), getThetaA1_deg(), getThetaB1_deg());
 }
+void printDebugFinger2Parameters( void )
+{
+    pc.printf("rx = %lf, ry = %lf, Torque M6 = %lf Nm, Torque M7 = %lf Nm, theta_a_deg = %lf, theta_b_deg = %lf \n", getRx2(), getRy2(), getTorqueMotor6(), getTorqueMotor7(), getThetaA2_deg(), getThetaB2_deg());
+}
 
 void printComBuffer( void )
 {
