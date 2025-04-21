@@ -60,31 +60,18 @@
 
 
 /* Virtual Environments Functions*/
-void renderForceAlert( void );
-//1DOF  
-void renderSpring1DOF( void );
-void renderVirtualWall1DOF( void );
-void renderLinearDamping1DOF( void );
-void renderNonLinearFriction1DOF( void );
-void renderHardSurface1DOF( void );
-void renderBumpAndValley1DOF( void );
-void renderTexture1DOF( void );
-void renderTexture21DOF( void );
-double renderWallForGraphics1DOF( void );
-double renderDynamicMSDSimulation1DOF( void );
-void renderBilateralTeleoperator1DOF(void);
+
+
 double getForceH( void );
 double getTorqueMotor1( void );
 //2DOF
-void renderFloor2DOF( void );
-void renderInsideBox2DOF( void );
-void renderInsideCircle2DOF( void );
+
 
 void renderOutsideCircle2DOF_M1M2( void );
 void renderOutsideCircle2DOF_M4M5( void );
 
 int renderOutsideBox2DOF( void );
-void renderBilateralTeleoperator2DOF(void);
+
 double getProxyX( void );
 double getProxyY( void );
 double getForceX( void );

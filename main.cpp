@@ -72,7 +72,7 @@ int main()
             //debugprintStarterCode();
             //debugprinttruesusb();
 
-            debugprintFingerMotorCounts();
+            // debugprintFingerMotorCounts();
             printDebugFinger1Parameters();
 
             print_counter = 0;
