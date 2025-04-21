@@ -24,6 +24,8 @@
 /* Global Variables ----------------------------------------------------------*/
 //variables needed declared in other files:
 extern double J00, J01, J10, J11; //jacobian variables
+extern double J00_f1, J01_f1, J10_f1, J11_f1; //jacobian variables
+extern double J00_f2, J01_f2, J10_f2, J11_f2; //jacobian variables
 extern double rx, ry, dx, dy; // 2-DOF position variables
 extern double xH, dxH; //1-DOF position variables
 double rx_proxy = 0.0;
@@ -477,6 +479,55 @@ void renderOutsideCircle2DOF( void )
   outputTorqueMotor1(TorqueMotor1);
   outputTorqueMotor2(TorqueMotor2);    
 }
+
+void renderOutsideCircleFinger1( void )
+{
+  double DCircle = 0.0;
+  double FVector = 0.0;  
+  ForceX = 0.0;
+  ForceY = 0.0;
+  
+  // implement the virtual environment!
+  //Remember that ForceX and ForceY should be in Newtons!
+  
+
+  TorqueX = J00_f1*ForceX + J10_f1*ForceY;
+  TorqueX = TorqueX*0.001;
+  TorqueY = J01_f1*ForceX + J11_f1*ForceY;
+  TorqueY = TorqueY*0.001;
+        
+  TorqueMotor4 = -((TorqueX*R_MA)/R_A);
+  TorqueMotor5 = -((TorqueY*R_MB)/R_B); 
+        
+  outputTorqueMotor4(TorqueMotor4);
+  outputTorqueMotor5(TorqueMotor5);    
+}
+
+void renderOutsideCircleFinger2( void )
+{
+  double DCircle = 0.0;
+  double FVector = 0.0;  
+  ForceX = 0.0;
+  ForceY = 0.0;
+  
+  // implement the virtual environment!
+  //Remember that ForceX and ForceY should be in Newtons!
+  
+
+  TorqueX = J00_f2*ForceX + J10_f2*ForceY;
+  TorqueX = TorqueX*0.001;
+  TorqueY = J01_f2*ForceX + J11_f2*ForceY;
+  TorqueY = TorqueY*0.001;
+        
+  TorqueMotor6 = -((TorqueX*R_MA)/R_A);
+  TorqueMotor7 = -((TorqueY*R_MB)/R_B); 
+        
+  outputTorqueMotor6(TorqueMotor6);
+  outputTorqueMotor7(TorqueMotor7);    
+}
+
+
+
 /*******************************************************************************
   * @name   renderOutsideBox2DOF
   * @brief  There is a Box delimited by WALL2_X1, WALL2_X2, WALL2_Y1, WALL2_Y2

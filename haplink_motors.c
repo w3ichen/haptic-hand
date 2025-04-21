@@ -47,7 +47,7 @@
     | Motor 7 Dir 1  | PG8   | Output     |
     | Motor 7 Dir 2  | PG9   | Output     |
     | Motor 7 Enc 1  | PE2   | EXTI_2     |
-
+    | Motor 7 Enc 2  | PE1   | EXTI_!     |
 
   ******************************************************************************
   */

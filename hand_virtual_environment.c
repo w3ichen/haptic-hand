@@ -14,6 +14,8 @@
 #include "hand_virtual_environment.h"
 #include "delta_thumb.h"
 #include "haplink_motors.h"
+#include "haplink_position.h"
+
 
 
 /*******************************************************************************
@@ -80,3 +82,48 @@ double sphereDistance( double user_x, double user_y, double user_z ) {
     return sqrt(diff_x*diff_x + diff_y*diff_y + diff_z*diff_z);
 }
 
+
+
+// /*******************************************************************************
+//  * @name   renderOutsideCircle2DOF
+//  * @brief  There is a circle of RCircle2 radius centered at CCircleX2,CCircleY2
+//  *         that you can explore from the outside.
+//  * @param  None.
+//  * @retval None.
+//  */
+// void renderOutsideCircle2DOF(void) {
+//   double DCircle = 0.0;
+//   double FVector = 0.0;
+//   ForceX = 0.0;
+//   ForceY = 0.0;
+//   double dr = 0.0;
+//   double rhat_x = 0.0;
+//   double rhat_y = 0.0;
+//   // implement the virtual environment!
+//   // Remember that ForceX and ForceY should be in Newtons!
+
+//   dr = sqrt(pow((rx - CCircleX2),2) + pow((ry - CCircleY2),2));
+//   rhat_x = dr/(rx-CCircleX2);
+//   rhat_y = dr/(ry-CCircleY2);
+
+//   if (dr < RCircle){ // ball is inside of circle radius so must be pushed outwards
+//       ForceX = ForceX + KCircle2*(RCircle2 - dr)*rhat_x/1000;
+//       ForceY = ForceY + KCircle2*(RCircle2 - dr)*rhat_y/1000;
+//   }
+//  // otherwise ForceX = 0 and ForceY = 0
+//   else {
+//       ForceX = 0;
+//       ForceY = 0;
+//   }
+
+//   TorqueX = J00 * ForceX + J10 * ForceY;
+//   TorqueX = TorqueX * 0.001;
+//   TorqueY = J01 * ForceX + J11 * ForceY;
+//   TorqueY = TorqueY * 0.001;
+
+//   TorqueMotor1 = -((TorqueX * R_MA) / R_A);
+//   TorqueMotor2 = -((TorqueY * R_MB) / R_B);
+
+//   outputTorqueMotor1(TorqueMotor1);
+//   outputTorqueMotor2(TorqueMotor2);
+// }
