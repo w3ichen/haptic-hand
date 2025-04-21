@@ -289,37 +289,37 @@ void initHapticHandEncodersMotors(void)
     /* Configure EXTI Line13 */
     extiinitstructure.EXTILine = EXTI_Line13_MORT;
     EXTIInit(&extiinitstructure);
-    /* Configure EXTI Line12 */
+    // /* Configure EXTI Line12 */
     extiinitstructure.EXTILine = EXTI_Line12_MORT;
     EXTIInit(&extiinitstructure);
-    /* Configure EXTI Line11 */
+    // /* Configure EXTI Line11 */
     extiinitstructure.EXTILine = EXTI_Line11_MORT;
     EXTIInit(&extiinitstructure);
-    /* Configure EXTI Line10 */
+    // /* Configure EXTI Line10 */
     extiinitstructure.EXTILine = EXTI_Line10_MORT;
     EXTIInit(&extiinitstructure);
-    /* Configure EXTI Line9 */
+    // /* Configure EXTI Line9 */
     extiinitstructure.EXTILine = EXTI_Line9_MORT;
     EXTIInit(&extiinitstructure);
-    /* Configure EXTI Line8 */
+    // /* Configure EXTI Line8 */
     extiinitstructure.EXTILine = EXTI_Line8_MORT;
     EXTIInit(&extiinitstructure);
-    /* Configure EXTI Line7 */
+    // /* Configure EXTI Line7 */
     extiinitstructure.EXTILine = EXTI_Line7_MORT;
     EXTIInit(&extiinitstructure);
-    /* Configure EXTI Line6 */
+    // /* Configure EXTI Line6 */
     extiinitstructure.EXTILine = EXTI_Line6_MORT;
     EXTIInit(&extiinitstructure);
-    /* Configure EXTI Line4 */
+    // /* Configure EXTI Line4 */
     extiinitstructure.EXTILine = EXTI_Line4_MORT;
     EXTIInit(&extiinitstructure);
-    /* Configure EXTI Line3 */
+    // /* Configure EXTI Line3 */
     extiinitstructure.EXTILine = EXTI_Line3_MORT;
     EXTIInit(&extiinitstructure);
-    /* Configure EXTI Line2 */
+    // /* Configure EXTI Line2 */
     extiinitstructure.EXTILine = EXTI_Line2_MORT;
     EXTIInit(&extiinitstructure);
-    /* Configure EXTI Line1 */
+    // /* Configure EXTI Line1 */
     extiinitstructure.EXTILine = EXTI_Line1_MORT;
     EXTIInit(&extiinitstructure);
 
@@ -461,9 +461,11 @@ int32_t getCountsSensor7(void)
 
 void EXTI9_5_IRQHandler(void)
 {
-    // debugprint(9);
+    // debugprint(95);
     if (EXTI_GetITStatus_mort(EXTI_Line9_MORT) != RESET) // motor 4 sensor 1
     {
+    // debugprint(9);
+
         M4_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M4_S1_PIN));
         M4_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M4_S2_PIN));
         if (((M4p_s1 == M4p_s2) && (M4_s1 == (!M4_s2))) || ((M4_s1 == M4_s2) && (M4p_s1 == (!M4p_s2))))
@@ -484,7 +486,7 @@ void EXTI9_5_IRQHandler(void)
         /* Clear the EXTI line 9 pending bit */
         EXTI_ClearITPendingBit_mort(EXTI_Line9_MORT);
     }
-    else if (EXTI_GetITStatus_mort(EXTI_Line8_MORT) != RESET) // motor4 sensor 2
+    if (EXTI_GetITStatus_mort(EXTI_Line8_MORT) != RESET) // motor4 sensor 2
     {
         // debugprint(8);
         M4_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M4_S1_PIN));
@@ -506,7 +508,7 @@ void EXTI9_5_IRQHandler(void)
         /* Clear the EXTI line 8 pending bit */
         EXTI_ClearITPendingBit_mort(EXTI_Line8_MORT);
     }
-    else if (EXTI_GetITStatus_mort(EXTI_Line7_MORT) != RESET) // motor 5 sensor 1
+    if (EXTI_GetITStatus_mort(EXTI_Line7_MORT) != RESET) // motor 5 sensor 1
     {
         // debugprint(7);
         M5_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M5_S1_PIN));
@@ -529,7 +531,7 @@ void EXTI9_5_IRQHandler(void)
         /* Clear the EXTI line 7 pending bit */
         EXTI_ClearITPendingBit_mort(EXTI_Line7_MORT);
     }
-    else if (EXTI_GetITStatus_mort(EXTI_Line6_MORT) != RESET) // motor5 sensor2
+    if (EXTI_GetITStatus_mort(EXTI_Line6_MORT) != RESET) // motor5 sensor2
     {
         // debugprint(6);
         M5_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M5_S1_PIN));
@@ -556,9 +558,11 @@ void EXTI9_5_IRQHandler(void)
 
 void EXTI4_IRQHandler(void)
 {
+    // debugprint(4);
+
     if (EXTI_GetITStatus_mort(EXTI_Line4_MORT) != RESET) // motor 6 sensor 1
     {
-        // debugprint(4);
+        // // debugprint(4);
         M6_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M6_S1_PIN));
         M6_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M6_S2_PIN));
         if (((M6p_s1 == M6p_s2) && (M6_s1 == (!M6_s2))) || ((M6_s1 == M6_s2) && (M6p_s1 == (!M6p_s2))))
@@ -581,9 +585,11 @@ void EXTI4_IRQHandler(void)
 }
 void EXTI3_IRQHandler(void) // motor 6 s2
 {
+    // debugprint(3);
+
     if (EXTI_GetITStatus_mort(EXTI_Line3_MORT) != RESET)
     {
-        // debugprint(3);
+        // // debugprint(3);
         M6_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M6_S1_PIN));
         M6_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M6_S2_PIN));
         if (((M6p_s1 == M6p_s2) && (M6_s1 == (!M6_s2))) || ((M6_s1 == M6_s2) && (M6p_s1 == (!M6p_s2))))
@@ -606,9 +612,11 @@ void EXTI3_IRQHandler(void) // motor 6 s2
 }
 void EXTI2_IRQHandler(void) // motor 7 s1
 {
+    // debugprint(2);
+
     if (EXTI_GetITStatus_mort(EXTI_Line2_MORT) != RESET)
     {
-        // debugprint(2);
+        // // debugprint(2);
         M7_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M7_S1_PIN));
         M7_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M7_S2_PIN));
         if (((M7p_s1 == M7p_s2) && (M7_s1 == (!M7_s2))) || ((M7_s1 == M7_s2) && (M7p_s1 == (!M7p_s2))))
@@ -631,9 +639,11 @@ void EXTI2_IRQHandler(void) // motor 7 s1
 }
 void EXTI1_IRQHandler(void) // motor 7 s2
 {
+    // debugprint(1);
+
     if (EXTI_GetITStatus_mort(EXTI_Line1_MORT) != RESET)
     {
-        // debugprint(1);
+        // // debugprint(1);
         M7_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M7_S1_PIN));
         M7_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M7_S2_PIN));
         if (((M7p_s1 == M7p_s2) && (M7_s1 == (!M7_s2))) || ((M7_s1 == M7_s2) && (M7p_s1 == (!M7p_s2))))
@@ -657,10 +667,13 @@ void EXTI1_IRQHandler(void) // motor 7 s2
 
 void EXTI15_10_IRQHandler(void)
 {
+    // debugprint(1510);
+
     // toggleLED1();
-    // debugprint(0);
+
     if (EXTI_GetITStatus_mort(EXTI_Line13_MORT) != RESET) // motor 1  s1
     {
+        // debugprint(13);
         M1_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M1_S1_PIN));
         M1_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M1_S2_PIN));
         if (((M1p_s1 == M1p_s2) && (M1_s1 == (!M1_s2))) || ((M1_s1 == M1_s2) && (M1p_s1 == (!M1p_s2))))
@@ -705,7 +718,7 @@ void EXTI15_10_IRQHandler(void)
     }
     else if (EXTI_GetITStatus_mort(EXTI_Line15_MORT) != RESET) // motor 2 sensor 1
     {
-        // debugprint(15);
+        // // debugprint(15);
         M2_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M2_S1_PIN));
         M2_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M2_S2_PIN));
         if (((M2p_s1 == M2p_s2) && (M2_s1 == (!M2_s2))) || ((M2_s1 == M2_s2) && (M2p_s1 == (!M2p_s2))))
@@ -728,7 +741,7 @@ void EXTI15_10_IRQHandler(void)
     }
     else if (EXTI_GetITStatus_mort(EXTI_Line14_MORT) != RESET) // motor2  sensor2
     {
-        // debugprint(14);
+        // // debugprint(14);
         M2_s1 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M2_S1_PIN));
         M2_s2 = (GPIOReadInputDataBit((GPIOTypeDef *)GPIOE_BASE_MORT, M2_S2_PIN));
         if (((M2p_s1 == M2p_s2) && (M2_s1 == (!M2_s2))) || ((M2_s1 == M2_s2) && (M2p_s1 == (!M2p_s2))))

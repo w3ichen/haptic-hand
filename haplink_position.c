@@ -170,7 +170,7 @@ int initHaplinkPosition( void )
     J10 = 0;
     J11 = 0;
     //initialize encoders
-    initHaplinkEncoders2Motors();
+    // initHaplinkEncoders2Motors();
     //wait_ms(200); //wait to settle timers
     
     initPositionHandleAndJacobian( );   

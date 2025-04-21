@@ -18,8 +18,6 @@ extern "C"
 #include "main.h"
 
   void initHapticHandEncodersMotors(void);
-  void initHaplinkEncoders2Motors(void);
-  void initHaplinkEncoders3Motors(void);
   int32_t getCountsSensor1(void);
   int32_t getCountsSensor2(void);
   int32_t getCountsSensor3(void);
