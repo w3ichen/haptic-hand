@@ -28,13 +28,28 @@ void renderOutsideSphere( void ) {
     double dist = sphereDistance(deltaThumbX, deltaThumbY, deltaThumbZ);
     double torque1, torque2, torque3, F_coeff;
     double Fx=0, Fy=0, Fz=0;
+    static double Fx_prev=0, Fy_prev=0, Fz_prev=0;
+    static double alpha = 0.6; // how much of new value to include
+
 
     if (dist < SPHERE1_RADIUS) {
         // Calculate the forces to apply in order to resist the user
         F_coeff = K_DELTA_THUMB * (SPHERE1_RADIUS - dist) / dist;
-        Fx = F_coeff * (deltaThumbX - SPHERE1_X);
-        Fy = F_coeff * (deltaThumbY - SPHERE1_Y);
-        Fz = F_coeff * (deltaThumbZ - SPHERE1_Z);
+        Fx = F_coeff * (deltaThumbX - SPHERE1_X) / 1000.0;
+        Fy = F_coeff * (deltaThumbY - SPHERE1_Y) / 1000.0;
+        Fz = F_coeff * (deltaThumbZ - SPHERE1_Z) / 1000.0;
+
+        // Apply smoothing
+        // Fx = Fx * alpha + Fx_prev * (1-alpha);
+        // Fy = Fy * alpha + Fy_prev * (1-alpha);
+        // Fz = Fz * alpha + Fz_prev * (1-alpha);
+
+        // // Set previous values
+        // Fx_prev = Fx;
+        // Fy_prev = Fy;
+        // Fz_prev = Fz;
+
+        printf("Fx=%f, Fy=%f, Fz=%f\n", Fx, Fy, Fz);
     }
 
     // Use jacobians to transforms forces into motor torques
@@ -58,6 +73,14 @@ void renderOutsideSphere( void ) {
     torque1 = J11 * Fx + J12 * Fy + J13 * Fz;
     torque2 = J21 * Fx + J22 * Fy + J23 * Fz;
     torque3 = J31 * Fx + J32 * Fy + J33 * Fz;
+
+    if (torque1 != 0){
+        printf("Tx=%f, Ty=%f, Tz=%f\n", torque1, torque2, torque3);
+        printf("J11=%f, J12=%f, J13=%f\nJ21=%f, J22=%f, J23=%f\nJ31=%f, J32=%f, J33=%f\n",J11, J12, J13, 
+           J21, J22, J23, 
+           J31, J32, J33);
+
+    }
     outputTorqueMotor1(torque1);
     outputTorqueMotor2(torque2);
     outputTorqueMotor3(torque3);

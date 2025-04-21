@@ -80,9 +80,6 @@ void deltaThumbHandler( void )
     // outputTorqueMotor3(TorqueMotor3);    
 
 
-    // goHome();
-    // goTo(x, y, z); 
-
     // // #1: Update x,y,z positions of end-effector using DeltaZ code
     delta_calcForward(ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
 
@@ -90,9 +87,11 @@ void deltaThumbHandler( void )
     // double x1, y1, z1, x2, y2, z2, x3, y3, z3;
     // GetElbowPosition(&x1, &y1, &z1, &x2, &y2, &z2, &x3, &y3, &z3, &deltaThumbX, &deltaThumbY, &deltaThumbZ, &ThetaMotor1Rad, &ThetaMotor2Rad, &ThetaMotor3Rad);
 
-    // goHome(); // From DeltaZ
-
     // ForceApp(); // From Haptic mouse
+
+    // goHome(); // From DeltaZ
+    // goTo(x, y, z); 
+    // goTo(0, 0, 52); 
 
     // Print values
     printf("theta1=%.2f, theta2=%.2f, theta3=%.2f, thumbX=%.2f, thumbY=%.2f, thumbZ=%.2f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
