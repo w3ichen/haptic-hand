@@ -21,6 +21,7 @@
 #include "haplink_fsr.h"
 #include "haplink_adc_sensors.h"
 #include "delta_thumb.h"
+#include "hand_virtual_environment.h"
 
 int main() 
 {
@@ -36,11 +37,15 @@ int main()
     initHaplinkAnalogSensors(); // unchanged
     initHaplinkTime(); // unchanged
     SystemCoreClockUpdate(); // unchanged
+    
+    //calculatePositionHandleAndJacobian();
+  
+    printf("Starting haptic hand...\n");
 
   while(1) 
   {
     //deltaThumbHandler(); // remember to uncomment for delta - fingers need different jacobian variables
-    //debugprint(print_counter); // test if even connecting
+    //renderOutsideSphere();
 
     //calculatePositionHandleAndJacobian(); // Motors 1 and 2 for debugging - nvm lol not implemented
     // calculatePositionAndJacobianFinger1(); // Motors 4 and 5
@@ -68,7 +73,10 @@ int main()
         if (print_counter > 10000)
         {
             //printDebug1DOFAllParameters();
-            //debugprintHelloWorld();
+
+            // debugprintHelloWorld();
+            //printProcessingHapticHand();
+          
             //debugprintStarterCode();
             //debugprinttruesusb();
 
@@ -87,6 +95,7 @@ int main()
 //change the parameter you are sending depending on the virtual environment you are rendering.
 //or maybe you need to write your own function in debug_mort.cpp and call it from here.
     #ifdef COMM_PROCESSING
+        printProcessingHapticHand();
         //printProcessingComm1DOF(mass_position*1000.0);
         //printProcessingComm2DOF((double)contact);
         printProcessingCommFinger1(); // prints out x and y position for finger 1 (z is determined by physical spacing)

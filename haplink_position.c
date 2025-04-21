@@ -182,6 +182,17 @@ int initHaplinkPosition( void )
     J01 = 0;
     J10 = 0;
     J11 = 0;
+
+    J00_f1 = 0;
+    J01_f1 = 0;
+    J10_f1 = 0;
+    J11_f1 = 0;
+
+    J00_f2 = 0;
+    J01_f2 = 0;
+    J10_f2 = 0;
+    J11_f2 = 0;
+
     //initialize encoders
     // initHaplinkEncoders2Motors();
     //wait_ms(200); //wait to settle timers

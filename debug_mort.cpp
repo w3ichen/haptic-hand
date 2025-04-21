@@ -13,7 +13,11 @@
   ******************************************************************************
   */
 
+
 #include "haplink_encoders.h"
+
+#include "delta_thumb.h"
+
 #include "main.h"
 #include "mbed.h"
 #include "debug_mort.h"
@@ -165,6 +169,19 @@ void debugprintFingerMotorCounts()
 void printDebugDeltaThumb( void )
 {
     pc.printf("xH=%lf, dXh=%lf, ForceH=%lf, Torque=%lf\r\n", getXH(), getDxH(), getForceH(), getTorqueMotor1());
+}
+
+void printProcessingHapticHand( void )
+{
+    // pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t l", (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, getThumbX(), getThumbY(), getThumbZ(), (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    if ((returnMessageAcknowledged() > 0) && (returnDataHasBeenRequested() > 0))
+    {
+        clearMessageAcknowledged();
+        clearDataHasBeenRequested();
+         pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t l", (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, getThumbX(), getThumbY(), getThumbZ(), (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+         ////pc.printf("%f\t%f\t l", (float)getRx(), (float)getRy());
+    }
+    
 }
 
 void printDebug1DOFAllParameters( void )

@@ -250,6 +250,51 @@ void renderOutsideCircle2DOF_M6M7( void )
     outputTorqueMotor7(-TorqueMotor7);    // flipped the sign to get the circle 
 }
 
+void renderOutsideCircleFinger1( void )
+{
+  double DCircle = 0.0;
+  double FVector = 0.0;  
+  ForceX = 0.0;
+  ForceY = 0.0;
+  
+  // implement the virtual environment!
+  //Remember that ForceX and ForceY should be in Newtons!
+  
+
+  TorqueX = J00_f1*ForceX + J10_f1*ForceY;
+  TorqueX = TorqueX*0.001;
+  TorqueY = J01_f1*ForceX + J11_f1*ForceY;
+  TorqueY = TorqueY*0.001;
+        
+  TorqueMotor4 = -((TorqueX*R_MA)/R_A);
+  TorqueMotor5 = -((TorqueY*R_MB)/R_B); 
+        
+  outputTorqueMotor4(TorqueMotor4);
+  outputTorqueMotor5(TorqueMotor5);    
+}
+
+void renderOutsideCircleFinger2( void )
+{
+  double DCircle = 0.0;
+  double FVector = 0.0;  
+  ForceX = 0.0;
+  ForceY = 0.0;
+  
+  // implement the virtual environment!
+  //Remember that ForceX and ForceY should be in Newtons!
+  
+
+  TorqueX = J00_f2*ForceX + J10_f2*ForceY;
+  TorqueX = TorqueX*0.001;
+  TorqueY = J01_f2*ForceX + J11_f2*ForceY;
+  TorqueY = TorqueY*0.001;
+        
+  TorqueMotor6 = -((TorqueX*R_MA)/R_A);
+  TorqueMotor7 = -((TorqueY*R_MB)/R_B); 
+        
+  outputTorqueMotor6(TorqueMotor6);
+  outputTorqueMotor7(TorqueMotor7);    
+}
 
 /*******************************************************************************
   * @name   renderOutsideBox2DOF
