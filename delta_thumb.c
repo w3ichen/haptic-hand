@@ -8,7 +8,7 @@
   *     - Delta Kinematics: https://hypertriangle.com/~alex/delta-robot-tutorial/
   *     - Delta Robot paper: http://robby.caltech.edu/~jwb/courses/ME115/handouts/DeltaKinematics.pdf
   *     - Delta Parallel Robot paper: https://people.ohio.edu/williams/html/PDF/DeltaKin.pdf
-  * NOTE: DeltaZ code operates in degrees!
+  * NOTE: DeltaZ code operates in degrees!aaa
   ******************************************************************************
   */
 
