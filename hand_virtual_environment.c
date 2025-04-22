@@ -94,8 +94,8 @@ void renderOutsideSphere( void ) {
     }
 
     // Map back to local coordinate axes
-    Fx_f1 = Fx_f1*-1; // rotation
-    Fy_f1 = Fy_f1;
+    Fx_f1 = Fx_f1*-1;   // rotation
+    Fy_f1 = Fy_f1;      // axis aligned
 
     // Use jacobians to transforms forces into motor torques
     /* Force to Torque*/
@@ -108,7 +108,7 @@ void renderOutsideSphere( void ) {
     TorqueMotor5 = -((TorqueY_f1*R_MB)/R_B); 
             
     outputTorqueMotor4(TorqueMotor4);
-    outputTorqueMotor5(-TorqueMotor5);  
+    outputTorqueMotor5(TorqueMotor5);  
 
     /********************* FINGER 2 *************************/
 
@@ -143,7 +143,7 @@ void renderOutsideSphere( void ) {
     TorqueMotor7 = -((TorqueY_f2*R_MB)/R_B); 
             
     outputTorqueMotor6(TorqueMotor6);
-    outputTorqueMotor7(-TorqueMotor7);  
+    outputTorqueMotor7(TorqueMotor7);  
 }
 
 
