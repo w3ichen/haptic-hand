@@ -30,30 +30,31 @@ int main()
     double wall_position;
     int contact;
 
-    initCommunication(); // unchanged
-    initLED1(); // unchanged
-    initHapticHand(); // calls motor encoder initializations within
-    initHaplinkMotors();
+    initCommunication();        // unchanged
+    initLED1();                 // unchanged
+    initHapticHand();           // calls motor encoder initializations within
+    initHaplinkMotors();        // init for all seven motors
     initHaplinkAnalogSensors(); // unchanged
-    initHaplinkTime(); // unchanged
-    SystemCoreClockUpdate(); // unchanged
-    
-    //calculatePositionHandleAndJacobian();
+    initHaplinkTime();          // unchanged
+    SystemCoreClockUpdate();    // unchanged
   
     //printf("Starting haptic hand...\n");
   while(1) 
   {
-    deltaThumbHandler(); 
-    renderOutsideSphere();
+    deltaThumbHandler(); // Motors 1, 2, 3
+    calculatePositionAndJacobianFinger1();  // Motors 4 and 5
+    calculatePositionAndJacobianFinger2();  // Motors 6 and 7
 
-    //calculatePositionHandleAndJacobian(); // Motors 1 and 2 for debugging - nvm lol not implemented
-    calculatePositionAndJacobianFinger1(); // Motors 4 and 5
-    calculatePositionAndJacobianFinger2(); // Motors 6 and 7
 
-    //renderOutsideCircle2DOF_M1M2(); // Motors 1 and 2 for debugging
-    renderOutsideCircle2DOF_M4M5(); // Motors 4 and 5
-    renderOutsideCircle2DOF_M6M7();
-    //toggleLED1();
+
+    renderOutsideSphere(); // Single shape felt by thumb and fingers
+
+    /* Finger-specific renders for debugging */
+    //renderOutsideCircle2DOF_M1M2(); // Delta disconnected, finger on original motor channels
+    //renderOutsideCircle2DOF_M4M5(); // Finger 1
+    //renderOutsideCircle2DOF_M6M7(); // Finger 2
+
+    //toggleLED1(); // unused
 
     /* Message decoding code, do not change*/
     if (checkReceiveMessage() > 0)
@@ -80,9 +81,10 @@ int main()
             //debugprintStarterCode();
             //debugprinttruesusb();
 
-            // debugprintFingerMotorCounts();
-            // printDebugFinger2Parameters();
-            // printDebugFinger1Parameters();
+            //debugprintFingerMotorCounts();
+            
+            printDebugFinger1Parameters();
+            printDebugFinger2Parameters();
 
             print_counter = 0;
         }

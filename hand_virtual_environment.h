@@ -21,8 +21,19 @@
 // Obstacles
 #define SPHERE1_X 0.0
 #define SPHERE1_Y 0.0
-#define SPHERE1_Z 70.0
-#define SPHERE1_RADIUS 20.0
+#define SPHERE1_Z 60.0          // Yuichi recommendation is 110.0, Delta Z currently variable.
+#define SPHERE1_RADIUS 10.0     // Delta Z should be XX per CAD, radius should be 
+
+// Original values
+//#define SPHERE1_Z 70.0          
+//#define SPHERE1_RADIUS 20.0
+
+#define NORMAL_XF 122.73
+#define NORMAL_YF -12.01
+#define NORMAL_ZF1 45.41
+#define NORMAL_ZF2 86.59
+
+#define K_FINGERS 100.0
 
 /* Virtual Environments Functions*/
 void renderOutsideSphere( void );
