@@ -21,13 +21,17 @@
 // Obstacles
 #define SPHERE1_X 0.0
 #define SPHERE1_Y 0.0
-#define SPHERE1_Z 60.0
-#define SPHERE1_RADIUS 10.0
+#define SPHERE1_Z 70.0
+#define SPHERE1_RADIUS 20.0
 
 /* Virtual Environments Functions*/
 void renderOutsideSphere( void );
 double sphereDistance( double user_x, double user_y, double user_z );
 
+double getSphereX( void );
+double getSphereY( void );
+double getSphereZ( void );
+double getSphereRadius( void );
 
 
 
