@@ -39,7 +39,7 @@ int main()
     SystemCoreClockUpdate();
     calculatePositionHandleAndJacobian();
 
-    printf("Starting haptic hand...\n");
+    // printf("Starting haptic hand...\n");
   while(1) 
   {
     deltaThumbHandler();
@@ -111,8 +111,8 @@ int main()
         printProcessingHapticHand();
         //printProcessingComm1DOF(mass_position*1000.0);
         //printProcessingComm2DOF((double)contact);
-        printProcessingCommFinger1(); // prints out x and y position for finger 1 (z is determined by physical spacing)
-        printProcessingCommFinger2(); // prints out x and y position for finger 2 (z is determined by physical spacing )
+        // printProcessingCommFinger1(); // prints out x and y position for finger 1 (z is determined by physical spacing)
+        // printProcessingCommFinger2(); // prints out x and y position for finger 2 (z is determined by physical spacing )
     #endif
 
 //we are using the USB communication for teleoperation: 

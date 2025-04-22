@@ -50,7 +50,7 @@ void renderOutsideSphere( void ) {
         // Fy_prev = Fy;
         // Fz_prev = Fz;
 
-        printf("Fx=%f, Fy=%f, Fz=%f\n", Fx, Fy, Fz);
+        // printf("Fx=%f, Fy=%f, Fz=%f\n", Fx, Fy, Fz);
     }
 
     // Use jacobians to transforms forces into motor torques
@@ -75,13 +75,13 @@ void renderOutsideSphere( void ) {
     torque2 = J21 * Fx + J22 * Fy + J23 * Fz;
     torque3 = J31 * Fx + J32 * Fy + J33 * Fz;
 
-    if (torque1 != 0){
-        printf("Tx=%f, Ty=%f, Tz=%f\n", torque1, torque2, torque3);
-        printf("J11=%f, J12=%f, J13=%f\nJ21=%f, J22=%f, J23=%f\nJ31=%f, J32=%f, J33=%f\n",J11, J12, J13, 
-           J21, J22, J23, 
-           J31, J32, J33);
+    // if (torque1 != 0){
+    //     printf("Tx=%f, Ty=%f, Tz=%f\n", torque1, torque2, torque3);
+    //     printf("J11=%f, J12=%f, J13=%f\nJ21=%f, J22=%f, J23=%f\nJ31=%f, J32=%f, J33=%f\n",J11, J12, J13, 
+    //        J21, J22, J23, 
+    //        J31, J32, J33);
 
-    }
+    // }
     if (!isnan(torque1)) outputTorqueMotor1(torque1);
     if (!isnan(torque2)) outputTorqueMotor2(torque2);
     if (!isnan(torque3)) outputTorqueMotor3(torque3);
@@ -102,5 +102,19 @@ double sphereDistance( double user_x, double user_y, double user_z ) {
     double diff_z = user_z - SPHERE1_Z;
 
     return sqrt(diff_x*diff_x + diff_y*diff_y + diff_z*diff_z);
+}
+
+
+double getSphereX( void ) {
+    return SPHERE1_X;
+}
+double getSphereY( void ) {
+    return SPHERE1_Y;
+}
+double getSphereZ( void ) {
+    return SPHERE1_Z;
+}
+double getSphereRadius( void ) {
+    return SPHERE1_RADIUS;
 }
 

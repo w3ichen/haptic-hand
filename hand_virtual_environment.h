@@ -28,6 +28,10 @@
 void renderOutsideSphere( void );
 double sphereDistance( double user_x, double user_y, double user_z );
 
+double getSphereX( void );
+double getSphereY( void );
+double getSphereZ( void );
+double getSphereRadius( void );
 
 
 

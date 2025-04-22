@@ -94,7 +94,7 @@ void deltaThumbHandler( void )
     // goTo(0, 0, 52); 
 
     // Print values
-    printf("theta1=%.2f, theta2=%.2f, theta3=%.2f, thumbX=%.2f, thumbY=%.2f, thumbZ=%.2f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
+    // printf("theta1=%.2f, theta2=%.2f, theta3=%.2f, thumbX=%.2f, thumbY=%.2f, thumbZ=%.2f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
 }
 
 
