@@ -1,2 +1,0 @@
-# haptic-hand
-Haptic Hand
