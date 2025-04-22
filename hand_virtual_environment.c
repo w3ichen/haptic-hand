@@ -23,10 +23,8 @@ extern double J00_f1, J01_f1, J10_f1, J11_f1; //jacobian variables
 extern double J00_f2, J01_f2, J10_f2, J11_f2; //jacobian variables
 extern double rx, ry, dx, dy; // 2-DOF position variables
 extern double xH, dxH; //1-DOF position variables
-double rx_proxy = 0.0;
-double ry_proxy = 0.0;
 double TorqueX, TorqueY, ForceX, ForceY, ForceH;
-double TorqueMotor1, TorqueMotor2, TorqueMotor3, TorqueMotor4, TorqueMotor5, TorqueMotor6, TorqueMotor7;
+double TorqueMotor4, TorqueMotor5, TorqueMotor6, TorqueMotor7;
 
 /*******************************************************************************
   * @name   renderOutsideSphere
