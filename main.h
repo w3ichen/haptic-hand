@@ -26,8 +26,8 @@
 /* MACROS for everyone--------------------------------------------------------*/
 
 //choose which communication you are using, comment out the other two!
-    // #define COMM_DEBUGGING          1
-    #define COMM_PROCESSING         2
+    #define COMM_DEBUGGING          1
+    // #define COMM_PROCESSING         2
     //#define COMM_TELEOPERATION      3
 
 // Haplink 2-DOF initial Offset in degrees:

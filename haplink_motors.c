@@ -738,12 +738,12 @@ void outputTorqueMotor5(double torque)
     double duty;
     if (torque < 0)
     {
-        motor5Dir1();
+        motor5Dir2();
         torque = torque * (-1.0);
     }
     else
     {
-        motor5Dir2();
+        motor5Dir1();
     }
 
     duty = torque * 65.13; // replace the 65.13 with value for specific motor
@@ -786,12 +786,12 @@ void outputTorqueMotor7(double torque)
     double duty;
     if (torque < 0)
     {
-        motor7Dir1();
+        motor7Dir2();
         torque = torque * (-1.0);
     }
     else
     {
-        motor7Dir2();
+        motor7Dir1();
     }
 
     duty = torque * 65.13; // replace the 65.13 with value for specific motor

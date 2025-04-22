@@ -187,7 +187,7 @@ void renderOutsideCircle2DOF_M4M5( void )
     TorqueMotor5 = -((TorqueY*R_MB)/R_B); 
             
     outputTorqueMotor4(TorqueMotor4);
-    outputTorqueMotor5(-TorqueMotor5);    // flipped the sign to get the circle 
+    outputTorqueMotor5(TorqueMotor5);    // flipped the sign to get the circle 
 }
 
 /*******************************************************************************
@@ -199,7 +199,7 @@ void renderOutsideCircle2DOF_M4M5( void )
   */
 void renderOutsideCircle2DOF_M6M7( void )
 {
-    static double x_sphere = 40.0/1000.0;
+    static double x_sphere = -40.0/1000.0;
     static double y_sphere = 80.0/1000.0;
     static double R = 30/1000.0;
 
@@ -247,7 +247,7 @@ void renderOutsideCircle2DOF_M6M7( void )
     TorqueMotor7 = -((TorqueY*R_MB)/R_B); 
             
     outputTorqueMotor6(TorqueMotor6);
-    outputTorqueMotor7(-TorqueMotor7);    // flipped the sign to get the circle 
+    outputTorqueMotor7(TorqueMotor7);    // flipped the sign to get the circle 
 }
 
 void renderOutsideCircleFinger1( void )

@@ -378,12 +378,12 @@ void initPositionHandleAndJacobian( void )
     
   
     // Compute px and py 
-    tildetheta_a = theta_a + DELTATHETA_A; 
+    tildetheta_a = theta_a + DELTATHETA_A_1; 
     //px = ;
     //py = ;
 
     //Compute rx and ry in frame n
-    tildetheta_b = theta_b + DELTATHETA_B; 
+    tildetheta_b = theta_b + DELTATHETA_B_1; 
     //rx =  ;
     //ry =  ;
     
@@ -423,12 +423,12 @@ void initPositionAndJacobianFinger1( void )
     theta_b1 =  -R_MA/R_A*theta_mb1 +(R_MB/R_B)*theta_a1 + THETA_B_OFFSET_RAD;
   
     // Compute px and py 
-    tildetheta_a = theta_a1 + DELTATHETA_A; 
+    tildetheta_a = theta_a1 + DELTATHETA_A_1; 
     px = -L_A*sin(tildetheta_a) + CX;
     py = L_A*cos(tildetheta_a) + CY ;
 
     //Compute rx and ry in frame n
-    tildetheta_b = theta_b1 + DELTATHETA_B; 
+    tildetheta_b = theta_b1 + DELTATHETA_B_1; 
     rx1 =  -L_B*sin(tildetheta_a+tildetheta_b) + px;
     ry1 =  -L_B*cos(tildetheta_a + tildetheta_b) + py;
     
@@ -468,12 +468,12 @@ void initPositionAndJacobianFinger2( void )
     theta_b2 =  -R_MA/R_A*theta_mb2 +(R_MB/R_B)*theta_a2 + THETA_B_OFFSET_RAD;
   
     // Compute px and py 
-    tildetheta_a = theta_a2 + DELTATHETA_A; 
+    tildetheta_a = theta_a2 + DELTATHETA_A_2; 
     px = -L_A*sin(tildetheta_a) + CX;
     py = L_A*cos(tildetheta_a) + CY ;
 
     //Compute rx and ry in frame n
-    tildetheta_b = theta_b2 + DELTATHETA_B; 
+    tildetheta_b = theta_b2 + DELTATHETA_B_2; 
     rx2 =  -L_B*sin(tildetheta_a+tildetheta_b) + px;
     ry2 =  -L_B*cos(tildetheta_a + tildetheta_b) + py;
     
@@ -514,12 +514,12 @@ void calculatePositionHandleAndJacobian( void )
     
   
     // Compute px and py 
-    tildetheta_a = theta_a + DELTATHETA_A; 
+    tildetheta_a = theta_a + DELTATHETA_A_1; 
     //px = ;
     //py = ;
 
     //Compute rx and ry in n
-    tildetheta_b = theta_b + DELTATHETA_B; 
+    tildetheta_b = theta_b + DELTATHETA_B_1; 
     //rx =  ;
     //ry =  ;
     
@@ -563,12 +563,12 @@ void calculatePositionAndJacobianFinger1( void )
     
   
     // Compute px and py 
-    tildetheta_a = theta_a1 + DELTATHETA_A; 
+    tildetheta_a = theta_a1 + DELTATHETA_A_1; 
     px = -L_A*sin(tildetheta_a) + CX;
     py = L_A*cos(tildetheta_a) + CY ;
 
     //Compute rx and ry in n
-    tildetheta_b = theta_b1 + DELTATHETA_B; 
+    tildetheta_b = theta_b1 + DELTATHETA_B_1; 
     rx1 =  -L_B*sin(tildetheta_a+tildetheta_b) + px;
     ry1 =  L_B*cos(tildetheta_a + tildetheta_b) + py;
     
@@ -611,12 +611,12 @@ void calculatePositionAndJacobianFinger2( void )
     
   
     // Compute px and py 
-    tildetheta_a = theta_a2 + DELTATHETA_A; 
+    tildetheta_a = theta_a2 + DELTATHETA_A_2; 
     px = -L_A*sin(tildetheta_a) + CX;
     py = L_A*cos(tildetheta_a) + CY ;
 
     //Compute rx and ry in n
-    tildetheta_b = theta_b2 + DELTATHETA_B; 
+    tildetheta_b = theta_b2 + DELTATHETA_B_2; 
     rx2 =  -L_B*sin(tildetheta_a+tildetheta_b) + px;
     ry2 =  L_B*cos(tildetheta_a + tildetheta_b) + py;
     
