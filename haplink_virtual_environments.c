@@ -480,51 +480,120 @@ void renderOutsideCircle2DOF( void )
   outputTorqueMotor2(TorqueMotor2);    
 }
 
-void renderOutsideCircleFinger1( void )
+void renderOutsideCircle2DOF_M4M5( void )
 {
-  double DCircle = 0.0;
-  double FVector = 0.0;  
-  ForceX = 0.0;
-  ForceY = 0.0;
-  
-  // implement the virtual environment!
-  //Remember that ForceX and ForceY should be in Newtons!
-  
+    static double x_sphere = 40.0/1000.0;
+    static double y_sphere = 80.0/1000.0;
+    static double R = 30/1000.0;
 
-  TorqueX = J00_f1*ForceX + J10_f1*ForceY;
-  TorqueX = TorqueX*0.001;
-  TorqueY = J01_f1*ForceX + J11_f1*ForceY;
-  TorqueY = TorqueY*0.001;
-        
-  TorqueMotor4 = -((TorqueX*R_MA)/R_A);
-  TorqueMotor5 = -((TorqueY*R_MB)/R_B); 
-        
-  outputTorqueMotor4(TorqueMotor4);
-  outputTorqueMotor5(TorqueMotor5);    
+    double dr;
+    double r_x;
+    double r_y;
+    double r_hat_x;
+    double r_hat_y;
+
+    static double k = 100; // N/m
+
+    // Motor 4
+    double x_user = getRx1()/1000.0; // Rx1 and Ry1 is for first finger
+    double y_user = getRy1()/1000.0; 
+    // 
+    
+
+    // implement the virtual environment!
+    //Remember that ForceX and ForceY should be in Newtons!
+
+    r_x = x_user - x_sphere;
+    r_y = y_user - y_sphere;
+
+    dr = sqrt(pow((x_user - x_sphere), 2) + pow((y_user - y_sphere), 2));
+
+    // normalization of a vector
+    
+
+    if (dr < R)
+    {
+        ForceX = k*(R - dr)*r_hat_x;
+        ForceY = k*(R - dr)*r_hat_y;
+    }
+    else
+    {
+        ForceX = 0.0;
+        ForceY = 0.0;
+    }
+
+    TorqueX = J00_f1*ForceX + J10_f1*ForceY;
+    TorqueX = TorqueX*0.001;
+    TorqueY = J01_f1*ForceX + J11_f1*ForceY;
+    TorqueY = TorqueY*0.001;
+            
+    TorqueMotor4 = -((TorqueX*R_MA)/R_A);
+    TorqueMotor5 = -((TorqueY*R_MB)/R_B); 
+            
+    outputTorqueMotor4(TorqueMotor4);
+    outputTorqueMotor5(-TorqueMotor5);    // flipped the sign to get the circle 
 }
 
-void renderOutsideCircleFinger2( void )
+/*******************************************************************************
+  * @name   renderOutsideCircle2DOF_M6M7
+  * @brief  There is a circle of RCircle2 radius centered at CCircleX2,CCircleY2
+  *         that you can explore from the outside.
+  * @param  None.
+  * @retval None.
+  */
+void renderOutsideCircle2DOF_M6M7( void )
 {
-  double DCircle = 0.0;
-  double FVector = 0.0;  
-  ForceX = 0.0;
-  ForceY = 0.0;
-  
-  // implement the virtual environment!
-  //Remember that ForceX and ForceY should be in Newtons!
-  
+    static double x_sphere = 40.0/1000.0;
+    static double y_sphere = 80.0/1000.0;
+    static double R = 30/1000.0;
 
-  TorqueX = J00_f2*ForceX + J10_f2*ForceY;
-  TorqueX = TorqueX*0.001;
-  TorqueY = J01_f2*ForceX + J11_f2*ForceY;
-  TorqueY = TorqueY*0.001;
-        
-  TorqueMotor6 = -((TorqueX*R_MA)/R_A);
-  TorqueMotor7 = -((TorqueY*R_MB)/R_B); 
-        
-  outputTorqueMotor6(TorqueMotor6);
-  outputTorqueMotor7(TorqueMotor7);    
+    double dr;
+    double r_x;
+    double r_y;
+    double r_hat_x;
+    double r_hat_y;
+
+    static double k = 100; // N/m
+
+
+    double x_user = getRx2()/1000.0; // Rx1 and Ry1 is for first finger
+    double y_user = getRy2()/1000.0; 
+   
+    // implement the virtual environment!
+    //Remember that ForceX and ForceY should be in Newtons!
+
+    r_x = x_user - x_sphere;
+    r_y = y_user - y_sphere;
+
+    dr = sqrt(pow((x_user - x_sphere), 2) + pow((y_user - y_sphere), 2));
+
+    // normalization of a vector
+    r_hat_x = (1.0/dr) * r_x;
+    r_hat_y = (1.0/dr) * r_y;
+
+    if (dr < R)
+    {
+        ForceX = k*(R - dr)*r_hat_x;
+        ForceY = k*(R - dr)*r_hat_y;
+    }
+    else
+    {
+        ForceX = 0.0;
+        ForceY = 0.0;
+    }
+
+    TorqueX = J00_f2*ForceX + J10_f2*ForceY;
+    TorqueX = TorqueX*0.001;
+    TorqueY = J01_f2*ForceX + J11_f2*ForceY;
+    TorqueY = TorqueY*0.001;
+            
+    TorqueMotor6 = -((TorqueX*R_MA)/R_A);
+    TorqueMotor7 = -((TorqueY*R_MB)/R_B); 
+            
+    outputTorqueMotor6(TorqueMotor6);
+    outputTorqueMotor7(-TorqueMotor7);    // flipped the sign to get the circle 
 }
+
 
 
 

@@ -24,6 +24,13 @@
 #define SPHERE1_Z 60.0
 #define SPHERE1_RADIUS 10.0
 
+#define NORMAL_XF 122.73
+#define NORMAL_YF -12.01
+#define NORMAL_ZF1 45.41
+#define NORMAL_ZF2 86.59
+
+#define K_FINGERS 100.0
+
 /* Virtual Environments Functions*/
 void renderOutsideSphere( void );
 double sphereDistance( double user_x, double user_y, double user_z );
