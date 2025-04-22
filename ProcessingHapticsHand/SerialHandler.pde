@@ -76,9 +76,9 @@ void serialEvent(Serial p) {
       if (tokens.length == 13) {
         serialVals = float(tokens);
         // Update global state variables directly (ensure they are declared in the main sketch)
-        thumb_end.set(serialVals[6], serialVals[7], serialVals[8]);
+        thumb_end.set(serialVals[0], serialVals[1], serialVals[2]);
         index_end.set(serialVals[3], serialVals[4], serialVals[5]);
-        middle_end.set(serialVals[0], serialVals[1], serialVals[2]);
+        middle_end.set(serialVals[6], serialVals[7], serialVals[8]);
         object_position.set(serialVals[9], serialVals[10], serialVals[11]);
         object_radius = serialVals[12];
         dataReceived = true; // Flag that we have valid data
@@ -91,5 +91,7 @@ void serialEvent(Serial p) {
     } catch (Exception e) {
       println("Serial Error: Unexpected error processing message: " + e.getMessage());
     }
+  } else {
+    println("messagestring is null");
   }
 } 
