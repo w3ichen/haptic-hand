@@ -14,6 +14,8 @@
 #include "hand_virtual_environment.h"
 #include "delta_thumb.h"
 #include "haplink_motors.h"
+#include "haplink_position.h"
+
 
 
 /*******************************************************************************
@@ -117,4 +119,3 @@ double getSphereZ( void ) {
 double getSphereRadius( void ) {
     return SPHERE1_RADIUS;
 }
-
