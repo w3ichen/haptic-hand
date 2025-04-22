@@ -14,6 +14,7 @@
   */
 
 #include "delta_thumb.h"
+#include "hand_virtual_environment.h"
 #include "main.h"
 #include "mbed.h"
 #include "debug_mort.h"
@@ -162,13 +163,16 @@ void printDebugDeltaThumb( void )
 void printProcessingHapticHand( void )
 {
     // pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t l", (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, getThumbX(), getThumbY(), getThumbZ(), (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-    if ((returnMessageAcknowledged() > 0) && (returnDataHasBeenRequested() > 0))
-    {
-        clearMessageAcknowledged();
-        clearDataHasBeenRequested();
-         pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t l", (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, getThumbX(), getThumbY(), getThumbZ(), (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-         ////pc.printf("%f\t%f\t l", (float)getRx(), (float)getRy());
-    }
+    // pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t l", (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t \n", getThumbX(), getThumbY(), getThumbZ(), (float)getRx1(), (float)getRy1(), (float)45.41, (float)getRx2(), (float)getRy2(), (float)86.59, (float)getSphereX(), (float)getSphereY(), (float)getSphereZ(), (float)getSphereRadius());
+    // if ((returnMessageAcknowledged() > 0) && (returnDataHasBeenRequested() > 0))
+    // {
+    //     clearMessageAcknowledged();
+    //     clearDataHasBeenRequested();
+    //     // pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t l", getThumbX(), getThumbY(), getThumbZ(), (float)getRx1(), (float)getRy1(), (float)45.41, (float)getRx2(), (float)getRy2(), (float)86.59, (float)getSphereX(), (float)getSphereY(), (float)getSphereZ(), (float)getSphereRadius());
+    //     pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t l", (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    //     ////pc.printf("%f\t%f\t l", (float)getRx(), (float)getRy());
+    // }
     
 }
 

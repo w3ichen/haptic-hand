@@ -44,7 +44,7 @@
 
 
 // HAPTIC CONSTANTS
-#define K_DELTA_THUMB 100.0
+#define K_DELTA_THUMB 1.0
 
 /******* Calibration Values ****/
 typedef struct {
