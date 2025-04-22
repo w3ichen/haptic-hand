@@ -113,7 +113,7 @@ void renderOutsideSphere( void ) {
     /********************* FINGER 2 *************************/
 
     // Check if finger 2 is inside sphere
-    double xf2_global = getRx1()*-1 + NORMAL_XF; // mm, rotated and translated to be in global frame
+    double xf2_global = getRx1() + NORMAL_XF; // mm, rotated and translated to be in global frame
     double yf2_global = getRy1() + NORMAL_YF;    // mm, rotated and translated to be in global frame
     double dist_f2 = sphereDistance(xf2_global, yf2_global, NORMAL_ZF2); // mm
     double TorqueX_f2, TorqueY_f2;
