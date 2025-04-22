@@ -57,7 +57,7 @@ void setup() {
   object_radius = 30;
   
   if (!simulationMode) {
-    String portName = Serial.list()[5];
+    String portName = Serial.list()[8];
     println(portName);
     myPort = new Serial(this, portName, 115200);
   }

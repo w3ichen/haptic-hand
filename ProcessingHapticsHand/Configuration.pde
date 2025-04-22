@@ -12,7 +12,7 @@ final int windowHeight = 800;
 // IMPORTANT: Find the correct index for your Nucleo board!
 // Run the sketch once. It will print the list of available serial ports.
 // Identify the correct port for your device and update the index below.
-final int SERIAL_PORT_INDEX = 5; // <--- CHANGE THIS INDEX AS NEEDED
+final int SERIAL_PORT_INDEX = 8; // <--- CHANGE THIS INDEX AS NEEDED
 final int BAUD_RATE = 115200;
 
 // Simulation Mode
