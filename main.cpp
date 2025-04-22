@@ -43,8 +43,8 @@ int main()
     //printf("Starting haptic hand...\n");
   while(1) 
   {
-    //deltaThumbHandler(); // remember to uncomment for delta - fingers need different jacobian variables
-    //renderOutsideSphere();
+    deltaThumbHandler(); 
+    renderOutsideSphere();
 
     //calculatePositionHandleAndJacobian(); // Motors 1 and 2 for debugging - nvm lol not implemented
     calculatePositionAndJacobianFinger1(); // Motors 4 and 5
@@ -75,13 +75,13 @@ int main()
             //printDebug1DOFAllParameters();
 
             // debugprintHelloWorld();
-            //printProcessingHapticHand();
+            printProcessingHapticHand();
           
             //debugprintStarterCode();
             //debugprinttruesusb();
 
             // debugprintFingerMotorCounts();
-            printDebugFinger2Parameters();
+            // printDebugFinger2Parameters();
             // printDebugFinger1Parameters();
 
             print_counter = 0;

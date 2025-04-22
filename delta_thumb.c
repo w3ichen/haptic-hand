@@ -19,6 +19,7 @@
 #include <math.h> // For sqrt
 #include "delta_thumb.h"
 #include "haplink_time.h"
+#include "stdio.h"
 
 // Global vars
 DeltaThumb deltaThumb;
@@ -36,13 +37,13 @@ double ThetaMotor3Deg;
 
 
 float getThumbX( void ) {
-    return deltaThumbX;
+    return (float)deltaThumbX;
 }
 float getThumbY( void ) {
-    return deltaThumbY;
+    return (float)deltaThumbY;
 }
 float getThumbZ( void ) {
-    return deltaThumbZ;
+    return (float)deltaThumbZ;
 }
 
 /*******************************************************************************
@@ -382,6 +383,9 @@ int delta_calcForward(double theta1, double theta2, double theta3, double *x0, d
   if (d < 0) return -1; // non-existing point
   
   *z0 = -(double)0.5 * (b + sqrt(d)) / a;
+  // NEW, reflect Z to + axis
+//   *z0 = *z0 * -1;
+
   *x0 = (a1 * *z0 + b1) / dnm;
   *y0 = (a2 * *z0 + b2) / dnm;
   return 0;
