@@ -38,13 +38,14 @@ int main()
     initHaplinkTime();          // unchanged
     SystemCoreClockUpdate();    // unchanged
   
-    printf("Starting haptic hand...\n");
-
+    //printf("Starting haptic hand...\n");
   while(1) 
   {
     deltaThumbHandler(); // Motors 1, 2, 3
     calculatePositionAndJacobianFinger1();  // Motors 4 and 5
     calculatePositionAndJacobianFinger2();  // Motors 6 and 7
+
+
 
     renderOutsideSphere(); // Single shape felt by thumb and fingers
 
@@ -69,10 +70,13 @@ int main()
 //But you may want to print different things so feel free to write your own in debug_mort.cpp and call it from here.
 //Debug prints shouldn't happen very often.
     #ifdef COMM_DEBUGGING
+        // printProcessingHapticHand();
         if (print_counter > 10000)
         {
-            //debugprintHelloWorld();
-            //printProcessingHapticHand();
+            //printDebug1DOFAllParameters();
+
+            // debugprintHelloWorld();
+            printProcessingHapticHand();
           
             //debugprintStarterCode();
             //debugprinttruesusb();
@@ -94,11 +98,20 @@ int main()
 //change the parameter you are sending depending on the virtual environment you are rendering.
 //or maybe you need to write your own function in debug_mort.cpp and call it from here.
     #ifdef COMM_PROCESSING
-        printProcessingHapticHand();
+        // printProcessingHapticHand();
+        if (print_counter > 100)
+        {
+            printProcessingHapticHand();
+            print_counter = 0;
+        }
+        else
+        {
+            print_counter = print_counter + 1;
+        }
         //printProcessingComm1DOF(mass_position*1000.0);
         //printProcessingComm2DOF((double)contact);
-        printProcessingCommFinger1(); // prints out x and y position for finger 1 (z is determined by physical spacing)
-        printProcessingCommFinger2(); // prints out x and y position for finger 2 (z is determined by physical spacing )
+        // printProcessingCommFinger1(); // prints out x and y position for finger 1 (z is determined by physical spacing)
+        // printProcessingCommFinger2(); // prints out x and y position for finger 2 (z is determined by physical spacing )
     #endif
 
 //we are using the USB communication for teleoperation: 

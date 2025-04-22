@@ -38,16 +38,32 @@ void renderOutsideSphere( void ) {
     /********************* THUMB *************************/
 
     // Check if thumb is inside sphere
-    double dist = sphereDistance(deltaThumbX, deltaThumbY, deltaThumbZ);
+    double dist = sphereDistance(deltaThumbX, deltaThumbY, deltaThumbZ) / 1000.0;
     double torque1, torque2, torque3, F_coeff;
     double Fx=0, Fy=0, Fz=0;
+    static double Fx_prev=0, Fy_prev=0, Fz_prev=0;
+    static double alpha = 0.6; // how much of new value to include
 
-    if (dist < SPHERE1_RADIUS) {
+
+    if (dist < (SPHERE1_RADIUS / 1000.0)) {
         // Calculate the forces to apply in order to resist the user
-        F_coeff = K_DELTA_THUMB * (SPHERE1_RADIUS - dist) / dist;
-        Fx = F_coeff * (deltaThumbX - SPHERE1_X);
-        Fy = F_coeff * (deltaThumbY - SPHERE1_Y);
-        Fz = F_coeff * (deltaThumbZ - SPHERE1_Z);
+        F_coeff = K_DELTA_THUMB * ((SPHERE1_RADIUS / 1000.0) - dist) / dist;
+
+        Fx = F_coeff * (deltaThumbX - SPHERE1_X) / 1000.0;
+        Fy = F_coeff * (deltaThumbY - SPHERE1_Y) / 1000.0;
+        Fz = F_coeff * (deltaThumbZ - SPHERE1_Z) / 1000.0;
+
+        // Apply smoothing
+        // Fx = Fx * alpha + Fx_prev * (1-alpha);
+        // Fy = Fy * alpha + Fy_prev * (1-alpha);
+        // Fz = Fz * alpha + Fz_prev * (1-alpha);
+
+        // // Set previous values
+        // Fx_prev = Fx;
+        // Fy_prev = Fy;
+        // Fz_prev = Fz;
+
+        // printf("Fx=%f, Fy=%f, Fz=%f\n", Fx, Fy, Fz);
     }
 
     // Use jacobians to transforms forces into motor torques
@@ -144,6 +160,17 @@ void renderOutsideSphere( void ) {
             
     outputTorqueMotor6(TorqueMotor6);
     outputTorqueMotor7(TorqueMotor7);  
+
+    // if (torque1 != 0){
+    //     printf("Tx=%f, Ty=%f, Tz=%f\n", torque1, torque2, torque3);
+    //     printf("J11=%f, J12=%f, J13=%f\nJ21=%f, J22=%f, J23=%f\nJ31=%f, J32=%f, J33=%f\n",J11, J12, J13, 
+    //        J21, J22, J23, 
+    //        J31, J32, J33);
+
+    // }
+    //if (!isnan(torque1)) outputTorqueMotor1(torque1);
+    //if (!isnan(torque2)) outputTorqueMotor2(torque2);
+    //if (!isnan(torque3)) outputTorqueMotor3(torque3);
 }
 
 
@@ -164,47 +191,15 @@ double sphereDistance( double user_x, double user_y, double user_z ) {
 }
 
 
-
-// /*******************************************************************************
-//  * @name   renderOutsideCircle2DOF
-//  * @brief  There is a circle of RCircle2 radius centered at CCircleX2,CCircleY2
-//  *         that you can explore from the outside.
-//  * @param  None.
-//  * @retval None.
-//  */
-// void renderOutsideCircle2DOF(void) {
-//   double DCircle = 0.0;
-//   double FVector = 0.0;
-//   ForceX = 0.0;
-//   ForceY = 0.0;
-//   double dr = 0.0;
-//   double rhat_x = 0.0;
-//   double rhat_y = 0.0;
-//   // implement the virtual environment!
-//   // Remember that ForceX and ForceY should be in Newtons!
-
-//   dr = sqrt(pow((rx - CCircleX2),2) + pow((ry - CCircleY2),2));
-//   rhat_x = dr/(rx-CCircleX2);
-//   rhat_y = dr/(ry-CCircleY2);
-
-//   if (dr < RCircle){ // ball is inside of circle radius so must be pushed outwards
-//       ForceX = ForceX + KCircle2*(RCircle2 - dr)*rhat_x/1000;
-//       ForceY = ForceY + KCircle2*(RCircle2 - dr)*rhat_y/1000;
-//   }
-//  // otherwise ForceX = 0 and ForceY = 0
-//   else {
-//       ForceX = 0;
-//       ForceY = 0;
-//   }
-
-//   TorqueX = J00 * ForceX + J10 * ForceY;
-//   TorqueX = TorqueX * 0.001;
-//   TorqueY = J01 * ForceX + J11 * ForceY;
-//   TorqueY = TorqueY * 0.001;
-
-//   TorqueMotor1 = -((TorqueX * R_MA) / R_A);
-//   TorqueMotor2 = -((TorqueY * R_MB) / R_B);
-
-//   outputTorqueMotor1(TorqueMotor1);
-//   outputTorqueMotor2(TorqueMotor2);
-// }
+double getSphereX( void ) {
+    return SPHERE1_X;
+}
+double getSphereY( void ) {
+    return SPHERE1_Y;
+}
+double getSphereZ( void ) {
+    return SPHERE1_Z;
+}
+double getSphereRadius( void ) {
+    return SPHERE1_RADIUS;
+}

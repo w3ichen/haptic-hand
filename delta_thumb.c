@@ -8,7 +8,7 @@
   *     - Delta Kinematics: https://hypertriangle.com/~alex/delta-robot-tutorial/
   *     - Delta Robot paper: http://robby.caltech.edu/~jwb/courses/ME115/handouts/DeltaKinematics.pdf
   *     - Delta Parallel Robot paper: https://people.ohio.edu/williams/html/PDF/DeltaKin.pdf
-  * NOTE: DeltaZ code operates in degrees!
+  * NOTE: DeltaZ code operates in degrees!aaa
   ******************************************************************************
   */
 
@@ -19,6 +19,7 @@
 #include <math.h> // For sqrt
 #include "delta_thumb.h"
 #include "haplink_time.h"
+#include "stdio.h"
 
 // Global vars
 DeltaThumb deltaThumb;
@@ -36,13 +37,13 @@ double ThetaMotor3Deg;
 
 
 float getThumbX( void ) {
-    return deltaThumbX;
+    return (float)deltaThumbX;
 }
 float getThumbY( void ) {
-    return deltaThumbY;
+    return (float)deltaThumbY;
 }
 float getThumbZ( void ) {
-    return deltaThumbZ;
+    return (float)deltaThumbZ;
 }
 
 /*******************************************************************************
@@ -80,9 +81,6 @@ void deltaThumbHandler( void )
     // outputTorqueMotor3(TorqueMotor3);    
 
 
-    // goHome();
-    // goTo(x, y, z); 
-
     // // #1: Update x,y,z positions of end-effector using DeltaZ code
     delta_calcForward(ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
 
@@ -90,12 +88,14 @@ void deltaThumbHandler( void )
     // double x1, y1, z1, x2, y2, z2, x3, y3, z3;
     // GetElbowPosition(&x1, &y1, &z1, &x2, &y2, &z2, &x3, &y3, &z3, &deltaThumbX, &deltaThumbY, &deltaThumbZ, &ThetaMotor1Rad, &ThetaMotor2Rad, &ThetaMotor3Rad);
 
-    // goHome(); // From DeltaZ
-
     // ForceApp(); // From Haptic mouse
 
+    // goHome(); // From DeltaZ
+    // goTo(x, y, z); 
+    // goTo(0, 0, 52); 
+
     // Print values
-    printf("theta1=%.2f, theta2=%.2f, theta3=%.2f, thumbX=%.2f, thumbY=%.2f, thumbZ=%.2f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
+    // printf("theta1=%.2f, theta2=%.2f, theta3=%.2f, thumbX=%.2f, thumbY=%.2f, thumbZ=%.2f\n", ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, deltaThumbX, deltaThumbY, deltaThumbZ);
 }
 
 
@@ -349,15 +349,15 @@ int delta_calcForward(double theta1, double theta2, double theta3, double *x0, d
   theta3 *= dtr;
 
   double y1 = -(t + deltaThumb.rf * cos(theta1));
-  double z1 = deltaThumb.rf * sin(theta1);
+  double z1 = -deltaThumb.rf * sin(theta1);
 
   double y2 = (t + deltaThumb.rf * cos(theta2)) * deltaThumb.sin30;
   double x2 = y2 * deltaThumb.tan60;
-  double z2 = deltaThumb.rf * sin(theta2);
+  double z2 = -deltaThumb.rf * sin(theta2);
 
   double y3 = (t + deltaThumb.rf * cos(theta3)) * deltaThumb.sin30;
   double x3 = -y3 * deltaThumb.tan60;
-  double z3 = deltaThumb.rf * sin(theta3);
+  double z3 = -deltaThumb.rf * sin(theta3);
 
   double dnm = (y2 - y1) * x3 - (y3 - y1) * x2;
 
@@ -382,7 +382,10 @@ int delta_calcForward(double theta1, double theta2, double theta3, double *x0, d
   double d = b * b - (double)4.0 * a * c;
   if (d < 0) return -1; // non-existing point
   
-  *z0 = (double)0.5 * (b + sqrt(d)) / a;
+  *z0 = -(double)0.5 * (b + sqrt(d)) / a;
+  // NEW, reflect Z to + axis
+//   *z0 = *z0 * -1;
+
   *x0 = (a1 * *z0 + b1) / dnm;
   *y0 = (a2 * *z0 + b2) / dnm;
   return 0;
