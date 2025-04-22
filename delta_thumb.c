@@ -348,15 +348,15 @@ int delta_calcForward(double theta1, double theta2, double theta3, double *x0, d
   theta3 *= dtr;
 
   double y1 = -(t + deltaThumb.rf * cos(theta1));
-  double z1 = deltaThumb.rf * sin(theta1);
+  double z1 = -deltaThumb.rf * sin(theta1);
 
   double y2 = (t + deltaThumb.rf * cos(theta2)) * deltaThumb.sin30;
   double x2 = y2 * deltaThumb.tan60;
-  double z2 = deltaThumb.rf * sin(theta2);
+  double z2 = -deltaThumb.rf * sin(theta2);
 
   double y3 = (t + deltaThumb.rf * cos(theta3)) * deltaThumb.sin30;
   double x3 = -y3 * deltaThumb.tan60;
-  double z3 = deltaThumb.rf * sin(theta3);
+  double z3 = -deltaThumb.rf * sin(theta3);
 
   double dnm = (y2 - y1) * x3 - (y3 - y1) * x2;
 
@@ -381,7 +381,7 @@ int delta_calcForward(double theta1, double theta2, double theta3, double *x0, d
   double d = b * b - (double)4.0 * a * c;
   if (d < 0) return -1; // non-existing point
   
-  *z0 = (double)0.5 * (b + sqrt(d)) / a;
+  *z0 = -(double)0.5 * (b + sqrt(d)) / a;
   *x0 = (a1 * *z0 + b1) / dnm;
   *y0 = (a2 * *z0 + b2) / dnm;
   return 0;

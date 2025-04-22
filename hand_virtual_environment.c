@@ -25,16 +25,17 @@
 void renderOutsideSphere( void ) {
     // THUMB
     // Check if thumb is inside sphere
-    double dist = sphereDistance(deltaThumbX, deltaThumbY, deltaThumbZ);
+    double dist = sphereDistance(deltaThumbX, deltaThumbY, deltaThumbZ) / 1000.0;
     double torque1, torque2, torque3, F_coeff;
     double Fx=0, Fy=0, Fz=0;
     static double Fx_prev=0, Fy_prev=0, Fz_prev=0;
     static double alpha = 0.6; // how much of new value to include
 
 
-    if (dist < SPHERE1_RADIUS) {
+    if (dist < (SPHERE1_RADIUS / 1000.0)) {
         // Calculate the forces to apply in order to resist the user
-        F_coeff = K_DELTA_THUMB * (SPHERE1_RADIUS - dist) / dist;
+        F_coeff = K_DELTA_THUMB * ((SPHERE1_RADIUS / 1000.0) - dist) / dist;
+
         Fx = F_coeff * (deltaThumbX - SPHERE1_X) / 1000.0;
         Fy = F_coeff * (deltaThumbY - SPHERE1_Y) / 1000.0;
         Fz = F_coeff * (deltaThumbZ - SPHERE1_Z) / 1000.0;
@@ -81,9 +82,9 @@ void renderOutsideSphere( void ) {
            J31, J32, J33);
 
     }
-    outputTorqueMotor1(torque1);
-    outputTorqueMotor2(torque2);
-    outputTorqueMotor3(torque3);
+    if (!isnan(torque1)) outputTorqueMotor1(torque1);
+    if (!isnan(torque2)) outputTorqueMotor2(torque2);
+    if (!isnan(torque3)) outputTorqueMotor3(torque3);
 }
 
 
