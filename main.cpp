@@ -30,50 +30,31 @@ int main()
     double wall_position;
     int contact;
 
-    initCommunication();
-    initLED1();
-    initHapticHand();
+    initCommunication(); // unchanged
+    initLED1(); // unchanged
+    initHapticHand(); // calls motor encoder initializations within
     initHaplinkMotors();
-    initHaplinkAnalogSensors();
-    initHaplinkTime();
-    SystemCoreClockUpdate();
-    calculatePositionHandleAndJacobian();
-
+    initHaplinkAnalogSensors(); // unchanged
+    initHaplinkTime(); // unchanged
+    SystemCoreClockUpdate(); // unchanged
+    
+    //calculatePositionHandleAndJacobian();
+  
     printf("Starting haptic hand...\n");
+
   while(1) 
   {
-    deltaThumbHandler();
-    renderOutsideSphere();
+    //deltaThumbHandler(); // remember to uncomment for delta - fingers need different jacobian variables
+    //renderOutsideSphere();
 
-    #ifdef DOF_1        
-        // calculatePosition1DOF(); 
-        /*Insert here the virtual environment from the file haplink_virtual_environments.c that you wish to render*/   
-        //renderSpring1DOF( );
-        //renderForceAlert( );
-        //renderVirtualWall1DOF();
-        //renderLinearDamping1DOF();
-        //renderNonLinearFriction1DOF();
-        //renderHardSurface1DOF();
-        //renderBumpAndValley1DOF( );
-        //renderTexture21DOF();
-        //wall_position =  renderWallForGraphics1DOF();
-        //mass_position = renderDynamicMSDSimulation1DOF();
-        //renderBilateralTeleoperator1DOF();
-    #endif 
-    #ifdef DOF_2//then we are in 2DOF
-        //calculatePositionHandleAndJacobian();
-        calculatePositionAndJacobianFinger1();
-        calculatePositionAndJacobianFinger2();
+    //calculatePositionHandleAndJacobian(); // Motors 1 and 2 for debugging - nvm lol not implemented
+    calculatePositionAndJacobianFinger1(); // Motors 4 and 5
+    calculatePositionAndJacobianFinger2(); // Motors 6 and 7
 
-        /*Insert here the virtual environment from the file haplink_virtual_environments.cpp
-        that you wish to render*/
-         //renderInsideBox2DOF();
-         //renderInsideCircle2DOF();
-         //renderOutsideCircle2DOF();
-        //contact = renderOutsideBox2DOF();
-        //renderBilateralTeleoperator2DOF();
-    #endif
-    toggleLED1();
+    //renderOutsideCircle2DOF_M1M2(); // Motors 1 and 2 for debugging
+    renderOutsideCircle2DOF_M4M5(); // Motors 4 and 5
+    renderOutsideCircle2DOF_M6M7();
+    //toggleLED1();
 
     /* Message decoding code, do not change*/
     if (checkReceiveMessage() > 0)
@@ -92,10 +73,17 @@ int main()
         if (print_counter > 10000)
         {
             //printDebug1DOFAllParameters();
+
             // debugprintHelloWorld();
-            printProcessingHapticHand();
+            //printProcessingHapticHand();
+          
             //debugprintStarterCode();
             //debugprinttruesusb();
+
+            // debugprintFingerMotorCounts();
+            printDebugFinger2Parameters();
+            // printDebugFinger1Parameters();
+
             print_counter = 0;
         }
         else

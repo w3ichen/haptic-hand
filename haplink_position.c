@@ -131,14 +131,26 @@ int initHapticHand( void )
     J01 = 0;
     J10 = 0;
     J11 = 0;
+
+    J00_f1 = 0;
+    J01_f1 = 0;
+    J10_f1 = 0;
+    J11_f1 = 0;
+
+    J00_f2 = 0;
+    J01_f2 = 0;
+    J10_f2 = 0;
+    J11_f2 = 0;
+
     //initialize encoders
     initHapticHandEncodersMotors();
     
-    initPositionHandleAndJacobian( ); 
+    //initPositionHandleAndJacobian( ); // default, two motors from class
     initPositionAndJacobianFinger1( ); 
     initPositionAndJacobianFinger2( );   
 
     initDeltaThumb();
+    
     return 1;
 }
 
@@ -182,7 +194,7 @@ int initHaplinkPosition( void )
     J11_f2 = 0;
 
     //initialize encoders
-    initHaplinkEncoders2Motors();
+    // initHaplinkEncoders2Motors();
     //wait_ms(200); //wait to settle timers
     
     initPositionHandleAndJacobian( );   
@@ -366,12 +378,12 @@ void initPositionHandleAndJacobian( void )
     
   
     // Compute px and py 
-    tildetheta_a = theta_a + DELTATHETA_A; 
+    tildetheta_a = theta_a + DELTATHETA_A_1; 
     //px = ;
     //py = ;
 
     //Compute rx and ry in frame n
-    tildetheta_b = theta_b + DELTATHETA_B; 
+    tildetheta_b = theta_b + DELTATHETA_B_1; 
     //rx =  ;
     //ry =  ;
     
@@ -411,12 +423,12 @@ void initPositionAndJacobianFinger1( void )
     theta_b1 =  -R_MA/R_A*theta_mb1 +(R_MB/R_B)*theta_a1 + THETA_B_OFFSET_RAD;
   
     // Compute px and py 
-    tildetheta_a = theta_a1 + DELTATHETA_A; 
+    tildetheta_a = theta_a1 + DELTATHETA_A_1; 
     px = -L_A*sin(tildetheta_a) + CX;
     py = L_A*cos(tildetheta_a) + CY ;
 
     //Compute rx and ry in frame n
-    tildetheta_b = theta_b1 + DELTATHETA_B; 
+    tildetheta_b = theta_b1 + DELTATHETA_B_1; 
     rx1 =  -L_B*sin(tildetheta_a+tildetheta_b) + px;
     ry1 =  -L_B*cos(tildetheta_a + tildetheta_b) + py;
     
@@ -456,12 +468,12 @@ void initPositionAndJacobianFinger2( void )
     theta_b2 =  -R_MA/R_A*theta_mb2 +(R_MB/R_B)*theta_a2 + THETA_B_OFFSET_RAD;
   
     // Compute px and py 
-    tildetheta_a = theta_a2 + DELTATHETA_A; 
+    tildetheta_a = theta_a2 + DELTATHETA_A_2; 
     px = -L_A*sin(tildetheta_a) + CX;
     py = L_A*cos(tildetheta_a) + CY ;
 
     //Compute rx and ry in frame n
-    tildetheta_b = theta_b2 + DELTATHETA_B; 
+    tildetheta_b = theta_b2 + DELTATHETA_B_2; 
     rx2 =  -L_B*sin(tildetheta_a+tildetheta_b) + px;
     ry2 =  -L_B*cos(tildetheta_a + tildetheta_b) + py;
     
@@ -502,12 +514,12 @@ void calculatePositionHandleAndJacobian( void )
     
   
     // Compute px and py 
-    tildetheta_a = theta_a + DELTATHETA_A; 
+    tildetheta_a = theta_a + DELTATHETA_A_1; 
     //px = ;
     //py = ;
 
     //Compute rx and ry in n
-    tildetheta_b = theta_b + DELTATHETA_B; 
+    tildetheta_b = theta_b + DELTATHETA_B_1; 
     //rx =  ;
     //ry =  ;
     
@@ -551,12 +563,12 @@ void calculatePositionAndJacobianFinger1( void )
     
   
     // Compute px and py 
-    tildetheta_a = theta_a1 + DELTATHETA_A; 
+    tildetheta_a = theta_a1 + DELTATHETA_A_1; 
     px = -L_A*sin(tildetheta_a) + CX;
     py = L_A*cos(tildetheta_a) + CY ;
 
     //Compute rx and ry in n
-    tildetheta_b = theta_b1 + DELTATHETA_B; 
+    tildetheta_b = theta_b1 + DELTATHETA_B_1; 
     rx1 =  -L_B*sin(tildetheta_a+tildetheta_b) + px;
     ry1 =  L_B*cos(tildetheta_a + tildetheta_b) + py;
     
@@ -585,7 +597,6 @@ void calculatePositionAndJacobianFinger2( void )
     double px = 0;
     double py = 0;
     
-    
     // Compute the angle of the paddles in radians
     //motor angles:
     theta_ma2 = -calculatePositionMotor6();
@@ -600,12 +611,12 @@ void calculatePositionAndJacobianFinger2( void )
     
   
     // Compute px and py 
-    tildetheta_a = theta_a2 + DELTATHETA_A; 
+    tildetheta_a = theta_a2 + DELTATHETA_A_2; 
     px = -L_A*sin(tildetheta_a) + CX;
     py = L_A*cos(tildetheta_a) + CY ;
 
     //Compute rx and ry in n
-    tildetheta_b = theta_b2 + DELTATHETA_B; 
+    tildetheta_b = theta_b2 + DELTATHETA_B_2; 
     rx2 =  -L_B*sin(tildetheta_a+tildetheta_b) + px;
     ry2 =  L_B*cos(tildetheta_a + tildetheta_b) + py;
     
@@ -653,7 +664,6 @@ double getRy2( void )
 { 
     return ry2;
 }
-
 //
 
 double getThetaA( void )
@@ -671,6 +681,26 @@ double getThetaADeg( void )
 double getThetaBDeg( void )
 {
     return theta_b*180/3.1416;
+}
+
+// Finger 1
+double getThetaA1_deg( void )
+{
+    return theta_a1*180/3.1416;
+}
+double getThetaB1_deg( void )
+{
+    return theta_b1*180/3.1416;
+}
+
+// Finger 2
+double getThetaA2_deg( void )
+{
+    return theta_a2*180/3.1416;
+}
+double getThetaB2_deg( void )
+{
+    return theta_b2*180/3.1416;
 }
 
 double getXH( void )
