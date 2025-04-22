@@ -21,6 +21,13 @@
 
 //PWM timer period
 #define PERIOD_PWM                  665
+#define MOTOR_1 1
+#define MOTOR_2 2
+#define MOTOR_3 3
+#define MOTOR_4 4
+#define MOTOR_5 5
+#define MOTOR_6 6
+#define MOTOR_7 7
 
 
 void initHaplinkMotors( void );
@@ -46,7 +53,10 @@ void outputDutyCycleMotor3(double duty);
 void outputTorqueMotor1(double torque);
 void outputTorqueMotor2(double torque);
 void outputTorqueMotor3(double torque);
-
+void outputTorqueMotor4(double torque);
+void outputTorqueMotor5(double torque);
+void outputTorqueMotor6(double torque);
+void outputTorqueMotor7(double torque);
 
 
 #ifdef __cplusplus

@@ -11,16 +11,44 @@
   ******************************************************************************
   */
 /* Pin Connections:***********************************************************
-  * PC6-TIM3_CH1-PWMB-PWM Motor1
-  * PC7-TIM3_CH2-PWMA-PWM Motor2
-  * PC8-TIM3_CH3-     -PWM Motor3
-  * PC9-TIM3_CH4-     -PWM Motor4
-  * PC10 - Bin2 - PWM12_PIN Motor1
-  * PC11 - Bin1 - PWM11_PIN Motor1
-  * PC12 - Ain1 - PWM21_PIN Motor2
-  * PD2 - Ain2  - PWM22_PIN Motor2
-  * PG2 -       - pwm31 Motor3
-  * PG3 -       - pwm32 Motor3
+    | HARDWARE       | PIN # | RESOURCE   |
+    |----------------|-------|------------|
+    | Motor 1 PWM    | PC6   | TIM3_CH1   |
+    | Motor 1 Dir 1  | PC11  | Output     |
+    | Motor 1 Dir 2  | PC10  | Output     |
+    | Motor 1 Enc 1  | PE13  | EXTI_15    |
+    | Motor 1 Enc 2  | PE12  | EXTI_14    |
+    | Motor 2 PWM    | PC7   | TIM3_CH2   |
+    | Motor 2 Dir 1  | PC12  | Output     |
+    | Motor 2 Dir 2  | PD2   | Output     |
+    | Motor 2 Enc 1  | PE15  | EXTI_13    |
+    | Motor 2 Enc 2  | PE14  | EXTI_12    |
+    | Motor 3 PWM    | PC8   | TIM3_CH3   |
+    | Motor 3 Dir1   | PD0   | Output     |
+    | Motor 3 Dir 2  | PD1   | Output     |
+    | Motor 3 Enc1   | PE11  | EXTI_11.   |
+    | Motor 3 Enc 2  | PE10  | EXTI_10.   |
+    | Motor 4 PWM    | PC9   | TIM3_CH4   |
+    | Motor 4 Dir 1  | PD3   | Output     |
+    | Motor 4 Dir 2  | PD4   | Output     |
+    | Motor 4 Enc 1  | PE9   | EXTI_9     |
+    | Motor 4 Enc 2  | PE8   | EXTI_8     |
+    | Motor 5 PWM    | PD12  | TIM4_CH1   |
+    | Motor 5 Dir 1  | PG2   | Output     |
+    | Motor 5 Dir 2  | PG3   | Output     |
+    | Motor 5 Enc 1  | PE7   | EXTI_7     |
+    | Motor 5 Enc 2  | PE6   | EXTI_6     |
+    | Motor 6 PWM    | PD13  | TIM4_CH2   |
+    | Motor 6 Dir 1  | PG4   | Output     |
+    | Motor 6 Dir 2  | PG5   | Output     |
+    | Motor 6 Enc 1  | PE4   | EXTI_4     |
+    | Motor 6 Enc 2  | PE3   | EXTI_3     |
+    | Motor 7 PWM    | PD14  | TIM4_CH3   |
+    | Motor 7 Dir 1  | PG8   | Output     |
+    | Motor 7 Dir 2  | PG9   | Output     |
+    | Motor 7 Enc 1  | PE2   | EXTI_2     |
+    | Motor 7 Enc 2  | PE1   | EXTI_!     |
+
   ******************************************************************************
   */
 
@@ -28,21 +56,22 @@
 #include "stm32f4xx_rcc_mort.h"
 #include "stm32f446ze_gpio.h"
 #include "stm32f4xx_tim_mort.h"
+#include <math.h>
 
 
 #define PWM11_PIN GPIOPin11
 #define PWM12_PIN GPIOPin10
 #define PWM21_PIN GPIOPin12
 #define PWM22_PIN GPIOPin2
-#define PWM31_PIN GPIOPin2
-#define PWM32_PIN GPIOPin3
+#define PWM31_PIN GPIOPin0
+#define PWM32_PIN GPIOPin1
 
 #define PWM11_PORT ((GPIOTypeDef *)GPIOC_BASE_MORT)
 #define PWM12_PORT ((GPIOTypeDef *)GPIOC_BASE_MORT)
 #define PWM21_PORT ((GPIOTypeDef *)GPIOC_BASE_MORT)
 #define PWM22_PORT ((GPIOTypeDef *)GPIOD_BASE_MORT)
-#define PWM31_PORT ((GPIOTypeDef *)GPIOG_BASE_MORT)
-#define PWM32_PORT ((GPIOTypeDef *)GPIOG_BASE_MORT)
+#define PWM31_PORT ((GPIOTypeDef *)GPIOD_BASE_MORT)
+#define PWM32_PORT ((GPIOTypeDef *)GPIOD_BASE_MORT)
 
 GPIOInitTypeDef gpiomotorsinitstructure;
 TIM_TimeBaseInitTypeDef_mort  TIM_TimeBaseStructure;
@@ -60,12 +89,14 @@ double dutyPrint3 = 0;
 void initMotorsGpio( void )
 {
     /* First the pins connected to PWM*/
+    // Start clocks for ports in use
     /* GPIOC clock enable */
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);
 
 
+    // Init PWM pins
     gpiomotorsinitstructure.GPIO_Mode = GPIOModeAF;
     gpiomotorsinitstructure.GPIO_OType = GPIOOTypePP;
     gpiomotorsinitstructure.GPIO_Speed = GPIOHighSpeed;
@@ -80,30 +111,33 @@ void initMotorsGpio( void )
     GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure); //PWM4
 
     /* Connect TIM3 pins to AF2 */  
-  GPIOPinAFConfig((GPIOTypeDef *)GPIOC_BASE_MORT, GPIOPinSource6, GPIO_AF_TIM3);
-  GPIOPinAFConfig((GPIOTypeDef *)GPIOC_BASE_MORT, GPIOPinSource7, GPIO_AF_TIM3); 
-  GPIOPinAFConfig((GPIOTypeDef *)GPIOC_BASE_MORT, GPIOPinSource8, GPIO_AF_TIM3);
-  GPIOPinAFConfig((GPIOTypeDef *)GPIOC_BASE_MORT, GPIOPinSource9, GPIO_AF_TIM3); 
+    GPIOPinAFConfig((GPIOTypeDef *)GPIOC_BASE_MORT, GPIOPinSource6, GPIO_AF_TIM3);
+    GPIOPinAFConfig((GPIOTypeDef *)GPIOC_BASE_MORT, GPIOPinSource7, GPIO_AF_TIM3); 
+    GPIOPinAFConfig((GPIOTypeDef *)GPIOC_BASE_MORT, GPIOPinSource8, GPIO_AF_TIM3);
+    GPIOPinAFConfig((GPIOTypeDef *)GPIOC_BASE_MORT, GPIOPinSource9, GPIO_AF_TIM3); 
 
 
     /*Then the pins used for direction*/
-
     gpiomotorsinitstructure.GPIO_Mode = GPIOModeOUT;
     gpiomotorsinitstructure.GPIO_OType = GPIOOTypePP;
     gpiomotorsinitstructure.GPIO_Speed = GPIOHighSpeed;
     gpiomotorsinitstructure.GPIO_PuPd = GPIOPuPdNOPULL;
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin10;
-    GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure);
+    GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure); // C10
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin11;
-    GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure);
+    GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure); // C11
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin12;
-    GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure);
+    GPIOInit((GPIOTypeDef *)GPIOC_BASE_MORT, &gpiomotorsinitstructure); // C12
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin2;
-    GPIOInit((GPIOTypeDef *)GPIOD_BASE_MORT, &gpiomotorsinitstructure);
+    GPIOInit((GPIOTypeDef *)GPIOD_BASE_MORT, &gpiomotorsinitstructure); // D2
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin2;
-    GPIOInit((GPIOTypeDef *)GPIOG_BASE_MORT, &gpiomotorsinitstructure);
+    GPIOInit((GPIOTypeDef *)GPIOG_BASE_MORT, &gpiomotorsinitstructure); // G2
     gpiomotorsinitstructure.GPIO_Pin = GPIOPin3;
-    GPIOInit((GPIOTypeDef *)GPIOG_BASE_MORT, &gpiomotorsinitstructure);
+    GPIOInit((GPIOTypeDef *)GPIOG_BASE_MORT, &gpiomotorsinitstructure); // G3
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin0;
+    GPIOInit((GPIOTypeDef *)GPIOD_BASE_MORT, &gpiomotorsinitstructure); // D0
+    gpiomotorsinitstructure.GPIO_Pin = GPIOPin1;
+    GPIOInit((GPIOTypeDef *)GPIOD_BASE_MORT, &gpiomotorsinitstructure); // D1
 }
 
 void initHaplinkMotors( void )
@@ -329,7 +363,7 @@ void outputDutyCycleMotor3(double duty)
     {
         motor3Dir2();
     }
-    dutyPrint2 = duty;
+    dutyPrint3 = duty;
     updateDutyCycle3(duty); 
 }
 /**/
@@ -369,12 +403,12 @@ void outputTorqueMotor2(double torque)
     double duty;
     if (torque < 0)
     {
-        motor2Dir2();
+        motor2Dir1();
         torque = torque*(-1.0);
     }
     else
     {
-        motor2Dir1();
+        motor2Dir2();
     }
 
     duty = torque*65.13; //replace 65.13 with value for specific motor.
