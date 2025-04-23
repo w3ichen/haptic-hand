@@ -25,6 +25,8 @@ extern double rx, ry, dx, dy; // 2-DOF position variables
 extern double xH, dxH; //1-DOF position variables
 double TorqueX, TorqueY, ForceX, ForceY, ForceH;
 double TorqueMotor4, TorqueMotor5, TorqueMotor6, TorqueMotor7;
+double xf1_global, yf1_global, xf2_global, yf2_global;
+
 
 /*******************************************************************************
   * @name   renderOutsideSphere
@@ -92,8 +94,8 @@ void renderOutsideSphere( void ) {
     /********************* FINGER 1 *************************/
 
     // Check if finger 1 is inside sphere
-    double xf1_global = getRx1()*-1 + NORMAL_XF; // mm, rotated and translated to be in global frame
-    double yf1_global = getRy1() + NORMAL_YF;    // mm, rotated and translated to be in global frame
+    xf1_global = getRx1() + NORMAL_XF;    // mm, translated to be in global frame
+    yf1_global = getRy1() + NORMAL_YF;    // mm, translated to be in global frame
     double dist_f1 = sphereDistance(xf1_global, yf1_global, NORMAL_ZF1); // mm
     double TorqueX_f1, TorqueY_f1;
     double Fx_f1=0, Fy_f1=0;
@@ -108,8 +110,8 @@ void renderOutsideSphere( void ) {
     }
 
     // Map back to local coordinate axes
-    Fx_f1 = Fx_f1*-1;   // rotation
-    Fy_f1 = Fy_f1;      // axis aligned
+    Fx_f1 = Fx_f1;      // axes aligned, no rotation needed
+    Fy_f1 = Fy_f1;      
 
     // Use jacobians to transforms forces into motor torques
     /* Force to Torque*/
@@ -118,8 +120,8 @@ void renderOutsideSphere( void ) {
     TorqueY_f1 = J01_f1*Fx_f1 + J11_f1*Fy_f1;
     TorqueY_f1 = TorqueY_f1*0.001;
             
-    TorqueMotor4 = -((TorqueX_f1*R_MA)/R_A);
-    TorqueMotor5 = -((TorqueY_f1*R_MB)/R_B); 
+    TorqueMotor4 = ((TorqueX_f1*R_MA)/R_A);
+    TorqueMotor5 = ((TorqueY_f1*R_MB)/R_B); 
             
     outputTorqueMotor4(TorqueMotor4);
     outputTorqueMotor5(TorqueMotor5);  
@@ -127,8 +129,8 @@ void renderOutsideSphere( void ) {
     /********************* FINGER 2 *************************/
 
     // Check if finger 2 is inside sphere
-    double xf2_global = getRx1() + NORMAL_XF; // mm, rotated and translated to be in global frame
-    double yf2_global = getRy1() + NORMAL_YF;    // mm, rotated and translated to be in global frame
+    xf2_global = getRx2() + NORMAL_XF;      // mm, translated to be in global frame
+    yf2_global = getRy2() + NORMAL_YF;      // mm, translated to be in global frame
     double dist_f2 = sphereDistance(xf2_global, yf2_global, NORMAL_ZF2); // mm
     double TorqueX_f2, TorqueY_f2;
     double Fx_f2=0, Fy_f2=0;
@@ -200,4 +202,20 @@ double getSphereZ( void ) {
 }
 double getSphereRadius( void ) {
     return SPHERE1_RADIUS;
+}
+
+double getXf1_global( void ) {
+    return xf1_global;
+}
+
+double getYf1_global( void ) {
+    return yf1_global;
+}
+
+double getXf2_global( void ) {
+    return xf2_global;
+}
+
+double getYf2_global( void ) {
+    return yf2_global;
 }

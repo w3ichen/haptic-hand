@@ -155,40 +155,40 @@ void renderOutsideCircle2DOF_M4M5( void )
     // 
     
 
-    // // implement the virtual environment!
-    // //Remember that ForceX and ForceY should be in Newtons!
+    // implement the virtual environment!
+    //Remember that ForceX and ForceY should be in Newtons!
 
-    // r_x = x_user - x_sphere;
-    // r_y = y_user - y_sphere;
+    r_x = x_user - x_sphere;
+    r_y = y_user - y_sphere;
 
-    // dr = sqrt(pow((x_user - x_sphere), 2) + pow((y_user - y_sphere), 2));
+    dr = sqrt(pow((x_user - x_sphere), 2) + pow((y_user - y_sphere), 2));
 
-    // // normalization of a vector
-    // r_hat_x = (1.0/dr) * r_x;
-    // r_hat_y = (1.0/dr) * r_y;
+    // normalization of a vector
+    r_hat_x = (1.0/dr) * r_x;
+    r_hat_y = (1.0/dr) * r_y;
 
-    // if (dr < R)
-    // {
-    //     ForceX = k*(R - dr)*r_hat_x;
-    //     ForceY = k*(R - dr)*r_hat_y;
-    // }
-    // else
-    // {
-    //     ForceX = 0.0;
-    //     ForceY = 0.0;
-    // }
+    if (dr < R)
+    {
+        ForceX = k*(R - dr)*r_hat_x;
+        ForceY = k*(R - dr)*r_hat_y;
+    }
+    else
+    {
+        ForceX = 0.0;
+        ForceY = 0.0;
+    }
 
-    // TorqueX = J00_f1*ForceX + J10_f1*ForceY;
-    // TorqueX = TorqueX*0.001;
-    // TorqueY = J01_f1*ForceX + J11_f1*ForceY;
-    // TorqueY = TorqueY*0.001;
+    TorqueX = J00_f1*ForceX + J10_f1*ForceY;
+    TorqueX = TorqueX*0.001;
+    TorqueY = J01_f1*ForceX + J11_f1*ForceY;
+    TorqueY = TorqueY*0.001;
             
     TorqueMotor4 = ((TorqueX*R_MA)/R_A);
     TorqueMotor5 = ((TorqueY*R_MB)/R_B); 
 
             
-    // outputTorqueMotor4(TorqueMotor4);
-    // outputTorqueMotor5(TorqueMotor5);    // flipped the sign to get the circle 
+    outputTorqueMotor4(TorqueMotor4);
+    outputTorqueMotor5(TorqueMotor5);    // flipped the sign to get the circle 
 }
 
 /*******************************************************************************

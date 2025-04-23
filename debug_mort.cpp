@@ -98,7 +98,7 @@ void printProcessingCommFinger1(void)
     {
         clearMessageAcknowledged();
         clearDataHasBeenRequested();
-         pc.printf("%f\t%f\t", getRx1(), getRy1());
+         pc.printf("%f\t%f\t", getXf1_global(), getYf1_global());
          ////pc.printf("%f\t%f\t l", (float)getRx(), (float)getRy());
     }
 }
@@ -117,7 +117,7 @@ void printProcessingCommFinger2(void)
     {
         clearMessageAcknowledged();
         clearDataHasBeenRequested();
-         pc.printf("%f\t%f\t", getRx2(), getRy2());
+         pc.printf("%f\t%f\t", getXf2_global(), getYf2_global());
          ////pc.printf("%f\t%f\t l", (float)getRx(), (float)getRy());
     }
 }
@@ -175,7 +175,7 @@ void printProcessingHapticHand( void )
 {
     // pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t l", (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, getThumbX(), getThumbY(), getThumbZ(), (float)0.0, (float)0.0, (float)0.0, (float)0.0);
     // pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t l", (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-    pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t \n", (float)deltaThumbX, getThumbY(), getThumbZ(), (float)getRx1(), (float)getRy1(), (float)45.41, (float)getRx2(), (float)getRy2(), (float)86.59, (float)getSphereX(), (float)getSphereY(), (float)getSphereZ(), (float)getSphereRadius());
+    pc.printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t \n", (float)deltaThumbX, getThumbY(), getThumbZ(), (float)getXf1_global(), (float)getYf1_global(), (float)NORMAL_ZF1, (float)getXf2_global(), (float)getYf2_global(), (float)NORMAL_ZF2, (float)getSphereX(), (float)getSphereY(), (float)getSphereZ(), (float)getSphereRadius());
     // if ((returnMessageAcknowledged() > 0) && (returnDataHasBeenRequested() > 0))
     // {
     //     clearMessageAcknowledged();
