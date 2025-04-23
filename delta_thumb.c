@@ -19,6 +19,7 @@
 #include <math.h> // For sqrt
 #include "delta_thumb.h"
 #include "haplink_time.h"
+#include "stdio.h"
 
 // Global vars
 DeltaThumb deltaThumb;
@@ -27,6 +28,7 @@ DeltaThumb deltaThumb;
 double deltaThumbX;
 double deltaThumbY;
 double deltaThumbZ;
+double deltaThumbX_prev, deltaThumbY_prev, deltaThumbZ_prev;
 double ThetaMotor1Rad;
 double ThetaMotor2Rad;
 double ThetaMotor3Rad;
@@ -36,13 +38,13 @@ double ThetaMotor3Deg;
 
 
 float getThumbX( void ) {
-    return deltaThumbX;
+    return (float)deltaThumbX;
 }
 float getThumbY( void ) {
-    return deltaThumbY;
+    return (float)deltaThumbY;
 }
 float getThumbZ( void ) {
-    return deltaThumbZ;
+    return (float)deltaThumbZ;
 }
 
 /*******************************************************************************
@@ -82,6 +84,21 @@ void deltaThumbHandler( void )
 
     // // #1: Update x,y,z positions of end-effector using DeltaZ code
     delta_calcForward(ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
+    double tempX =deltaThumbX ;
+    deltaThumbX = deltaThumbY;
+    deltaThumbY = tempX;
+    deltaThumbZ = deltaThumbZ + 50.0;
+
+    // Apply smoothing
+    double alpha = 0.4;
+    deltaThumbX = deltaThumbX * alpha + deltaThumbX_prev * (1-alpha);
+    deltaThumbY = deltaThumbY * alpha + deltaThumbY_prev * (1-alpha);
+    deltaThumbZ = deltaThumbZ * alpha + deltaThumbZ_prev * (1-alpha);
+
+    // Set previous values
+    deltaThumbX_prev = deltaThumbX;
+    deltaThumbY_prev = deltaThumbY;
+    deltaThumbZ_prev = deltaThumbZ;
 
     // #2: Update x,y,z positions of end-effector using haptic mouse code
     // double x1, y1, z1, x2, y2, z2, x3, y3, z3;
@@ -382,6 +399,9 @@ int delta_calcForward(double theta1, double theta2, double theta3, double *x0, d
   if (d < 0) return -1; // non-existing point
   
   *z0 = -(double)0.5 * (b + sqrt(d)) / a;
+  // NEW, reflect Z to + axis
+//   *z0 = *z0 * -1;
+
   *x0 = (a1 * *z0 + b1) / dnm;
   *y0 = (a2 * *z0 + b2) / dnm;
   return 0;
