@@ -410,8 +410,8 @@ void initPositionAndJacobianFinger1( void )
     double py = 0;
     
     // Compute the angle of the paddles in radians
-    theta_ma1 = -calculatePositionMotor4();
-    theta_mb1 = -calculatePositionMotor5();
+    theta_ma1 = calculatePositionMotor4();
+    theta_mb1 = calculatePositionMotor5();
     
      /*Add code here:***********************************************************/
     /* Uncomment and fill the variables theta_a, tehta_b (the rotation of paddle's a and b in radians)
@@ -551,8 +551,8 @@ void calculatePositionAndJacobianFinger1( void )
     
     // Compute the angle of the paddles in radians
     //motor angles:
-    theta_ma1 = -calculatePositionMotor4();
-    theta_mb1 = -calculatePositionMotor5();
+    theta_ma1 = calculatePositionMotor4();
+    theta_mb1 = calculatePositionMotor5();
     /* Uncomment and fill the variables theta_a, tehta_b (the rotation of paddle's a and b in radians)
     and rx and ry, as well as the velocity variables dx and dy */
     /*Add code here:***********************************************************/
