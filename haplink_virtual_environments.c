@@ -137,22 +137,22 @@ void renderOutsideCircle2DOF_M1M2( void )
   */
 void renderOutsideCircle2DOF_M4M5( void )
 {
-    // static double x_sphere = 40.0/1000.0;
-    // static double y_sphere = 80.0/1000.0;
-    // static double R = 30/1000.0;
+    static double x_sphere = -40.0/1000.0;
+    static double y_sphere = 85.0/1000.0;
+    static double R = 20/1000.0;
 
-    // double dr;
-    // double r_x;
-    // double r_y;
-    // double r_hat_x;
-    // double r_hat_y;
+    double dr;
+    double r_x;
+    double r_y;
+    double r_hat_x;
+    double r_hat_y;
 
-    // static double k = 100; // N/m
+    static double k = 200; // N/m
 
-    // // Motor 4
-    // double x_user = getRx1()/1000.0; // Rx1 and Ry1 is for first finger
-    // double y_user = getRy1()/1000.0; 
-    // // 
+    // Motor 4
+    double x_user = getRx1()/1000.0; // Rx1 and Ry1 is for first finger
+    double y_user = getRy1()/1000.0; 
+    // 
     
 
     // // implement the virtual environment!
@@ -183,8 +183,9 @@ void renderOutsideCircle2DOF_M4M5( void )
     // TorqueY = J01_f1*ForceX + J11_f1*ForceY;
     // TorqueY = TorqueY*0.001;
             
-    // TorqueMotor4 = -((TorqueX*R_MA)/R_A);
-    // TorqueMotor5 = -((TorqueY*R_MB)/R_B); 
+    TorqueMotor4 = ((TorqueX*R_MA)/R_A);
+    TorqueMotor5 = ((TorqueY*R_MB)/R_B); 
+
             
     // outputTorqueMotor4(TorqueMotor4);
     // outputTorqueMotor5(TorqueMotor5);    // flipped the sign to get the circle 
@@ -200,8 +201,8 @@ void renderOutsideCircle2DOF_M4M5( void )
 void renderOutsideCircle2DOF_M6M7( void )
 {
     static double x_sphere = -40.0/1000.0;
-    static double y_sphere = 80.0/1000.0;
-    static double R = 30/1000.0;
+    static double y_sphere = 85.0/1000.0;
+    static double R = 20/1000.0;
 
     double dr;
     double r_x;
@@ -209,7 +210,7 @@ void renderOutsideCircle2DOF_M6M7( void )
     double r_hat_x;
     double r_hat_y;
 
-    static double k = 100; // N/m
+    static double k = 200; // N/m
 
 
     double x_user = getRx2()/1000.0; // Rx1 and Ry1 is for first finger

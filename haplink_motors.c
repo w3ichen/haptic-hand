@@ -588,12 +588,12 @@ void outputDutyCycleMotor5(double duty)
 {
     if (duty < 0)
     {
-        motor5Dir1();
+        motor5Dir2();
         duty = duty * (-1.0);
     }
     else
     {
-        motor5Dir2();
+        motor5Dir1();
     }
     dutyPrint5 = duty;
     updateDutyCycle5(duty);
@@ -618,12 +618,12 @@ void outputDutyCycleMotor7(double duty)
 {
     if (duty < 0)
     {
-        motor7Dir1();
+        motor7Dir2();
         duty = duty * (-1.0);
     }
     else
     {
-        motor7Dir2();
+        motor7Dir1();
     }
     dutyPrint7 = duty;
     updateDutyCycle7(duty);
