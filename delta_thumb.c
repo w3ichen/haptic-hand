@@ -28,6 +28,7 @@ DeltaThumb deltaThumb;
 double deltaThumbX;
 double deltaThumbY;
 double deltaThumbZ;
+double deltaThumbX_prev, deltaThumbY_prev, deltaThumbZ_prev;
 double ThetaMotor1Rad;
 double ThetaMotor2Rad;
 double ThetaMotor3Rad;
@@ -83,6 +84,21 @@ void deltaThumbHandler( void )
 
     // // #1: Update x,y,z positions of end-effector using DeltaZ code
     delta_calcForward(ThetaMotor1Deg, ThetaMotor2Deg, ThetaMotor3Deg, &deltaThumbX, &deltaThumbY, &deltaThumbZ);
+    double tempX =deltaThumbX ;
+    deltaThumbX = deltaThumbY;
+    deltaThumbY = tempX;
+    deltaThumbZ = deltaThumbZ + 50.0;
+
+    // Apply smoothing
+    double alpha = 0.4;
+    deltaThumbX = deltaThumbX * alpha + deltaThumbX_prev * (1-alpha);
+    deltaThumbY = deltaThumbY * alpha + deltaThumbY_prev * (1-alpha);
+    deltaThumbZ = deltaThumbZ * alpha + deltaThumbZ_prev * (1-alpha);
+
+    // Set previous values
+    deltaThumbX_prev = deltaThumbX;
+    deltaThumbY_prev = deltaThumbY;
+    deltaThumbZ_prev = deltaThumbZ;
 
     // #2: Update x,y,z positions of end-effector using haptic mouse code
     // double x1, y1, z1, x2, y2, z2, x3, y3, z3;

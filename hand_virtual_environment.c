@@ -51,7 +51,7 @@ void renderOutsideSphere( void ) {
         Fy = F_coeff * (deltaThumbY - SPHERE1_Y) / 1000.0;
         Fz = F_coeff * (deltaThumbZ - SPHERE1_Z) / 1000.0;
 
-        // Apply smoothing
+        // // Apply smoothing
         // Fx = Fx * alpha + Fx_prev * (1-alpha);
         // Fy = Fy * alpha + Fy_prev * (1-alpha);
         // Fz = Fz * alpha + Fz_prev * (1-alpha);

@@ -21,8 +21,8 @@
 // Obstacles
 #define SPHERE1_X 0.0
 #define SPHERE1_Y 0.0
-#define SPHERE1_Z 60.0          // Yuichi recommendation is 110.0, Delta Z currently variable.
-#define SPHERE1_RADIUS 10.0     // Delta Z should be XX per CAD, radius should be 
+#define SPHERE1_Z 10.0          // Yuichi recommendation is 110.0, Delta Z currently variable.
+#define SPHERE1_RADIUS 20.0     // Delta Z should be XX per CAD, radius should be 
 
 // Original values
 //#define SPHERE1_Z 70.0          
