@@ -91,7 +91,9 @@ void setup() {
   
   // Initialize PeasyCam
   cam = new PeasyCam(this, 400); 
-  // cam.rotateY(-PI/2); // Commented out - potential cause of orientation issues
+  // Set up top-down view of XZ plane
+  cam.setRotations(-PI/2, 0, PI/2); // Rotate -90° around X axis to look down
+  cam.rotateY(PI); // Rotate 180° around Y to align X up and Z right
 
   // --- Create GUI3D Toolbar --- 
   int BAR_X = 10;
@@ -401,13 +403,19 @@ void keyPressed() {
     return; // Don't process other keys if text input is active
   }
   
-  // --- Camera View Control Handling (Numbers 1-6) ---
+  // --- Camera View Control Handling (Numbers 0-6) ---
   float targetDistance = 400; // Standard distance for view snaps
   PVector targetCenter = new PVector(0, 0, 0); // Look at origin
   boolean viewChanged = false;
   
   switch (key) {
-    case '1': // Front View (Default)
+    case '0': // Top-down XZ View (Y towards viewer, X up, Z right)
+      println("Setting Top-down XZ View");
+      cam.setRotations(-PI/2, 0, PI/2); // Rotate -90° around X axis to look down
+      cam.rotateY(PI); // Rotate 180° around Y to align X up and Z right
+      viewChanged = true;
+      break;
+    case '1': // Front View
       println("Setting Front View");
       cam.setRotations(0, 0, 0);
       viewChanged = true;

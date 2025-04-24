@@ -156,7 +156,10 @@ PVector applyTransformations(PVector point, PVector translation, PVector rotatio
   PVector result = point.copy();
   
   // Negate Y component to handle graphics coordinate system
-  result.y = -result.y;
+  // Don't negate Y for thumb (THUMB_TRANSLATION is used as identifier)
+  if (translation != THUMB_TRANSLATION) {
+    result.y = -result.y;
+  }
   
   // Apply translation
   result.add(translation);
@@ -308,7 +311,7 @@ void drawTargets() {
   // Thumb Target (Yellow)
   stroke(255, 255, 0);
   pushMatrix();
-  translate(thumb_end.x, -thumb_end.y, thumb_end.z);  // Negate Y component
+  translate(thumb_end.x, thumb_end.y, thumb_end.z);  // Don't negate Y for thumb
   box(10);
   popMatrix();
   

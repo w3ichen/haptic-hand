@@ -36,7 +36,7 @@ final PVector FINGER_BASE_OFFSET = new PVector(-20, -60, 45.41);
 // Relative offsets for individual finger bases from FINGER_BASE_OFFSET
 // Spread fingers along Z axis (Blue/Right in view). Thumb smallest Z, Middle largest Z.
 // Index/Middle bases should be further forward (+X) than Thumb.
-final PVector THUMB_FINGER_RELATIVE_OFFSET = new PVector(10, 10, -25);  // Smallest X, smallest Z (-)
+final PVector THUMB_FINGER_RELATIVE_OFFSET = new PVector(10, 50, -25);  // Smallest X, smallest Z (-)
 final PVector INDEX_FINGER_RELATIVE_OFFSET = new PVector(25, 0, 0);    // Larger X, medium Z (0)
 final PVector MIDDLE_FINGER_RELATIVE_OFFSET = new PVector(25, 0, 41.18);   // Larger X, largest Z (+)
 
