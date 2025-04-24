@@ -105,8 +105,26 @@ void renderOutsideSphere( void ) {
         dist_f1 = dist_f1/1000.0; // m
         xf1_global = xf1_global/1000.0; // m
         yf1_global = yf1_global/1000.0; // m
-        Fx_f1 = K_FINGERS*(SPHERE1_RADIUS/1000.0 - dist_f1) * ((1.0/dist_f1) * (xf1_global - SPHERE1_X/1000.0)); // N
-        Fy_f1 = K_FINGERS*(SPHERE1_RADIUS/1000.0 - dist_f1) * ((1.0/dist_f1) * (yf1_global - SPHERE1_Y/1000.0)); // N
+        
+        // Add minimum distance threshold to prevent division by very small numbers
+        double min_dist = 0.001; // 1mm minimum distance
+        if (dist_f1 < min_dist) {
+            dist_f1 = min_dist;
+        }
+        
+        // Calculate forces with distance threshold
+        double force_magnitude = K_FINGERS * (SPHERE1_RADIUS/1000.0 - dist_f1);
+        Fx_f1 = force_magnitude * ((xf1_global - SPHERE1_X/1000.0) / dist_f1);
+        Fy_f1 = force_magnitude * ((yf1_global - SPHERE1_Y/1000.0) / dist_f1);
+        
+        // Limit maximum force
+        double max_force = 10.0; // N
+        double current_force = sqrt(Fx_f1*Fx_f1 + Fy_f1*Fy_f1);
+        if (current_force > max_force) {
+            double scale = max_force / current_force;
+            Fx_f1 *= scale;
+            Fy_f1 *= scale;
+        }
     }
 
     // Map back to local coordinate axes
@@ -140,8 +158,26 @@ void renderOutsideSphere( void ) {
         dist_f2 = dist_f2/1000.0; // m
         xf2_global = xf2_global/1000.0; // m
         yf2_global = yf2_global/1000.0; // m
-        Fx_f2 = K_FINGERS*(SPHERE1_RADIUS/1000.0 - dist_f2) * ((1.0/dist_f2) * (xf2_global - SPHERE1_X/1000.0)); // N
-        Fy_f2 = K_FINGERS*(SPHERE1_RADIUS/1000.0 - dist_f2) * ((1.0/dist_f2) * (yf2_global - SPHERE1_Y/1000.0)); // N
+        
+        // Add minimum distance threshold to prevent division by very small numbers
+        double min_dist = 0.001; // 1mm minimum distance
+        if (dist_f2 < min_dist) {
+            dist_f2 = min_dist;
+        }
+        
+        // Calculate forces with distance threshold
+        double force_magnitude = K_FINGERS * (SPHERE1_RADIUS/1000.0 - dist_f2);
+        Fx_f2 = force_magnitude * ((xf2_global - SPHERE1_X/1000.0) / dist_f2);
+        Fy_f2 = force_magnitude * ((yf2_global - SPHERE1_Y/1000.0) / dist_f2);
+        
+        // Limit maximum force
+        double max_force = 10.0; // N
+        double current_force = sqrt(Fx_f2*Fx_f2 + Fy_f2*Fy_f2);
+        if (current_force > max_force) {
+            double scale = max_force / current_force;
+            Fx_f2 *= scale;
+            Fy_f2 *= scale;
+        }
     }
 
     // Map back to local coordinate axes
