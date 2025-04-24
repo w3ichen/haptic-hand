@@ -23,6 +23,10 @@ boolean SIMULATION_MODE = false;
 final float FINGER_RADIUS = 5; // Radius for drawing finger segments/joints
 final float OBJECT_BASE_RADIUS = 30; 
 
+// --- Position History Settings ---
+final int POSITION_HISTORY_SIZE = 5; // Number of previous positions to track for jump detection
+final float JUMP_THRESHOLD_PERCENT = 0.95; // Threshold as percentage of object radius (e.g., 0.9 = 27mm for 30mm radius)
+
 // --- Hand Geometry ---
 // Base offset for the entire hand structure in world coordinates
 // Goal: Palm parallel to XY plane, facing -Y (down). Fingers spread along Z.

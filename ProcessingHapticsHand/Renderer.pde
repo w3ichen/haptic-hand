@@ -12,6 +12,11 @@ color objectColor = color(200, 200, 255, 200); // Light blue, slightly transpare
 // color boneColor = color(240); // Off-white for bones - Not used directly now
 color jointColor = color(100, 100, 255); // Blue for joints
 
+// Add these at the top of the file with other global variables
+ArrayList<PVector> thumbHistory = new ArrayList<PVector>();
+ArrayList<PVector> indexHistory = new ArrayList<PVector>();
+ArrayList<PVector> middleHistory = new ArrayList<PVector>();
+
 /**
  * Draws the entire scene if data is available.
  */
@@ -68,6 +73,67 @@ void drawFingers() {
   PVector transformedThumbEnd = applyTransformations(thumb_end, THUMB_TRANSLATION, THUMB_ROTATION);
   PVector transformedIndexEnd = applyTransformations(index_end, INDEX_TRANSLATION, INDEX_ROTATION);
   PVector transformedMiddleEnd = applyTransformations(middle_end, MIDDLE_TRANSLATION, MIDDLE_ROTATION);
+
+  // Check for sudden jumps to near (0,0) using position history
+  if (abs(transformedThumbEnd.x) < 1 && abs(transformedThumbEnd.y) < 1) {
+    // Check if this is a sudden jump compared to recent positions
+    boolean isJump = false;
+    float jumpThreshold = OBJECT_BASE_RADIUS * JUMP_THRESHOLD_PERCENT;
+    for (PVector pos : thumbHistory) {
+      if (PVector.dist(transformedThumbEnd, pos) > jumpThreshold) {
+        isJump = true;
+        break;
+      }
+    }
+    if (isJump && thumbHistory.size() > 0) {
+      transformedThumbEnd = thumbHistory.get(thumbHistory.size() - 1).copy();
+    }
+  }
+  // Update thumb history
+  thumbHistory.add(transformedThumbEnd.copy());
+  while (thumbHistory.size() > POSITION_HISTORY_SIZE) {
+    thumbHistory.remove(0);
+  }
+
+  if (abs(transformedIndexEnd.x) < 1 && abs(transformedIndexEnd.y) < 1) {
+    // Check if this is a sudden jump compared to recent positions
+    boolean isJump = false;
+    float jumpThreshold = OBJECT_BASE_RADIUS * JUMP_THRESHOLD_PERCENT;
+    for (PVector pos : indexHistory) {
+      if (PVector.dist(transformedIndexEnd, pos) > jumpThreshold) {
+        isJump = true;
+        break;
+      }
+    }
+    if (isJump && indexHistory.size() > 0) {
+      transformedIndexEnd = indexHistory.get(indexHistory.size() - 1).copy();
+    }
+  }
+  // Update index history
+  indexHistory.add(transformedIndexEnd.copy());
+  while (indexHistory.size() > POSITION_HISTORY_SIZE) {
+    indexHistory.remove(0);
+  }
+
+  if (abs(transformedMiddleEnd.x) < 1 && abs(transformedMiddleEnd.y) < 1) {
+    // Check if this is a sudden jump compared to recent positions
+    boolean isJump = false;
+    float jumpThreshold = OBJECT_BASE_RADIUS * JUMP_THRESHOLD_PERCENT;
+    for (PVector pos : middleHistory) {
+      if (PVector.dist(transformedMiddleEnd, pos) > jumpThreshold) {
+        isJump = true;
+        break;
+      }
+    }
+    if (isJump && middleHistory.size() > 0) {
+      transformedMiddleEnd = middleHistory.get(middleHistory.size() - 1).copy();
+    }
+  }
+  // Update middle history
+  middleHistory.add(transformedMiddleEnd.copy());
+  while (middleHistory.size() > POSITION_HISTORY_SIZE) {
+    middleHistory.remove(0);
+  }
 
   // Draw each finger using the helper function with its specific base position
   drawImpliedFinger(thumbBaseAbs, transformedThumbEnd, 
