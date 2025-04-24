@@ -64,18 +64,56 @@ void drawFingers() {
   PVector middleBaseAbs = PVector.add(FINGER_BASE_OFFSET, MIDDLE_FINGER_RELATIVE_OFFSET);
   PVector thumbBaseAbs = PVector.add(FINGER_BASE_OFFSET, THUMB_FINGER_RELATIVE_OFFSET);
 
+  // Apply transformations to finger end positions
+  PVector transformedThumbEnd = applyTransformations(thumb_end, THUMB_TRANSLATION, THUMB_ROTATION);
+  PVector transformedIndexEnd = applyTransformations(index_end, INDEX_TRANSLATION, INDEX_ROTATION);
+  PVector transformedMiddleEnd = applyTransformations(middle_end, MIDDLE_TRANSLATION, MIDDLE_ROTATION);
+
   // Draw each finger using the helper function with its specific base position
-  drawImpliedFinger(thumbBaseAbs, thumb_end, 
+  drawImpliedFinger(thumbBaseAbs, transformedThumbEnd, 
                     IMPLIED_THUMB_BONE_1_LEN, IMPLIED_THUMB_BONE_2_LEN, IMPLIED_THUMB_BONE_3_LEN, 
                     FINGER_RADIUS * 0.9); // Slightly thicker thumb
                     
-  drawImpliedFinger(indexBaseAbs, index_end, 
+  drawImpliedFinger(indexBaseAbs, transformedIndexEnd, 
                     IMPLIED_INDEX_BONE_1_LEN, IMPLIED_INDEX_BONE_2_LEN, IMPLIED_INDEX_BONE_3_LEN, 
                     FINGER_RADIUS * 0.8);
                     
-  drawImpliedFinger(middleBaseAbs, middle_end, 
+  drawImpliedFinger(middleBaseAbs, transformedMiddleEnd, 
                     IMPLIED_MIDDLE_BONE_1_LEN, IMPLIED_MIDDLE_BONE_2_LEN, IMPLIED_MIDDLE_BONE_3_LEN, 
                     FINGER_RADIUS * 0.8);
+}
+
+/**
+ * Applies translation and rotation transformations to a point
+ */
+PVector applyTransformations(PVector point, PVector translation, PVector rotation) {
+  PVector result = point.copy();
+  
+  // Negate Y component to handle graphics coordinate system
+  result.y = -result.y;
+  
+  // Apply translation
+  result.add(translation);
+  
+  // Apply rotation around X axis
+  float y = result.y;
+  float z = result.z;
+  result.y = y * cos(rotation.x) - z * sin(rotation.x);
+  result.z = y * sin(rotation.x) + z * cos(rotation.x);
+  
+  // Apply rotation around Y axis
+  float x = result.x;
+  z = result.z;
+  result.x = x * cos(rotation.y) + z * sin(rotation.y);
+  result.z = -x * sin(rotation.y) + z * cos(rotation.y);
+  
+  // Apply rotation around Z axis
+  x = result.x;
+  y = result.y;
+  result.x = x * cos(rotation.z) - y * sin(rotation.z);
+  result.y = x * sin(rotation.z) + y * cos(rotation.z);
+  
+  return result;
 }
 
 /**
@@ -190,21 +228,21 @@ void drawTargets() {
   // Index Target (Cyan)
   stroke(0, 255, 255);
   pushMatrix();
-  translate(index_end.x, index_end.y, index_end.z);
+  translate(index_end.x, -index_end.y, index_end.z);  // Negate Y component
   box(10); // Draw a small box at the target
   popMatrix();
   
   // Middle Target (Magenta)
   stroke(255, 0, 255);
   pushMatrix();
-  translate(middle_end.x, middle_end.y, middle_end.z);
+  translate(middle_end.x, -middle_end.y, middle_end.z);  // Negate Y component
   box(10);
   popMatrix();
   
   // Thumb Target (Yellow)
   stroke(255, 255, 0);
   pushMatrix();
-  translate(thumb_end.x, thumb_end.y, thumb_end.z);
+  translate(thumb_end.x, -thumb_end.y, thumb_end.z);  // Negate Y component
   box(10);
   popMatrix();
   

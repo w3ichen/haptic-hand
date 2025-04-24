@@ -73,9 +73,9 @@ void serialEvent(Serial p) {
       }
       serialVals = float(tokens);
       // Update global state variables with correct finger order
-      middle_end.set(serialVals[0], serialVals[1], serialVals[2]);
+      thumb_end.set(serialVals[0], serialVals[1], serialVals[2]);
       index_end.set(serialVals[3], serialVals[4], serialVals[5]);
-      thumb_end.set(serialVals[6], serialVals[7], serialVals[8]);
+      middle_end.set(serialVals[6], serialVals[7], serialVals[8]);
       object_position.set(serialVals[9], serialVals[10], serialVals[11]);
       object_radius = serialVals[12];
       dataReceived = true; // Flag that we have valid data
